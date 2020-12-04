@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
@@ -50,18 +51,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll();
     }
 
-//    @Bean
-//    @Override
-//    public UserDetailsService userDetailsService() {
-//
-//        UserDetails user =
-//                User.withUsername("user")
-//                        .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123"))
-//                        .roles("ADMIN")
-//                        .build();
-//
-//        return new InMemoryUserDetailsManager(user);
-//    }
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    }
+
+    @Bean
+    @Override
+    public UserDetailsService userDetailsService() {
+
+        UserDetails user =
+                User.withUsername("user")
+                        .password(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode("123"))
+                        .roles("ADMIN")
+                        .build();
+
+        return new InMemoryUserDetailsManager(user);
+    }
 
     /*
     * 多个继承关系用 \n 隔开即可，如下 ROLE_A > ROLE_B \n ROLE_C > ROLE_D。

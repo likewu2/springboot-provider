@@ -1,6 +1,6 @@
 package com.springboot.provider.config;
 
-import com.alibaba.druid.pool.xa.DruidXADataSource;
+import com.mysql.cj.jdbc.MysqlXADataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -13,8 +13,11 @@ import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.Properties;
 
 /**
  * @program: bsinterface
@@ -24,7 +27,7 @@ import javax.sql.DataSource;
  * @create: 2020-12-03 14:12
  **/
 @Configuration
-@MapperScan(basePackages = {"com.springboot.provider.mapper.lis"}, sqlSessionTemplateRef = "sqlSessionTemplateLis")
+@MapperScan(basePackages = {"com.springboot.provider.mapper.lis"}, sqlSessionTemplateRef = "lisSqlSessionTemplate")
 // 扫描dao或mapper接口
 public class LisDataSourceConfig {
 
@@ -32,24 +35,35 @@ public class LisDataSourceConfig {
     private String location;
 
     /**
-     * 注入DruidXADataSource，Druid对JTA的支持，支持XA协议，采用两阶段事务的提交
+     * 注入注入数据源属性配置
      *
      * @return
      */
-    @Bean(value = "druidXADataSourceLis")
-    @ConfigurationProperties(prefix = "spring.jta.atomikos.datasource.lis")
-    public DruidXADataSource druidXADataSourceLis() {
-        return new DruidXADataSource();
+    @Bean(value = "lisProperties")
+    @ConfigurationProperties(prefix = "spring.datasource.lis")
+    public Properties lisProperties() {
+        return new Properties();
     }
 
-    @Bean(name = "dataSourceLis")
-    public DataSource dataSourceLis(@Qualifier("druidXADataSourceLis") DruidXADataSource dataSource) {
+    @Bean(name = "lisDataSource")
+    public DataSource lisDataSource(@Qualifier("lisProperties") Properties properties) throws SQLException {
+        MysqlXADataSource mysqlXADataSource = new MysqlXADataSource();
+        mysqlXADataSource.setUrl(properties.getProperty("url"));
+        mysqlXADataSource.setUser(properties.getProperty("username"));
+        mysqlXADataSource.setPassword(properties.getProperty("password"));
+        mysqlXADataSource.setPinGlobalTxToPhysicalConnection(true);
+
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-        xaDataSource.setXaDataSource(dataSource);
+        xaDataSource.setXaDataSource(mysqlXADataSource);
         xaDataSource.setMinPoolSize(5);
         xaDataSource.setMaxPoolSize(50);
-        xaDataSource.setUniqueResourceName("dataSourceLis");
+        xaDataSource.setUniqueResourceName("lisDataSource");
         return xaDataSource;
+    }
+
+    @Bean(name = "lisJdbcTemplate")
+    public JdbcTemplate lisJdbcTemplate(@Qualifier("lisDataSource") DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
     }
 
     /**
@@ -59,8 +73,8 @@ public class LisDataSourceConfig {
      * @return
      * @throws Exception
      */
-    @Bean(name = "sqlSessionFactoryLis")
-    public SqlSessionFactory sqlSessionFactoryLis(@Qualifier(value = "dataSourceLis") DataSource dataSource) throws Exception {
+    @Bean(name = "lisSqlSessionFactory")
+    public SqlSessionFactory lisSqlSessionFactory(@Qualifier(value = "lisDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(dataSource);
         factory.setVfs(SpringBootVFS.class);
@@ -71,8 +85,8 @@ public class LisDataSourceConfig {
         return factory.getObject();
     }
 
-    @Bean(name = "sqlSessionTemplateLis")
-    public SqlSessionTemplate sqlSessionTemplateLis(@Qualifier("sqlSessionFactoryLis") SqlSessionFactory sqlSessionFactory) {
+    @Bean(name = "lisSqlSessionTemplate")
+    public SqlSessionTemplate lisSqlSessionTemplate(@Qualifier("lisSqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 

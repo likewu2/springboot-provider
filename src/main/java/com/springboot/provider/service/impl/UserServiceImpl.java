@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         Integer userFlag = userMapper.insert(user);
 //        int i = 1/0;
         Integer roleFlag = roleService.insert(new Role("admin"));
-        int j = 1/0;
+//        int j = 1/0;
 
 //        手动回滚事务
 //        TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
