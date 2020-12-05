@@ -59,6 +59,7 @@ public class HisDataSourceConfig {
         xaDataSource.setXaDataSource(mysqlXADataSource);
         xaDataSource.setMinPoolSize(5);
         xaDataSource.setMaxPoolSize(50);
+        xaDataSource.setTestQuery("SELECT 1 FROM DUAL");
         xaDataSource.setUniqueResourceName("hisDataSource");
         return xaDataSource;
     }

@@ -57,6 +57,7 @@ public class LisDataSourceConfig {
         xaDataSource.setXaDataSource(mysqlXADataSource);
         xaDataSource.setMinPoolSize(5);
         xaDataSource.setMaxPoolSize(50);
+        xaDataSource.setTestQuery("SELECT 1 FROM DUAL");
         xaDataSource.setUniqueResourceName("lisDataSource");
         return xaDataSource;
     }
