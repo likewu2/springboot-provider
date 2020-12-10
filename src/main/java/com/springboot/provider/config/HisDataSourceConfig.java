@@ -1,13 +1,16 @@
 package com.springboot.provider.config;
 
 import com.mysql.cj.jdbc.MysqlXADataSource;
+import com.springboot.provider.common.builder.XADataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +20,6 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
-import java.util.Properties;
 
 /**
  * @program: bsinterface
@@ -35,24 +36,27 @@ public class HisDataSourceConfig {
     @Value("${mybatis.mapper-locations}")
     private String location;
 
+    @Autowired
+    XADataSourceBuilder xaDataSourceBuilder;
+
     /**
      * 注入数据源属性配置
      *
      * @return
      */
-    @Bean(value = "hisProperties")
+    @Bean(value = "hisDataSourceProperties")
     @ConfigurationProperties(prefix = "spring.datasource.his")
-    public Properties hisProperties() {
-        return new Properties();
+    public DataSourceProperties hisProperties() {
+        return new DataSourceProperties();
     }
 
     @Primary
     @Bean(name = "hisDataSource")
-    public DataSource hisDataSource(@Qualifier("hisProperties") Properties properties) throws SQLException {
+    public DataSource hisDataSource(@Qualifier("hisDataSourceProperties") DataSourceProperties dataSourceProperties) throws Exception {
         MysqlXADataSource mysqlXADataSource = new MysqlXADataSource();
-        mysqlXADataSource.setUrl(properties.getProperty("url"));
-        mysqlXADataSource.setUser(properties.getProperty("username"));
-        mysqlXADataSource.setPassword(properties.getProperty("password"));
+        mysqlXADataSource.setUrl(dataSourceProperties.getUrl());
+        mysqlXADataSource.setUser(dataSourceProperties.getUsername());
+        mysqlXADataSource.setPassword(dataSourceProperties.getPassword());
         mysqlXADataSource.setPinGlobalTxToPhysicalConnection(true);
 
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();

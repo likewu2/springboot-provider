@@ -8,6 +8,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
@@ -39,18 +40,18 @@ public class LisDataSourceConfig {
      *
      * @return
      */
-    @Bean(value = "lisProperties")
+    @Bean(value = "lisDataSourceProperties")
     @ConfigurationProperties(prefix = "spring.datasource.lis")
-    public Properties lisProperties() {
-        return new Properties();
+    public DataSourceProperties lisProperties() {
+        return new DataSourceProperties();
     }
 
     @Bean(name = "lisDataSource")
-    public DataSource lisDataSource(@Qualifier("lisProperties") Properties properties) throws SQLException {
+    public DataSource lisDataSource(@Qualifier("lisDataSourceProperties") DataSourceProperties dataSourceProperties) throws SQLException {
         MysqlXADataSource mysqlXADataSource = new MysqlXADataSource();
-        mysqlXADataSource.setUrl(properties.getProperty("url"));
-        mysqlXADataSource.setUser(properties.getProperty("username"));
-        mysqlXADataSource.setPassword(properties.getProperty("password"));
+        mysqlXADataSource.setUrl(dataSourceProperties.getUrl());
+        mysqlXADataSource.setUser(dataSourceProperties.getUsername());
+        mysqlXADataSource.setPassword(dataSourceProperties.getPassword());
         mysqlXADataSource.setPinGlobalTxToPhysicalConnection(true);
 
         AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
