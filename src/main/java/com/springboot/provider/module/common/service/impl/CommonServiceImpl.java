@@ -1,11 +1,10 @@
-package com.springboot.provider.service.impl;
+package com.springboot.provider.module.common.service.impl;
 
-import com.springboot.provider.entity.User;
-import com.springboot.provider.service.CommonService;
+import com.springboot.provider.module.common.service.CommonService;
+import com.springboot.provider.module.his.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,12 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
  * @program: springboot-provider
- * @package com.springboot.provider.service.impl
+ * @package com.springboot.provider.module.common.service.impl
  * @description
  * @author: XuZhenkui
  * @create: 2020-12-04 14:29

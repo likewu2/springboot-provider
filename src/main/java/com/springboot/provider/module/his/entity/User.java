@@ -1,5 +1,8 @@
-package com.springboot.provider.entity;
+package com.springboot.provider.module.his.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 
 /**
@@ -8,29 +11,18 @@ import java.io.Serializable;
  * </p>
  *
  * @author XuZhenkui
- * @since 2020-09-11
+ * @since 2020-12-10
  */
-public class User {
+public class User extends Model<User> {
 
+    private static final long serialVersionUID = 1L;
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     private String username;
 
     private String password;
-
-    public User() {
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(Long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
 
     public Long getId() {
         return id;
@@ -52,6 +44,11 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
     }
 
     @Override

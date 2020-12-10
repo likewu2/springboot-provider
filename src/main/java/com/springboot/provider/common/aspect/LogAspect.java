@@ -20,7 +20,7 @@ import java.util.Objects;
 public class LogAspect {
     private Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-    @Pointcut("execution(public * com.springboot.provider.controller.*.*(..))")
+    @Pointcut("execution(public * com.springboot.provider.module.*.controller.*.*(..))")
     public void log(){}
 
     @Around("log()")

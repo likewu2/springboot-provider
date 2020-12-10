@@ -1,8 +1,8 @@
-package com.springboot.provider.controller;
+package com.springboot.provider.module.common.controller;
 
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
-import com.springboot.provider.service.FileService;
+import com.springboot.provider.module.common.service.FileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

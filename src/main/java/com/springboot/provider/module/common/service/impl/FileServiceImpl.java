@@ -1,6 +1,6 @@
-package com.springboot.provider.service.impl;
+package com.springboot.provider.module.common.service.impl;
 
-import com.springboot.provider.service.FileService;
+import com.springboot.provider.module.common.service.FileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

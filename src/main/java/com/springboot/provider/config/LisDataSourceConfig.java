@@ -1,23 +1,17 @@
 package com.springboot.provider.config;
 
-import com.mysql.cj.jdbc.MysqlXADataSource;
+import com.springboot.provider.common.builder.AtomikosDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
-import org.mybatis.spring.boot.autoconfigure.SpringBootVFS;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.Properties;
 
 /**
@@ -28,39 +22,21 @@ import java.util.Properties;
  * @create: 2020-12-03 14:12
  **/
 @Configuration
-@MapperScan(basePackages = {"com.springboot.provider.mapper.lis"}, sqlSessionTemplateRef = "lisSqlSessionTemplate")
-// 扫描dao或mapper接口
+@MapperScan(basePackages = {"com.springboot.provider.module.lis.**.mapper"}, sqlSessionTemplateRef = "lisSqlSessionTemplate")
 public class LisDataSourceConfig {
 
-    @Value("${mybatis.mapper-locations}")
+    @Value("${mybatis-plus.mapper-locations}")
     private String location;
 
-    /**
-     * 注入注入数据源属性配置
-     *
-     * @return
-     */
-    @Bean(value = "lisDataSourceProperties")
+    @Bean(value = "lisProperties")
     @ConfigurationProperties(prefix = "spring.datasource.lis")
-    public DataSourceProperties lisProperties() {
-        return new DataSourceProperties();
+    public Properties lisProperties() {
+        return new Properties();
     }
 
     @Bean(name = "lisDataSource")
-    public DataSource lisDataSource(@Qualifier("lisDataSourceProperties") DataSourceProperties dataSourceProperties) throws SQLException {
-        MysqlXADataSource mysqlXADataSource = new MysqlXADataSource();
-        mysqlXADataSource.setUrl(dataSourceProperties.getUrl());
-        mysqlXADataSource.setUser(dataSourceProperties.getUsername());
-        mysqlXADataSource.setPassword(dataSourceProperties.getPassword());
-        mysqlXADataSource.setPinGlobalTxToPhysicalConnection(true);
-
-        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
-        xaDataSource.setXaDataSource(mysqlXADataSource);
-        xaDataSource.setMinPoolSize(5);
-        xaDataSource.setMaxPoolSize(50);
-        xaDataSource.setTestQuery("SELECT 1 FROM DUAL");
-        xaDataSource.setUniqueResourceName("lisDataSource");
-        return xaDataSource;
+    public DataSource lisDataSource(@Qualifier("lisProperties") Properties properties) {
+        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(properties);
     }
 
     @Bean(name = "lisJdbcTemplate")
@@ -68,23 +44,9 @@ public class LisDataSourceConfig {
         return new JdbcTemplate(dataSource);
     }
 
-    /**
-     * Mybatis对多数据源的整合
-     *
-     * @param dataSource
-     * @return
-     * @throws Exception
-     */
     @Bean(name = "lisSqlSessionFactory")
     public SqlSessionFactory lisSqlSessionFactory(@Qualifier(value = "lisDataSource") DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
-        factory.setDataSource(dataSource);
-        factory.setVfs(SpringBootVFS.class);
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
-        configuration.setMapUnderscoreToCamelCase(true);
-        factory.setConfiguration(configuration);
-        factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(location));
-        return factory.getObject();
+        return AtomikosDataSourceBuilder.createSqlSessionFactory(dataSource, location);
     }
 
     @Bean(name = "lisSqlSessionTemplate")

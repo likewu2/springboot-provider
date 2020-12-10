@@ -1,4 +1,4 @@
-package com.springboot.provider.controller;
+package com.springboot.provider.module.common.controller;
 
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
@@ -7,8 +7,8 @@ import com.springboot.provider.common.holder.ApplicationEventPublisherHolder;
 import com.springboot.provider.common.holder.EnvironmentHolder;
 import com.springboot.provider.common.holder.MultiDataSourceHolder;
 import com.springboot.provider.common.holder.ResourceLoaderHolder;
-import com.springboot.provider.entity.User;
-import com.springboot.provider.service.CommonService;
+import com.springboot.provider.module.common.service.CommonService;
+import com.springboot.provider.module.his.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.Cacheable;
