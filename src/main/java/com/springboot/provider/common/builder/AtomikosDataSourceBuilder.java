@@ -26,20 +26,12 @@ public class AtomikosDataSourceBuilder {
     /**
      * 创建AtomikosDataSourceBean是使用Atomikos连接池的首选类
      */
-    public static AtomikosDataSourceBean createAtomikosDataSourceBean(Properties properties) {
+    public static AtomikosDataSourceBean createAtomikosDataSourceBean(String xaDataSourceClassName,
+                                                                      Properties properties, String resourceName) {
         AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
-        atomikosDataSourceBean.setMinPoolSize(Integer.parseInt(properties.getProperty("min-pool-size")));
-        atomikosDataSourceBean.setMaxPoolSize(Integer.parseInt(properties.getProperty("max-pool-size")));
-        atomikosDataSourceBean.setMaxLifetime(Integer.parseInt(properties.getProperty("max-lifetime")));
-        atomikosDataSourceBean.setTestQuery(properties.getProperty("test-query"));
-        atomikosDataSourceBean.setUniqueResourceName(properties.getProperty("name"));
-
-        MysqlXADataSource mysqlXADataSource = new MysqlXADataSource();
-        mysqlXADataSource.setURL(properties.getProperty("url"));
-        mysqlXADataSource.setUser(properties.getProperty("username"));
-        mysqlXADataSource.setPassword(properties.getProperty("password"));
-
-        atomikosDataSourceBean.setXaDataSource(mysqlXADataSource);
+        atomikosDataSourceBean.setUniqueResourceName(resourceName);
+        atomikosDataSourceBean.setXaDataSourceClassName(xaDataSourceClassName);
+        atomikosDataSourceBean.setXaProperties(properties);
         return atomikosDataSourceBean;
     }
 

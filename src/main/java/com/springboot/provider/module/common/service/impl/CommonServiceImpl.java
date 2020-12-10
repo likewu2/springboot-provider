@@ -44,7 +44,7 @@ public class CommonServiceImpl implements CommonService {
         int his = hisJdbcTemplate.update("insert into user(username,password) values(?,?)", username, passwordEncoder.encode(username));
 //        int a= 1/0;
 
-        int lis = lisJdbcTemplate.update("insert into role(title) values(?)", "ADMIN");
+        int lis = lisJdbcTemplate.update("insert into role(name,title) values(?,?)", "admin","ADMIN");
 //        int i = 1/0;
         return his + lis;
     }

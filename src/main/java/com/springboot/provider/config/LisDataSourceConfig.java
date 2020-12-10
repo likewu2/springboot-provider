@@ -7,6 +7,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,6 +29,11 @@ public class LisDataSourceConfig {
     @Value("${mybatis-plus.mapper-locations}")
     private String location;
 
+    @Value("${spring.jta.atomikos.datasource.lis.xa-data-source-class-name}")
+    private String xaDataSourceClassName;
+
+    public static final String RESOURCE_NAME = "lisDataSource";
+
     @Bean(value = "lisProperties")
     @ConfigurationProperties(prefix = "spring.datasource.lis")
     public Properties lisProperties() {
@@ -36,7 +42,7 @@ public class LisDataSourceConfig {
 
     @Bean(name = "lisDataSource")
     public DataSource lisDataSource(@Qualifier("lisProperties") Properties properties) {
-        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(properties);
+        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(xaDataSourceClassName, properties, RESOURCE_NAME);
     }
 
     @Bean(name = "lisJdbcTemplate")

@@ -29,6 +29,11 @@ public class HisDataSourceConfig {
     @Value("${mybatis-plus.mapper-locations}")
     private String location;
 
+    @Value("${spring.jta.atomikos.datasource.his.xa-data-source-class-name}")
+    private String xaDataSourceClassName;
+
+    public static final String RESOURCE_NAME = "hisDataSource";
+
     @Bean(value = "hisProperties")
     @ConfigurationProperties(prefix = "spring.datasource.his")
     public Properties hisProperties() {
@@ -38,7 +43,7 @@ public class HisDataSourceConfig {
     @Primary
     @Bean(name = "hisDataSource")
     public DataSource hisDataSource(@Qualifier("hisProperties") Properties properties) {
-        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(properties);
+        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(xaDataSourceClassName, properties, RESOURCE_NAME);
     }
 
     @Bean(name = "hisJdbcTemplate")
