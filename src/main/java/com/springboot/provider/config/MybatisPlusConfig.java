@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @Date 2019/9/18 14:54
  */
 @Configuration
-@MapperScan(basePackages = {"com.springboot.provider.module.*.mapper"})
+//@MapperScan(basePackages = {"com.springboot.provider.module.**.mapper"})
 public class MybatisPlusConfig {
     /*
      * 分页插件，自动识别数据库类型

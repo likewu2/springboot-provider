@@ -1,9 +1,11 @@
 package com.springboot.provider.config;
 
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.springboot.provider.common.builder.AtomikosDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -26,11 +28,11 @@ import java.util.Properties;
 @MapperScan(basePackages = {"com.springboot.provider.module.lis.**.mapper"}, sqlSessionTemplateRef = "lisSqlSessionTemplate")
 public class LisDataSourceConfig {
 
-    @Value("${mybatis-plus.mapper-locations}")
-    private String location;
-
     @Value("${spring.jta.atomikos.datasource.lis.xa-data-source-class-name}")
     private String xaDataSourceClassName;
+
+    @Autowired
+    private MybatisPlusProperties mybatisPlusProperties;
 
     public static final String RESOURCE_NAME = "lisDataSource";
 
@@ -52,7 +54,7 @@ public class LisDataSourceConfig {
 
     @Bean(name = "lisSqlSessionFactory")
     public SqlSessionFactory lisSqlSessionFactory(@Qualifier(value = "lisDataSource") DataSource dataSource) throws Exception {
-        return AtomikosDataSourceBuilder.createSqlSessionFactory(dataSource, location);
+        return AtomikosDataSourceBuilder.createSqlSessionFactory(dataSource, mybatisPlusProperties);
     }
 
     @Bean(name = "lisSqlSessionTemplate")
