@@ -17,4 +17,8 @@
     <select id="getAllUser" resultMap="BaseResultMap">
         select * from user
     </select>
+
+    <select id="getByUserId" parameterType="Long" resultMap="BaseResultMap">
+        select * from user where id = #{id}
+    </select>
 </mapper>

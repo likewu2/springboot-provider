@@ -1,13 +1,11 @@
 package com.springboot.provider.config;
 
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.springboot.provider.common.builder.AtomikosDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -37,11 +35,11 @@ public class HisDataSourceConfig {
     @Value("${mybatis-plus.his.mapper-locations}")
     private String[] mapperLocations;
 
+    @Value("${mybatis-plus.type-aliases-package}")
+    private String typeAliasesPackage;
+
     @Value("${spring.jta.atomikos.datasource.his.xa-data-source-class-name}")
     private String xaDataSourceClassName;
-
-    @Autowired
-    private MybatisPlusProperties mybatisPlusProperties;
 
     @Bean(value = "hisProperties")
     @ConfigurationProperties(prefix = "spring.datasource.his")
@@ -60,10 +58,11 @@ public class HisDataSourceConfig {
         return new JdbcTemplate(dataSource);
     }
 
+    @Primary
     @Bean(name = "hisSqlSessionFactory")
     public SqlSessionFactory hisSqlSessionFactory(@Qualifier(value = "hisDataSource") DataSource dataSource) throws Exception {
         logger.info(RESOURCE_NAME + ": is registering...");
-        SqlSessionFactory sqlSessionFactory = AtomikosDataSourceBuilder.createSqlSessionFactory(dataSource, mybatisPlusProperties, mapperLocations);
+        SqlSessionFactory sqlSessionFactory = AtomikosDataSourceBuilder.createSqlSessionFactory(dataSource, typeAliasesPackage, mapperLocations);
         logger.info(RESOURCE_NAME + ": has been registered successfully!");
         return sqlSessionFactory;
     }

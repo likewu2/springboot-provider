@@ -8,6 +8,7 @@ import com.springboot.provider.module.lis.entity.Role;
 import com.springboot.provider.module.lis.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -49,5 +50,10 @@ public class UserController {
     @RequestMapping("getAllUser")
     public ResultJson getAllUser(){
         return ResultJson.success(userService.getAllUser());
+    }
+
+    @RequestMapping("getById")
+    public ResultJson getById(@RequestBody User user){
+        return ResultJson.success(userService.getByUserId(user.getId()));
     }
 }

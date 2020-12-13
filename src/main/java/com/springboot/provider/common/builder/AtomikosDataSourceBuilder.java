@@ -1,10 +1,10 @@
 package com.springboot.provider.common.builder;
 
-import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
+import com.baomidou.mybatisplus.autoconfigure.SpringBootVFS;
+import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -37,8 +37,13 @@ public class AtomikosDataSourceBuilder {
 
     /**
      * 创建SqlSessionFactory实例
+     * @param dataSource XA 数据源
+     * @param typeAliasesPackage 包路径
+     * @param mapperLocations mappedStatement XML 文件路径
+     * @return
+     * @throws Exception
      */
-    public static SqlSessionFactory createSqlSessionFactory(DataSource dataSource, MybatisPlusProperties mybatisPlusProperties, String[] mapperLocations) throws Exception {
+    public static SqlSessionFactory createSqlSessionFactory(DataSource dataSource, String typeAliasesPackage, String[] mapperLocations) throws Exception {
         /**
          * 必须使用MybatisSqlSessionFactoryBean，
          * 不能使用SqlSessionFactoryBean，不然会报invalid bound statement (not found)
@@ -47,12 +52,11 @@ public class AtomikosDataSourceBuilder {
          * 源码中也是使用MybatisSqlSessionFactoryBean
          * 并且源码中使用了@ConditionalOnMissingBean，即IOC中如果存在了SqlSessionFactory实例，mybatis-plus就不创建SqlSessionFactory实例了
          */
-
         MybatisSqlSessionFactoryBean sessionFactoryBean = new MybatisSqlSessionFactoryBean();
 
-        BeanUtils.copyProperties(mybatisPlusProperties, sessionFactoryBean);
-
         sessionFactoryBean.setDataSource(dataSource);
+        sessionFactoryBean.setVfs(SpringBootVFS.class);
+        sessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
         sessionFactoryBean.setPlugins(new MybatisPlusInterceptor());
 
         Set<Resource> resourceSet = new LinkedHashSet(16);
@@ -62,16 +66,9 @@ public class AtomikosDataSourceBuilder {
         }
         sessionFactoryBean.setMapperLocations(resourceSet.toArray(new Resource[0]));
 
-//        sessionFactoryBean.setTypeAliasesPackage("com.springboot.provider.module.**.entity");
-//        sessionFactoryBean.setVfs(SpringBootVFS.class);
-//        sessionFactoryBean.setPlugins(new MybatisPlusInterceptor());
-//        sessionFactoryBean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources(location));
-//
-//        MybatisConfiguration configuration = new MybatisConfiguration();
-//        configuration.setMapUnderscoreToCamelCase(true);
-//        configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
-//
-//        sessionFactoryBean.setConfiguration(configuration);
+        MybatisConfiguration configuration = new MybatisConfiguration();
+        configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
+        sessionFactoryBean.setConfiguration(configuration);
 
         return sessionFactoryBean.getObject();
     }
