@@ -1,17 +1,16 @@
 package com.springboot.provider.common.builder;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
-import com.baomidou.mybatisplus.autoconfigure.SpringBootVFS;
-import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * @program: springboot-provider
@@ -21,6 +20,8 @@ import java.util.Properties;
  * @create: 2020-12-10 15:22
  **/
 public class AtomikosDataSourceBuilder {
+
+    public static final PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 
     /**
      * 创建AtomikosDataSourceBean是使用Atomikos连接池的首选类
@@ -37,7 +38,7 @@ public class AtomikosDataSourceBuilder {
     /**
      * 创建SqlSessionFactory实例
      */
-    public static SqlSessionFactory createSqlSessionFactory(DataSource dataSource, MybatisPlusProperties mybatisPlusProperties) throws Exception {
+    public static SqlSessionFactory createSqlSessionFactory(DataSource dataSource, MybatisPlusProperties mybatisPlusProperties, String[] mapperLocations) throws Exception {
         /**
          * 必须使用MybatisSqlSessionFactoryBean，
          * 不能使用SqlSessionFactoryBean，不然会报invalid bound statement (not found)
@@ -48,9 +49,18 @@ public class AtomikosDataSourceBuilder {
          */
 
         MybatisSqlSessionFactoryBean sessionFactoryBean = new MybatisSqlSessionFactoryBean();
+
+        BeanUtils.copyProperties(mybatisPlusProperties, sessionFactoryBean);
+
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setPlugins(new MybatisPlusInterceptor());
-        BeanUtils.copyProperties(mybatisPlusProperties, sessionFactoryBean);
+
+        Set<Resource> resourceSet = new LinkedHashSet(16);
+        for (String mapperLocation : mapperLocations) {
+            Resource[] resources = resolver.getResources(mapperLocation);
+            resourceSet.addAll(Arrays.asList(resources));
+        }
+        sessionFactoryBean.setMapperLocations(resourceSet.toArray(new Resource[0]));
 
 //        sessionFactoryBean.setTypeAliasesPackage("com.springboot.provider.module.**.entity");
 //        sessionFactoryBean.setVfs(SpringBootVFS.class);
