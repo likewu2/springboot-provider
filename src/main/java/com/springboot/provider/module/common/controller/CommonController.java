@@ -104,8 +104,8 @@ public class CommonController {
     }
 
     @RequestMapping("/test/selectAll")
-    public ResultJson selectAll(){
-        return ResultJson.success(commonService.selectAll());
+    public List<User> selectAll(){
+        return commonService.selectAll();
     }
 
     @RequestMapping("/test/selectById/{id}")

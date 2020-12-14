@@ -89,7 +89,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResponseEntity<byte[]> download(String filename) throws IOException {
-        if (StringUtils.hasText(filename) || filename.contains("..")){
+        if (!StringUtils.hasText(filename) || filename.contains("..")){
             return null;
         }
         File file = new File(location + File.separator + filename);
