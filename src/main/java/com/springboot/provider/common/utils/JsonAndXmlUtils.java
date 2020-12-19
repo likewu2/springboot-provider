@@ -2,18 +2,11 @@ package com.springboot.provider.common.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -58,8 +51,22 @@ public class JsonAndXmlUtils {
         xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
     }
 
+    public static Map jsonToMap(String json) {
+        if (json == null || "".equals(json)) {
+            return null;
+        }
+        Map map;
+        try {
+            map = objectMapper.readValue(json, Map.class);
+        } catch (Exception e) {
+            return null;
+        }
+        return map;
+    }
+
     /**
      * 对象转字符串
+     *
      * @param object
      * @return json 字符串
      */
@@ -70,7 +77,7 @@ public class JsonAndXmlUtils {
         String json;
         try {
             json = objectMapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             return null;
         }
         return json;
@@ -78,6 +85,7 @@ public class JsonAndXmlUtils {
 
     /**
      * 对象转xml格式字符串
+     *
      * @param data
      * @return xml 字符串
      */
@@ -88,7 +96,7 @@ public class JsonAndXmlUtils {
         String xml;
         try {
             xml = xmlMapper.writeValueAsString(data);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             return null;
         }
         return xml;
@@ -96,12 +104,16 @@ public class JsonAndXmlUtils {
 
     /**
      * json字符串转对象
-     * @param json json字符串
+     *
+     * @param json  json字符串
      * @param clazz 类
-     * @param <T> 泛型
+     * @param <T>   泛型
      * @return java 对象
      */
     public static <T> T jsonToObject(String json, Class<T> clazz) {
+        if (json == null || "".equals(json)) {
+            return null;
+        }
         T t;
         try {
             t = objectMapper.readValue(json, clazz);
@@ -113,12 +125,16 @@ public class JsonAndXmlUtils {
 
     /**
      * xml字符串转对象
-     * @param xml xml字符串
+     *
+     * @param xml   xml字符串
      * @param clazz 类
-     * @param <T> 泛型
+     * @param <T>   泛型
      * @return java 对象
      */
     public static <T> T xmlToObject(String xml, Class<T> clazz) {
+        if (xml == null || "".equals(xml)) {
+            return null;
+        }
         T t;
         try {
             t = xmlMapper.readValue(xml, clazz);
@@ -130,11 +146,15 @@ public class JsonAndXmlUtils {
 
     /**
      * 指定根节点, map转xml字符串
+     *
      * @param map
      * @param root 根节点
      * @return xml字符串
      */
-    public static String mapToXml(Map<String, String> map, String root) {
+    public static String mapToXml(Map<String, Object> map, String root) {
+        if (root == null || "".equals(root) || map == null || map.size() == 0) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
         sb.append("<").append(root).append(">");
         sb.append(mapToXml(map));
@@ -144,15 +164,21 @@ public class JsonAndXmlUtils {
 
     /**
      * map转xml字符串
+     *
      * @param map
      * @return xml字符串
      */
-    public static String mapToXml(Map<String, String> map) {
+    public static String mapToXml(Map<String, Object> map) {
+        if (map == null || map.size() == 0) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
-            String value = entry.getValue();
-            if (value != null && !("").equals(value)) {
+            Object value = entry.getValue();
+            if (value instanceof Map) {
+                sb.append(mapToXml((Map<String, Object>) value));
+            } else if (value != null && !("").equals(value)) {
                 sb.append("<").append(key).append("><![CDATA[").append(value).append("]]></").append(key).append(">");
             }
         }
@@ -163,12 +189,15 @@ public class JsonAndXmlUtils {
      * 获取xml字符串中元素标签值
      * <p>xml中元素标签唯一</p>
      *
-     * @param xml 响应报文(xml字符串格式)
-     * @param element     元素名(不区分大小写)
+     * @param xml     响应报文(xml字符串格式)
+     * @param element 元素名(不区分大小写)
      * @return xml字符串中元素标签值
      * @throws Exception
      */
     public static String getXmlSingleElementValue(String xml, String element) {
+        if (xml == null || "".equals(xml) || element == null || "".equals(element)) {
+            return null;
+        }
         //元素名大写<ELEMENT>(.*)<ELEMENT/>
         StringBuffer regex = new StringBuffer();
         regex.append("<").append(element.toUpperCase()).append(">");
@@ -188,12 +217,15 @@ public class JsonAndXmlUtils {
      * <p>xml存在多个该元素标签</p>
      * <p>exmple:<DATA></DATA></p>
      *
-     * @param xml 响应报文(xml字符串格式)
-     * @param element     元素名(不区分大小写)
+     * @param xml     响应报文(xml字符串格式)
+     * @param element 元素名(不区分大小写)
      * @return xml字符串中元素标签列表
      * @throws Exception
      */
     public static List<String> getXmlListElementValue(String xml, String element) {
+        if (xml == null || "".equals(xml) || element == null || "".equals(element)) {
+            return null;
+        }
         List<String> list = new ArrayList<String>();
         //元素名大写<ELEMENT>([^</ELEMENT>]*)</ELEMENT>
         StringBuffer regex = new StringBuffer();
@@ -209,10 +241,14 @@ public class JsonAndXmlUtils {
 
     /**
      * 将xml字符串中的节点转为大写字母
+     *
      * @param xml
      * @return
      */
-    public static String xmlNodeToUpperCase(String xml){
+    public static String xmlNodeToUpperCase(String xml) {
+        if (xml == null || "".equals(xml)) {
+            return null;
+        }
         String regex = "<(/*[A-Za-z]+)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
@@ -225,10 +261,14 @@ public class JsonAndXmlUtils {
 
     /**
      * 将xml字符串中的节点转为小写字母
+     *
      * @param xml
      * @return
      */
-    public static String xmlNodeToLowerCase(String xml){
+    public static String xmlNodeToLowerCase(String xml) {
+        if (xml == null || "".equals(xml)) {
+            return null;
+        }
         String regex = "<(/*[A-Za-z]+)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
@@ -241,10 +281,14 @@ public class JsonAndXmlUtils {
 
     /**
      * 将xml字符串中的节点首字母转为大写字母
+     *
      * @param xml
      * @return
      */
-    public static String xmlNodeFirstLetterToUpperCase(String xml){
+    public static String xmlNodeFirstLetterToUpperCase(String xml) {
+        if (xml == null || "".equals(xml)) {
+            return null;
+        }
         String regex = "<(/*[A-Za-z]+)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
@@ -259,10 +303,14 @@ public class JsonAndXmlUtils {
 
     /**
      * 将xml字符串中的节点首字母转为小写字母
+     *
      * @param xml
      * @return
      */
-    public static String xmlNodeFirstLetterToLowerCase(String xml){
+    public static String xmlNodeFirstLetterToLowerCase(String xml) {
+        if (xml == null || "".equals(xml)) {
+            return null;
+        }
         String regex = "<(/*[A-Za-z]+)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
@@ -277,13 +325,14 @@ public class JsonAndXmlUtils {
 
     /**
      * 大小写字母相互转换
+     *
      * @param c
      * @return
      */
-    public static char characterConvertor(char c){
-        if ((int)c >= 65 && (int)c <= 90 ){
+    public static char characterConvertor(char c) {
+        if ((int) c >= 65 && (int) c <= 90) {
             return (char) (c + 32);
-        } else if ((int)c >= 97 && (int)c <= 122 ){
+        } else if ((int) c >= 97 && (int) c <= 122) {
             return (char) (c - 32);
         } else {
             return c;
@@ -292,24 +341,26 @@ public class JsonAndXmlUtils {
 
     /**
      * 大写字母转为小写字母
+     *
      * @param c 大写字母
      * @return 小写字母
      */
-    public static char upperToLowerConvertor(char c){
-        if ((int)c >= 65 && (int)c <= 90 ){
+    public static char upperToLowerConvertor(char c) {
+        if ((int) c >= 65 && (int) c <= 90) {
             return (char) (c + 32);
-        }  else {
+        } else {
             return c;
         }
     }
 
     /**
      * 小写字母转为大写字母
+     *
      * @param c 小写字母
      * @return 大写字母
      */
-    public static char lowerToUpperConvertor(char c){
-        if ((int)c >= 97 && (int)c <= 122 ){
+    public static char lowerToUpperConvertor(char c) {
+        if ((int) c >= 97 && (int) c <= 122) {
             return (char) (c - 32);
         } else {
             return c;
