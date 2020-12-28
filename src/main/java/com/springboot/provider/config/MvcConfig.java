@@ -11,6 +11,9 @@ public class MvcConfig extends WebMvcConfigurationSupport {
     @Value("${spring.servlet.header.location}")
     private String header;
 
+    @Value("${spring.servlet.multipart.location}")
+    private String file;
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
 //        registry.addViewController("/home").setViewName("home");
@@ -35,7 +38,10 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // http://127.0.0.1:8090/img/header.jpg
         registry.addResourceHandler("/img/**").addResourceLocations("file:"+ header);
+        // http://127.0.0.1:8090/file/ssr.txt
+        registry.addResourceHandler("/file/**").addResourceLocations("file:"+ file);
     }
 
     /**
