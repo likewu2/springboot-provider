@@ -33,7 +33,7 @@ public class LogAspect {
         Object result = joinPoint.proceed();
 
         long consultTime = System.currentTimeMillis() - startTimeMillis;
-        logger.info("\n请求URL: "+request.getRequestURI()+"\n入参:"+ Arrays.toString(joinPoint.getArgs()) +"\n出参:"+ JSON.toJSONString(result) +"\n执行时间: "+ consultTime +" 毫秒");
+        logger.info("\n请求URL: "+request.getRequestURL()+"\n请求path: "+request.getRequestURI()+"\n入参:"+ Arrays.toString(joinPoint.getArgs()) +"\n出参:"+ JSON.toJSONString(result) +"\n执行时间: "+ consultTime +" 毫秒");
 
         return result;
     }
