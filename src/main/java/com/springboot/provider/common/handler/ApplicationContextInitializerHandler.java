@@ -1,14 +1,10 @@
 package com.springboot.provider.common.handler;
 
-import com.springboot.provider.common.holder.ThreadPoolExecutorHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /*
 * org.springframework.context.ApplicationContextInitializer
@@ -32,31 +28,5 @@ public class ApplicationContextInitializerHandler implements ApplicationContextI
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         System.out.println("[ApplicationContextInitializer]");
-        Runtime.getRuntime().addShutdownHook(new Thread("thShutDownHook"){
-            @Override
-            public void run() {
-                // 关闭线程池
-                ExecutorService threadPoolExecutor = ThreadPoolExecutorHolder.getThreadPoolExecutor();
-                threadPoolExecutor.shutdown();
-                logger.info("threadPoolExecutor.isShutdown() = " + threadPoolExecutor.isShutdown());
-                try {
-                    threadPoolExecutor.awaitTermination(3, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                logger.info("threadPoolExecutor.isTerminated() = " + threadPoolExecutor.isTerminated());
-                if(!threadPoolExecutor.isTerminated()){
-                    threadPoolExecutor.shutdownNow();
-                    try {
-                        while (!threadPoolExecutor.isTerminated()){
-                            threadPoolExecutor.awaitTermination(10,TimeUnit.SECONDS);
-                            logger.info("threadPoolExecutor.isTerminated() = " + threadPoolExecutor.isTerminated());
-                        }
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
     }
 }
