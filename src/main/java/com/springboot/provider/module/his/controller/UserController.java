@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * <p>
  *  前端控制器
@@ -44,7 +48,12 @@ public class UserController {
         roleService.save(role);
 
 //        int i = 1/0;
-        return ResultJson.success(userService.list());
+        List<User> userList = userService.getAllUser();
+        List<Role> roleList = roleService.getRoleList();
+        Map<String, Object> map = new HashMap<>();
+        map.put("userList",userList);
+        map.put("roleList", roleList);
+        return ResultJson.success(map);
     }
 
     @RequestMapping("getAllUser")
