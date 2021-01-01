@@ -86,6 +86,13 @@ public class CommonController {
         return ResultJson.success(MultiDataSourceHolder.addDataSource("development", dataSource));
     }
 
+    @RequestMapping("/test/getRunningSQL")
+    public ResultJson getRunningSQL(){
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT * FROM information_schema.processlist WHERE STATE = 'Sending data'");
+        return ResultJson.success(maps);
+    }
+
     @RequestMapping("/test/getDataSource")
     public ResultJson getFromDataSource(){
         JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
