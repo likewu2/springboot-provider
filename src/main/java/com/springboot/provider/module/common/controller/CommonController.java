@@ -9,6 +9,8 @@ import com.springboot.provider.common.holder.MultiDataSourceHolder;
 import com.springboot.provider.common.holder.ResourceLoaderHolder;
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
+import com.springboot.provider.module.pay.enums.PayStrategy;
+import com.springboot.provider.module.pay.factory.PayStrategyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.Cacheable;
@@ -123,5 +125,11 @@ public class CommonController {
     @RequestMapping("/test/selectByUsername/{username}")
     public ResultJson selectByUsername(@PathVariable("username") String username){
         return ResultJson.success(commonService.selectByUsername(username));
+    }
+
+    @RequestMapping("/test/pay")
+    public String pay(){
+        PayStrategyFactory.get(PayStrategy.UNION).pay();
+        return "success";
     }
 }

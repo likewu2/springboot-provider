@@ -1,6 +1,5 @@
 package com.springboot.provider.common.handler;
 
-import com.springboot.provider.common.ResultJson;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -46,15 +45,6 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
      */
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-
-        if (MediaType.APPLICATION_JSON.equals(selectedContentType)){
-            if (body instanceof ResultJson) {
-                return body;
-            } else {
-                return ResultJson.success(body);
-            }
-        } else {
-            return body;
-        }
+        return body;
     }
 }
