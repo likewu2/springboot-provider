@@ -3,6 +3,8 @@ package com.springboot.provider.module.pay.service.impl;
 import com.springboot.provider.module.pay.enums.PayStrategy;
 import com.springboot.provider.module.pay.factory.PayStrategyFactory;
 import com.springboot.provider.module.pay.service.PayService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +19,8 @@ import javax.annotation.PostConstruct;
 @Service
 public class UnionPayService implements PayService {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @PostConstruct
     public void init(){
         PayStrategyFactory.register(PayStrategy.UNION, this);
@@ -24,6 +28,6 @@ public class UnionPayService implements PayService {
 
     @Override
     public void pay() {
-        System.out.println("PayEnum.UNION = " + PayStrategy.UNION);
+        logger.info("PayEnum.UNION = " + PayStrategy.UNION);
     }
 }

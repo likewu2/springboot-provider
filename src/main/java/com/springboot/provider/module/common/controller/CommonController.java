@@ -127,9 +127,9 @@ public class CommonController {
         return ResultJson.success(commonService.selectByUsername(username));
     }
 
-    @RequestMapping("/test/pay")
-    public String pay(){
-        PayStrategyFactory.get(PayStrategy.UNION).pay();
-        return "success";
+    @RequestMapping("/test/pay/{type}")
+    public String pay(@PathVariable("type") String type){
+        PayStrategyFactory.get(PayStrategy.getEnumByKey(type)).pay();
+        return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
     }
 }
