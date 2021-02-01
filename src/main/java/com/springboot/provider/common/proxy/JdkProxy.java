@@ -19,13 +19,13 @@ public class JdkProxy implements InvocationHandler {
             throw new RuntimeException("target class is null");
         }
         this.targetClass = targetClass;
-        return Proxy.newProxyInstance(targetClass.getClass().getClassLoader(), targetClass.getClass().getInterfaces(),this);
+        return Proxy.newProxyInstance(targetClass.getClass().getClassLoader(), targetClass.getClass().getInterfaces(), this);
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         long l = System.currentTimeMillis();
-        Object result = method.invoke(targetClass,args);
+        Object result = method.invoke(targetClass, args);
         System.out.println("调用方法: " + method.getName() + "调用耗时: " + (System.currentTimeMillis() - l) + " ms");
         return result;
     }
