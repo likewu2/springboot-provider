@@ -15,6 +15,9 @@ public class JdkProxy implements InvocationHandler {
     private Object targetClass;
 
     public Object getProxyInstance(Object targetClass) {
+        if (targetClass == null) {
+            throw new RuntimeException("target class is null");
+        }
         this.targetClass = targetClass;
         return Proxy.newProxyInstance(targetClass.getClass().getClassLoader(), targetClass.getClass().getInterfaces(),this);
     }
