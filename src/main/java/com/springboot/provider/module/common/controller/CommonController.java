@@ -1,16 +1,18 @@
 package com.springboot.provider.module.common.controller;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
-import com.springboot.provider.common.holder.ApplicationEventPublisherHolder;
-import com.springboot.provider.common.holder.EnvironmentHolder;
-import com.springboot.provider.common.holder.MultiDataSourceHolder;
-import com.springboot.provider.common.holder.ResourceLoaderHolder;
+import com.springboot.provider.common.holder.*;
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.pay.enums.PayStrategy;
 import com.springboot.provider.module.pay.factory.PayStrategyFactory;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.Cacheable;
@@ -23,7 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -131,5 +137,29 @@ public class CommonController {
     public String pay(@PathVariable("type") String type){
         PayStrategyFactory.get(PayStrategy.getEnumByKey(type)).pay();
         return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
+    }
+
+    @RequestMapping("/test/async")
+    public String async(){
+
+        ListenableFuture<Object> submit = CallbackThreadPoolExecutorHolder.getThreadPoolExecutor().submit(() -> {
+            try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); }
+            System.out.println(LocalDateTime.now());
+            throw new RuntimeException("error");
+        });
+
+        Futures.addCallback(submit, new FutureCallback<Object>() {
+            @Override
+            public void onSuccess(@Nullable Object result) {
+                System.out.println("result = " + result);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                System.out.println("t.getMessage() = " + t.getMessage());
+            }
+        }, MoreExecutors.directExecutor());
+
+        return "success";
     }
 }

@@ -1,5 +1,7 @@
 package com.springboot.provider.common.holder;
 
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.*;
@@ -11,7 +13,7 @@ import java.util.concurrent.*;
  * @Author xuzhenkui
  * @Date 2020/5/10 8:24
  */
-public class ThreadPoolExecutorHolder {
+public class CallbackThreadPoolExecutorHolder {
 
     //    核心线程数量: 取 CPU 核心数 / 2 + 1 个
     private final static int CORE_POOL_SIZE = Runtime.getRuntime().availableProcessors() / 2 + 1;
@@ -29,11 +31,12 @@ public class ThreadPoolExecutorHolder {
 
     private final static ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("Thread-pool-%d").build();
 
-    private static ExecutorService threadPoolExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
-            KEEP_ALIVE_TIME, TIME_UNIT,
-            workQueue, threadFactory, new ThreadPoolExecutor.AbortPolicy());
+    private static ListeningExecutorService threadPoolExecutor = MoreExecutors.listeningDecorator(
+            new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
+                    KEEP_ALIVE_TIME, TIME_UNIT,
+                    workQueue, threadFactory, new ThreadPoolExecutor.AbortPolicy()));
 
-    public static ExecutorService getThreadPoolExecutor() {
+    public static ListeningExecutorService getThreadPoolExecutor() {
         return threadPoolExecutor;
     }
 }
