@@ -151,15 +151,14 @@ public class JsonAndXmlUtils {
      * @param root 根节点
      * @return xml字符串
      */
-    public static String mapToXml(Map<String, String> map, String root) {
-        StringBuilder sb = new StringBuilder();
-        if (root != null && !"".equals(root)) {
-            sb.append("<" + root + ">");
-            sb.append(mapToXml(map));
-            sb.append("</" + root + ">");
-        } else {
-            sb.append(mapToXml(map));
+    public static String mapToXml(Map<String, Object> map, String root) {
+        if (root == null || "".equals(root) || map == null || map.size() == 0) {
+            return null;
         }
+        StringBuilder sb = new StringBuilder();
+        sb.append("<").append(root).append(">");
+        sb.append(mapToXml(map));
+        sb.append("</").append(root).append(">");
         return sb.toString();
     }
 
@@ -169,18 +168,18 @@ public class JsonAndXmlUtils {
      * @param map
      * @return xml字符串
      */
-    public static String mapToXml(Map<String, String> map) {
+    public static String mapToXml(Map<String, Object> map) {
+        if (map == null || map.size() == 0) {
+            return null;
+        }
         StringBuilder sb = new StringBuilder();
-        if (map != null) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-                key = key.replace(key.charAt(0), lowerToUpperConvertor(key.charAt(0)));
-                if (value == null) {
-                    sb.append("<").append(key).append(">").append("</").append(key).append(">");
-                } else {
-                    sb.append("<").append(key).append(">").append(value).append("</").append(key).append(">");
-                }
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (value instanceof Map) {
+                sb.append(mapToXml((Map<String, Object>) value));
+            } else if (value != null && !("").equals(value)) {
+                sb.append("<").append(key).append("><![CDATA[").append(value).append("]]></").append(key).append(">");
             }
         }
         return sb.toString();
