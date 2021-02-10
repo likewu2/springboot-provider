@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,8 +48,10 @@ public class LisDataSourceConfig {
     }
 
     @Bean(name = "lisDataSource")
+    @ConfigurationProperties(prefix = "spring.jta.atomikos.datasource.lis")
     public DataSource lisDataSource(@Qualifier("lisProperties") Properties properties) {
-        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(xaDataSourceClassName, properties, RESOURCE_NAME);
+        return new AtomikosDataSourceBean();
+//        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(xaDataSourceClassName, properties, RESOURCE_NAME);
     }
 
     @Bean(name = "lisJdbcTemplate")
