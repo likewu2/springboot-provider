@@ -1,18 +1,19 @@
 package com.springboot.provider;
 
+import com.springboot.provider.common.annotation.EnableBeans;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Arrays;
 
 // 自定义数据源一定要排除SpringBoot自动配置数据源，不然会出现循环引用的问题，The dependencies of some of the beans in the application context form a cycle
-@SpringBootApplication
+@SpringBootApplication/*(exclude = {DataSourceAutoConfiguration.class})*/
+@EnableBeans(packages = "com.springboot.provider.module.his.entity")
 public class Application {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
