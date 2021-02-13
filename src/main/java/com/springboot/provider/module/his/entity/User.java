@@ -1,8 +1,11 @@
 package com.springboot.provider.module.his.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -25,8 +28,12 @@ public class User extends Model<User> {
 
     private String password;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // post请求使用formdata格式传参
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")     // post请求使用json格式传参
     private LocalDateTime createTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // post请求使用formdata格式传参
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")     // post请求使用json格式传参
     private LocalDateTime updateTime;
 
     private Integer status;
