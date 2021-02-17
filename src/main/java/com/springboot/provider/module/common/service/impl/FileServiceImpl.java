@@ -2,6 +2,8 @@ package com.springboot.provider.module.common.service.impl;
 
 import com.springboot.provider.module.common.service.FileService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -12,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -36,10 +40,17 @@ public class FileServiceImpl implements FileService {
 
         Map<String, Path> map = new HashMap<>();
         // Get the file and save it somewhere
-        Path path;
+        Path path = Paths.get(location + fileName);
         try {
-            path = Files.write(Paths.get(location + fileName), file.getBytes());
-            map.put(fileName,path);
+            // write
+            Files.write(path, file.getBytes());
+
+            // copy
+//            InputStream inputStream = file.getInputStream();
+//            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+//            inputStream.close();
+
+            map.put(fileName, path);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -59,9 +70,16 @@ public class FileServiceImpl implements FileService {
         for (MultipartFile file : files) {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             // Get the file and save it somewhere
-            Path path;
+            Path path = Paths.get(location + fileName);
             try {
-                path = Files.write(Paths.get(location + fileName), file.getBytes());
+                // write
+                Files.write(path, file.getBytes());
+
+                // copy
+//                InputStream inputStream = file.getInputStream();
+//                Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
+//                inputStream.close();
+
                 map.put(fileName, path);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -89,15 +107,29 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ResponseEntity<byte[]> download(String filename) throws IOException {
-        if (!StringUtils.hasText(filename) || filename.contains("..")){
+        if (!StringUtils.hasText(filename) || filename.contains("..")) {
             return null;
         }
         File file = new File(location + File.separator + filename);
         HttpHeaders headers = new HttpHeaders();
-        filename = new String(filename.getBytes("UTF-8"),"iso-8859-1");
+        filename = new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 
         headers.setContentDispositionFormData("attachment", filename);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<>(Files.readAllBytes(file.toPath()),headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadFile(String filename) throws MalformedURLException {
+        if (!StringUtils.hasText(filename) || filename.contains("..")) {
+            return null;
+        }
+        Path path = Paths.get(location + filename);
+        Resource resource = new UrlResource(path.toUri());
+
+        filename = new String(Objects.requireNonNull(resource.getFilename()).getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + filename + "\"")
+                .body(resource);
     }
 }

@@ -3,6 +3,9 @@ package com.springboot.provider.module.common.controller;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.module.common.service.FileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.Map;
 
@@ -26,7 +29,7 @@ import java.util.Map;
 @RequestMapping("/file")
 public class FileController {
 
-    @Resource
+    @Autowired
     private FileService fileService;
 
 
@@ -48,17 +51,28 @@ public class FileController {
         return ResultJson.success(map);
     }
 
-    @RequestMapping(value = "list",method = RequestMethod.GET)
+    @RequestMapping(value = "list",method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResultJson downloadFileList() {
         return ResultJson.success(fileService.list());
     }
 
     @RequestMapping(value = "download",method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downloadFile(@RequestParam("filename") String filename) {
+    public ResponseEntity<byte[]> download(@RequestParam("filename") String filename) {
         ResponseEntity<byte[]> responseEntity = null;
         try {
             responseEntity = fileService.download(filename);
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return responseEntity;
+    }
+
+    @RequestMapping(value = "downloadFile",method = RequestMethod.GET)
+    public ResponseEntity<Resource> downloadFile(@RequestParam("filename") String filename) {
+        ResponseEntity<Resource> responseEntity = null;
+        try {
+            responseEntity = fileService.downloadFile(filename);
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         return responseEntity;
