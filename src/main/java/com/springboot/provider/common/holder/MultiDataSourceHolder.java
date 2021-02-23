@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MultiDataSourceHolder {
 
-    private static final ConcurrentHashMap<String, DataSource> MAP = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<String, DataSource> DATA_SOURCE_MAP = new ConcurrentHashMap<>();
 
     /**
      * 根据数据源名称获取数据源
@@ -26,7 +26,7 @@ public class MultiDataSourceHolder {
     public static DataSource getDataSource(String dsName){
         if (StringUtils.hasText(dsName)){
             dsName = dsName.toUpperCase();
-            return MAP.get(dsName);
+            return DATA_SOURCE_MAP.get(dsName);
         }
         return null;
     }
@@ -40,7 +40,7 @@ public class MultiDataSourceHolder {
         if (StringUtils.hasText(dsName) && dataSource != null){
             dsName = dsName.toUpperCase();
 //        如果传入key对应的value已经存在，就返回存在的value，不进行替换。如果不存在，就添加key和value，返回null
-            return MAP.putIfAbsent(dsName, dataSource) == null;
+            return DATA_SOURCE_MAP.putIfAbsent(dsName, dataSource) == null;
         }
         return false;
     }
@@ -50,10 +50,10 @@ public class MultiDataSourceHolder {
      * @param dsName 数据源名称
      * @param dataSource 数据源
      */
-    public static Boolean modifyDataSource(String dsName, DataSource dataSource){
+    public static Boolean updateDataSource(String dsName, DataSource dataSource){
         if (StringUtils.hasText(dsName) && dataSource != null){
             dsName = dsName.toUpperCase();
-            MAP.put(dsName, dataSource);
+            DATA_SOURCE_MAP.put(dsName, dataSource);
             return true;
         }
         return false;
@@ -67,7 +67,7 @@ public class MultiDataSourceHolder {
     public static Boolean removeDataSource(String dsName, DataSource dataSource){
         if (StringUtils.hasText(dsName) && dataSource != null){
             dsName = dsName.toUpperCase();
-            MAP.remove(dsName);
+            DATA_SOURCE_MAP.remove(dsName);
             return true;
         }
         return false;
