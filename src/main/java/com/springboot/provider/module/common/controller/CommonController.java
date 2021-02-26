@@ -21,9 +21,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletContext;
@@ -144,6 +142,11 @@ public class CommonController {
     public String pay(@PathVariable("type") String type) {
         PayStrategyFactory.get(PayStrategy.getEnumByKey(type)).pay();
         return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
+    }
+
+    @RequestMapping(value = "/test/xml")
+    public String xml(@RequestBody String xml) {
+        return xml;
     }
 
     @RequestMapping("/test/async")
