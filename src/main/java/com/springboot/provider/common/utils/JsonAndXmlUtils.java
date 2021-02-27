@@ -190,7 +190,7 @@ public class JsonAndXmlUtils {
      * <p>xml中元素标签唯一</p>
      *
      * @param xml     响应报文(xml字符串格式)
-     * @param element 元素名(不区分大小写)
+     * @param element 元素名
      * @return xml字符串中元素标签值
      * @throws Exception
      */
@@ -198,11 +198,11 @@ public class JsonAndXmlUtils {
         if (xml == null || "".equals(xml) || element == null || "".equals(element)) {
             return null;
         }
-        //元素名大写<ELEMENT>(.*)<ELEMENT/>
+        //元素名<ELEMENT key = value ...>(.*)<ELEMENT/>
         StringBuffer regex = new StringBuffer();
-        regex.append("<").append(element.toUpperCase()).append(">");
+        regex.append("<").append(element + ".*").append(">");
         regex.append("(.*)");
-        regex.append("</").append(element.toUpperCase()).append(">");
+        regex.append("</").append(element).append(">");
 
         String str = "";
         Matcher matcher = Pattern.compile(regex.toString()).matcher(xml);
@@ -218,7 +218,7 @@ public class JsonAndXmlUtils {
      * <p>exmple:<DATA></DATA></p>
      *
      * @param xml     响应报文(xml字符串格式)
-     * @param element 元素名(不区分大小写)
+     * @param element 元素名
      * @return xml字符串中元素标签列表
      * @throws Exception
      */
@@ -227,11 +227,11 @@ public class JsonAndXmlUtils {
             return null;
         }
         List<String> list = new ArrayList<String>();
-        //元素名大写<ELEMENT>([^</ELEMENT>]*)</ELEMENT>
+        //元素名<ELEMENT key = value ...>([^</ELEMENT>]*)</ELEMENT>
         StringBuffer regex = new StringBuffer();
-        regex.append("<").append(element.toUpperCase()).append(">");
-        regex.append("([^</" + element.toUpperCase() + ">]*)");
-        regex.append("</").append(element.toUpperCase()).append(">");
+        regex.append("<").append(element + ".*").append(">");
+        regex.append("([^</" + element + ">]*)");
+        regex.append("</").append(element).append(">");
         Matcher matcher = Pattern.compile(regex.toString()).matcher(xml);
         while (matcher.find()) {
             list.add(matcher.group(1));
