@@ -144,7 +144,7 @@ public class CommonController {
         return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
     }
 
-    @RequestMapping(value = "/test/xml")
+    @RequestMapping(value = "/test/xml", method = RequestMethod.POST, produces = {"application/xml;charset=utf-8"})
     public String xml(@RequestBody String xml) {
         return xml;
     }

@@ -23,6 +23,22 @@ public class QuartzController {
     @Autowired
     private QuartzService quartzService;
 
+    /**
+     *  {
+     *     "jobClass":"com.springboot.provider.module.quartz.job.SqlQueryJob",
+     *     "jobName":"job_1",
+     *     "jobGroupName":"job_group_1",
+     *     "cronExpression":"0/1 * * * * ?",
+     *     "jobData":{
+     *         "sql":"select * from user where status = #status#",
+     *         "params": {
+     *             "#status#":"1"
+     *         }
+     *     }
+     *  }
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/start")
     public ResultJson start(@RequestBody QuartzJob job) {
         try {
@@ -39,6 +55,11 @@ public class QuartzController {
         }
     }
 
+    /**
+     * 暂停
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/pause")
     public ResultJson pause(@RequestBody QuartzJob job) {
         Boolean aBoolean = quartzService.pauseJob(job.getJobName(), job.getJobGroupName());
@@ -49,6 +70,11 @@ public class QuartzController {
         }
     }
 
+    /**
+     * 修改
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/update")
     public ResultJson update(@RequestBody QuartzJob job) {
         Boolean aBoolean = quartzService.updateJob(job.getJobName(), job.getJobGroupName(), job.getCronExpression());
@@ -59,6 +85,11 @@ public class QuartzController {
         }
     }
 
+    /**
+     * 重启
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/resume")
     public ResultJson resume(@RequestBody QuartzJob job) {
         Boolean aBoolean = quartzService.resumeJob(job.getJobName(), job.getJobGroupName());
@@ -69,6 +100,11 @@ public class QuartzController {
         }
     }
 
+    /**
+     * 触发一次
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/runAJobNow")
     public ResultJson runAJobNow(@RequestBody QuartzJob job) {
         Boolean aBoolean = quartzService.runAJobNow(job.getJobName(), job.getJobGroupName());
@@ -79,6 +115,11 @@ public class QuartzController {
         }
     }
 
+    /**
+     * 删除
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/delete")
     public ResultJson delete(@RequestBody QuartzJob job) {
         Boolean aBoolean = quartzService.deleteJob(job.getJobName(), job.getJobGroupName());
@@ -89,11 +130,21 @@ public class QuartzController {
         }
     }
 
+    /**
+     * 所有在运行的定时任务
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/queryRunJob")
     public ResultJson queryRunJob(@RequestBody QuartzJob job) {
         return ResultJson.success(quartzService.queryRunJob());
     }
 
+    /**
+     * 所有定时任务
+     * @param job
+     * @return
+     */
     @RequestMapping("/test/queryAllJob")
     public ResultJson queryAllJob(@RequestBody QuartzJob job) {
         return ResultJson.success(quartzService.queryAllJob());
