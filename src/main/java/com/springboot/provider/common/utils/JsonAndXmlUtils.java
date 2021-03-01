@@ -303,7 +303,7 @@ public class JsonAndXmlUtils {
             if (!node.startsWith("/")){
                 matcher.appendReplacement(sb, "<" + node.replaceFirst(node.substring(0,1),node.substring(0,1).toUpperCase()) + ">");
             } else {
-                matcher.appendReplacement(sb, "<" + node.replaceFirst(node.substring(1,2),node.substring(1,2).toLowerCase()) + ">");
+                matcher.appendReplacement(sb, "<" + node.replaceFirst(node.substring(1,2),node.substring(1,2).toUpperCase()) + ">");
             }
         }
         matcher.appendTail(sb);
