@@ -2,11 +2,17 @@ package com.springboot.provider.common.utils;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.MapperFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,7 +54,7 @@ public class JsonAndXmlUtils {
         // 正常忽略多余字段
         xmlMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 序列化时加上文件头信息
-        xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
+        xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, false);
     }
 
     public static Map jsonToMap(String json) {
@@ -294,8 +300,30 @@ public class JsonAndXmlUtils {
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String node = matcher.group(1);
-            String s = "<" + node.replace(node.charAt(0), lowerToUpperConvertor(node.charAt(0))) + ">";
-            matcher.appendReplacement(sb, s);
+            if (!node.startsWith("/")){
+                matcher.appendReplacement(sb, "<" + node.replaceFirst(node.substring(0,1),node.substring(0,1).toUpperCase()) + ">");
+            } else {
+                matcher.appendReplacement(sb, "<" + node.replaceFirst(node.substring(1,2),node.substring(1,2).toLowerCase()) + ">");
+            }
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    public static String xmlNodeFirstLetterToUpper(String xml) {
+        if (xml == null || "".equals(xml)) {
+            return null;
+        }
+        String regex = "<(/*[A-Za-z]+)>";
+        Matcher matcher = Pattern.compile(regex).matcher(xml);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String node = matcher.group(1);
+            if(!node.startsWith("/")) {
+                matcher.appendReplacement(sb, "<" + (StringUtils.capitalize (node)) + ">");
+            }else {
+                matcher.appendReplacement(sb, "</" + (StringUtils.capitalize (node.substring(1))) + ">");
+            }
         }
         matcher.appendTail(sb);
         return sb.toString();
@@ -316,8 +344,11 @@ public class JsonAndXmlUtils {
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String node = matcher.group(1);
-            String s = "<" + node.replace(node.charAt(0), upperToLowerConvertor(node.charAt(0))) + ">";
-            matcher.appendReplacement(sb, s);
+            if (!node.startsWith("/")){
+                matcher.appendReplacement(sb, "<" + node.replaceFirst(node.substring(0,1),node.substring(0,1).toLowerCase()) + ">");
+            } else {
+                matcher.appendReplacement(sb, "<" + node.replaceFirst(node.substring(1,2),node.substring(1,2).toLowerCase()) + ">");
+            }
         }
         matcher.appendTail(sb);
         return sb.toString();
