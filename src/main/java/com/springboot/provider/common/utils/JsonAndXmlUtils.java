@@ -255,7 +255,7 @@ public class JsonAndXmlUtils {
         if (xml == null || "".equals(xml)) {
             return null;
         }
-        String regex = "<(/*[A-Za-z]+)>";
+        String regex = "<(/*[A-Za-z]+/?)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
@@ -275,7 +275,7 @@ public class JsonAndXmlUtils {
         if (xml == null || "".equals(xml)) {
             return null;
         }
-        String regex = "<(/*[A-Za-z]+)>";
+        String regex = "<(/*[A-Za-z]+/?)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
@@ -295,7 +295,7 @@ public class JsonAndXmlUtils {
         if (xml == null || "".equals(xml)) {
             return null;
         }
-        String regex = "<(/*[A-Za-z]+)>";
+        String regex = "<(/*[A-Za-z]+/?)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
@@ -314,7 +314,7 @@ public class JsonAndXmlUtils {
         if (xml == null || "".equals(xml)) {
             return null;
         }
-        String regex = "<(/*[A-Za-z]+)>";
+        String regex = "<(/*[A-Za-z]+/?)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
@@ -339,7 +339,7 @@ public class JsonAndXmlUtils {
         if (xml == null || "".equals(xml)) {
             return null;
         }
-        String regex = "<(/*[A-Za-z]+)>";
+        String regex = "<(/*[A-Za-z]+/?)>";
         Matcher matcher = Pattern.compile(regex).matcher(xml);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
