@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
-public class MvcConfig extends WebMvcConfigurationSupport {
+public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Value("${spring.servlet.header.location}")
     private String header;
@@ -52,6 +52,6 @@ public class MvcConfig extends WebMvcConfigurationSupport {
      */
     @Override
     protected void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.defaultContentType(MediaType.APPLICATION_JSON, MediaType.TEXT_XML, MediaType.APPLICATION_XML);
+        configurer.defaultContentType(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_XML, MediaType.TEXT_PLAIN);
     }
 }
