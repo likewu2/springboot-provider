@@ -1,5 +1,6 @@
 package com.springboot.provider.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.xfire.client.Client;
@@ -8,17 +9,28 @@ import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 public class WebServiceUtils {
 
     private Log logger = LogFactory.getLog(WebServiceUtils.class);
+
+    private static XPath xPath = null;
+    private static DocumentBuilder builder = null;
+
+    static {
+        try {
+            xPath = XPathFactory.newInstance().newXPath();
+            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static String url = "http://10.80.5.34:9528/hai/WebServiceEntry?wsdl";
 
@@ -30,11 +42,9 @@ public class WebServiceUtils {
             client.setUrl(url);
             Object[] result = client.invoke("invoke", new Object[]{service, "HOL", "HOL", xml});
 
-//            Map map;
-//            map = getReXml((String) result[0]);
-//            if (map != null && map.size() > 0) {
-//                reStr = map.get("Detail");
-//            }
+//            String expression = "/BSXml/MsgBody/Detail/text()";
+//            String content = getReXml((String) result[0], expression);
+
             reStr = (String) result[0];
         } catch (Exception e) {
             logger.error(" >>> 调用 WebService 接口：service: " + service + ", 异常" + e.getMessage());
@@ -43,20 +53,18 @@ public class WebServiceUtils {
         return reStr;
     }
 
-    private Map<String, String> getReXml(String xml) {
-        Map<String, String> map = new HashMap<>();
+    private String getReXml(String xml, String expression) {
+        String content = "";
         try {
-            if (!("".equals(xml))) {
-                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            if (StringUtils.isNotBlank(xml)) {
                 InputSource is = new InputSource(new StringReader(xml));
-                XPath xPath = XPathFactory.newInstance().newXPath();
                 Document document = builder.parse(is);
-                map.put("Detail", (String) xPath.evaluate("/BSXml/MsgBody/Detail/text()", document, XPathConstants.STRING));
+                content = (String) xPath.evaluate(expression, document, XPathConstants.STRING);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        return map;
+        return content;
     }
 
 }
