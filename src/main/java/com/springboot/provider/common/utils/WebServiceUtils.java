@@ -46,6 +46,7 @@ public class WebServiceUtils {
 //            String content = getReXml((String) result[0], expression);
 
             reStr = (String) result[0];
+            client.close();
         } catch (Exception e) {
             logger.error(" >>> 调用 WebService 接口：service: " + service + ", 异常" + e.getMessage());
         }
