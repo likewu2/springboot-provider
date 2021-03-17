@@ -55,14 +55,15 @@ public class WebServiceUtils {
 
     private String getReXml(String xml, String expression) {
         String content = "";
-        try {
-            if (StringUtils.isNotBlank(xml)) {
+        if (StringUtils.isNotBlank(xml)) {
+            try {
                 InputSource is = new InputSource(new StringReader(xml));
                 Document document = builder.parse(is);
                 content = (String) xPath.evaluate(expression, document, XPathConstants.STRING);
+
+            } catch (Exception e) {
+                logger.error(e.getMessage());
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
         }
         return content;
     }
