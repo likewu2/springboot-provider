@@ -14,6 +14,11 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Value("${spring.servlet.multipart.location}")
     private String file;
 
+    /**
+     * Return a handler mapping ordered at 1 to map URL paths directly to
+     * view names. To configure view controllers, override
+     * {@link #addViewControllers}.
+     */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
 //        registry.addViewController("/home").setViewName("home");
@@ -23,7 +28,11 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 //        registry.addViewController("/upload").setViewName("uploadForm");
     }
 
-
+    /**
+     * Override this method to configure cross origin requests processing.
+     * @since 4.2
+     * @see CorsRegistry
+     */
     @Override
     protected void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -36,6 +45,10 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .maxAge(3600);
     }
 
+    /**
+     * Override this method to add resource handlers for serving static resources.
+     * @see ResourceHandlerRegistry
+     */
     @Override
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         // http://127.0.0.1:8090/img/header.jpg

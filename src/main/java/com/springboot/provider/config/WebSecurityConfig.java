@@ -1,5 +1,6 @@
 package com.springboot.provider.config;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,6 +26,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    /**
+     * Override this method to configure {@link WebSecurity}. For example, if you wish to
+     * ignore certain requests.
+     *
+     * Endpoints specified in this method will be ignored by Spring Security, meaning it
+     * will not protect them from CSRF, XSS, Clickjacking, and so on.
+     *
+     * Instead, if you want to protect endpoints against common vulnerabilities, then see
+     * {@link #configure(HttpSecurity)} and the {@link HttpSecurity#authorizeRequests}
+     * configuration method.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -51,11 +63,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll();
     }
 
+    /**
+     * Override this method to configure {@link WebSecurity}. For example, if you wish to
+     * ignore certain requests.
+     *
+     * Endpoints specified in this method will be ignored by Spring Security, meaning it
+     * will not protect them from CSRF, XSS, Clickjacking, and so on.
+     *
+     * Instead, if you want to protect endpoints against common vulnerabilities, then see
+     * {@link #configure(HttpSecurity)} and the {@link HttpSecurity#authorizeRequests}
+     * configuration method.
+     */
     @Override
     public void configure(WebSecurity web) {
         web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
+    /**
+     * Allows modifying and accessing the {@link UserDetailsService} from
+     * {@link #userDetailsServiceBean()} without interacting with the
+     * {@link ApplicationContext}. Developers should override this method when changing
+     * the instance of {@link #userDetailsServiceBean()}.
+     * @return the {@link UserDetailsService} to use
+     */
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
