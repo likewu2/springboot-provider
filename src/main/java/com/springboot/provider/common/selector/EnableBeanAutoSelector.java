@@ -66,7 +66,7 @@ public class EnableBeanAutoSelector implements ImportSelector {
         if (packages == null || packages.length <= 0 || !StringUtils.hasText(packages[0])) {
             return new String[0];
         }
-        logger.info("加载该包所有类到spring容器中的包名为：" + Arrays.toString(packages));
+        logger.info("Loading all the classes under package to Spring Context, package name is：" + Arrays.toString(packages));
         Set<String> classNames = new HashSet<>();
 
         for (String packageName : packages) {
@@ -74,7 +74,7 @@ public class EnableBeanAutoSelector implements ImportSelector {
         }
         //将类打印到日志中
         for (String className : classNames) {
-            logger.info(className + "加载到spring容器中");
+            logger.info(className + " has been loaded to Spring Context");
         }
         String[] returnClassNames = new String[classNames.size()];
         returnClassNames = classNames.toArray(returnClassNames);

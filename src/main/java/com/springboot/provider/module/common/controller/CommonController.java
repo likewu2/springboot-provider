@@ -8,6 +8,7 @@ import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
 import com.springboot.provider.common.holder.*;
+import com.springboot.provider.common.reader.ResourceReader;
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.pay.enums.PayStrategy;
@@ -70,7 +71,9 @@ public class CommonController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return ResultJson.success(user);
+//        return ResultJson.success(user);
+        String getCost = ResourceReader.getResource(null,"db/quartz_mysql.sql");
+        return ResultJson.success(getCost);
     }
 
     @RequestMapping("/user")
