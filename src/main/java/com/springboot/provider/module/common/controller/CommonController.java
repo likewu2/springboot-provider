@@ -1,9 +1,7 @@
 package com.springboot.provider.module.common.controller;
 
-import com.google.common.util.concurrent.FutureCallback;
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
-import com.google.common.util.concurrent.MoreExecutors;
+import com.google.common.util.concurrent.*;
+import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
@@ -37,6 +35,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class CommonController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final RateLimiter rateLimiter = RateLimiter.create(5.0);
 
     private final AtomicLong counter = new AtomicLong();
 
@@ -184,5 +184,13 @@ public class CommonController {
         }, MoreExecutors.directExecutor());
 
         return "success";
+    }
+
+    @RequestMapping(value = "/test/limit/{id}")
+    public ResultJson limit(@PathVariable String id) {
+        if (rateLimiter.tryAcquire(1)) {
+            return ResultJson.success("consume: " + id + " success");
+        }
+        return ResultJson.failure(ResultCode.SERVICE_UNAVAILABLE, "access too frequently");
     }
 }
