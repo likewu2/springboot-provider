@@ -4,12 +4,10 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonInputMessage;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 
 /**
@@ -19,7 +17,7 @@ import java.lang.reflect.Type;
  * @author: XuZhenkui
  * @create: 2020-12-14 14:19
  **/
-@ControllerAdvice
+@RestControllerAdvice
 public class RequestBodyHandler implements RequestBodyAdvice {
     /**
      * Invoked first to determine if this interceptor applies.
@@ -48,6 +46,19 @@ public class RequestBodyHandler implements RequestBodyAdvice {
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
         return new MappingJacksonInputMessage(inputMessage.getBody(), inputMessage.getHeaders());
+//        return new HttpInputMessage() {
+//            @Override
+//            public InputStream getBody() throws IOException {
+//                String s = IOUtils.toString(inputMessage.getBody(), StandardCharsets.UTF_8);
+//                byte[] decode = Base64.getDecoder().decode(s);
+//                return new ByteArrayInputStream(decode);
+//            }
+//
+//            @Override
+//            public HttpHeaders getHeaders() {
+//                return inputMessage.getHeaders();
+//            }
+//        };
     }
 
     /**

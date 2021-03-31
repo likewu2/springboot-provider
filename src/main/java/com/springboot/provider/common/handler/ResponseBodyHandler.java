@@ -1,5 +1,7 @@
 package com.springboot.provider.common.handler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -17,6 +19,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  **/
 @RestControllerAdvice
 public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
+
+    @Autowired
+    private ObjectMapper objectMapper;
     /**
      * Whether this component supports the given controller method return type
      * and the selected {@code HttpMessageConverter} type.
@@ -45,6 +50,14 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
      */
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+//        if (body instanceof ResultJson) {
+//            try {
+//                byte[] bytes = objectMapper.writeValueAsBytes(body);
+//                return new String(Base64.getEncoder().encode(bytes), StandardCharsets.UTF_8);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//        }
         return body;
     }
 }
