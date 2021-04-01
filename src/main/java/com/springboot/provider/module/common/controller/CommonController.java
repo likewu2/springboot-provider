@@ -25,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
+import javax.websocket.server.PathParam;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -142,7 +143,13 @@ public class CommonController {
     }
 
     @RequestMapping("/test/pay/{type}")
-    public String pay(@PathVariable("type") String type) {
+    public String payPath(@PathVariable("type") String type) {
+        PayStrategyFactory.get(PayStrategy.getEnumByKey(type)).pay();
+        return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
+    }
+
+    @RequestMapping("/test/pay")
+    public String payForm(@PathParam("type") String type) {
         PayStrategyFactory.get(PayStrategy.getEnumByKey(type)).pay();
         return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
     }
