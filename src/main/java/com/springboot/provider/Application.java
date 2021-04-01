@@ -1,8 +1,11 @@
 package com.springboot.provider;
 
+import cn.hutool.crypto.SmUtil;
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.springboot.provider.common.annotation.EnableBeans;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 // 自定义数据源一定要排除SpringBoot自动配置数据源，不然会出现循环引用的问题，The dependencies of some of the beans in the application context form a cycle
@@ -18,6 +22,9 @@ import java.util.Arrays;
 @EnableBeans(packages = "com.springboot.provider.module.his.entity")
 public class Application {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${sm4.key:spring-framework}")
+    private String key;
 
 //    Springboot 启动流程及扩展点:
 //    ApplicationContextInitializer(initialize) -> AbstractApplicationContext(refresh)
@@ -54,5 +61,10 @@ public class Application {
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
+    }
+
+    @Bean
+    public SymmetricCrypto symmetricCrypto() {
+        return SmUtil.sm4(key.getBytes(StandardCharsets.UTF_8));
     }
 }

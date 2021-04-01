@@ -1,14 +1,20 @@
 package com.springboot.provider.common.handler;
 
+import cn.hutool.crypto.symmetric.SymmetricCrypto;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonInputMessage;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @program: springboot-provider
@@ -19,6 +25,10 @@ import java.lang.reflect.Type;
  **/
 @RestControllerAdvice
 public class RequestBodyHandler implements RequestBodyAdvice {
+
+    @Autowired
+    private SymmetricCrypto symmetricCrypto;
+
     /**
      * Invoked first to determine if this interceptor applies.
      * 此处如果返回false , 则不执行当前Advice的业务
@@ -45,20 +55,20 @@ public class RequestBodyHandler implements RequestBodyAdvice {
      */
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
-        return new MappingJacksonInputMessage(inputMessage.getBody(), inputMessage.getHeaders());
-//        return new HttpInputMessage() {
-//            @Override
-//            public InputStream getBody() throws IOException {
-//                String s = IOUtils.toString(inputMessage.getBody(), StandardCharsets.UTF_8);
-//                byte[] decode = Base64.getDecoder().decode(s);
-//                return new ByteArrayInputStream(decode);
-//            }
-//
-//            @Override
-//            public HttpHeaders getHeaders() {
-//                return inputMessage.getHeaders();
-//            }
-//        };
+//        return new MappingJacksonInputMessage(inputMessage.getBody(), inputMessage.getHeaders());
+        return new HttpInputMessage() {
+            @Override
+            public InputStream getBody() throws IOException {
+                String data = IOUtils.toString(inputMessage.getBody(), StandardCharsets.UTF_8);
+                byte[] decode = symmetricCrypto.decrypt(data);
+                return new ByteArrayInputStream(decode);
+            }
+
+            @Override
+            public HttpHeaders getHeaders() {
+                return inputMessage.getHeaders();
+            }
+        };
     }
 
     /**
