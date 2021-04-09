@@ -1,9 +1,7 @@
 package com.springboot.provider.common.handler;
 
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.provider.common.ResultJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
@@ -12,8 +10,6 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * @program: springboot-provider
@@ -58,14 +54,14 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
      */
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (body instanceof ResultJson) {
-            try {
-                byte[] bytes = objectMapper.writeValueAsBytes(body);
-                return symmetricCrypto.decryptStr(bytes, StandardCharsets.UTF_8);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
+//        if (body instanceof ResultJson) {
+//            try {
+//                byte[] bytes = objectMapper.writeValueAsBytes(body);
+//                return symmetricCrypto.encrypt(bytes);
+//            } catch (JsonProcessingException e) {
+//                e.printStackTrace();
+//            }
+//        }
         return body;
     }
 }

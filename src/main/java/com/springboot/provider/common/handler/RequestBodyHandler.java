@@ -7,6 +7,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJacksonInputMessage;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
@@ -55,20 +56,20 @@ public class RequestBodyHandler implements RequestBodyAdvice {
      */
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
-//        return new MappingJacksonInputMessage(inputMessage.getBody(), inputMessage.getHeaders());
-        return new HttpInputMessage() {
-            @Override
-            public InputStream getBody() throws IOException {
-                String data = IOUtils.toString(inputMessage.getBody(), StandardCharsets.UTF_8);
-                byte[] decode = symmetricCrypto.decrypt(data);
-                return new ByteArrayInputStream(decode);
-            }
-
-            @Override
-            public HttpHeaders getHeaders() {
-                return inputMessage.getHeaders();
-            }
-        };
+        return new MappingJacksonInputMessage(inputMessage.getBody(), inputMessage.getHeaders());
+//        return new HttpInputMessage() {
+//            @Override
+//            public InputStream getBody() throws IOException {
+//                String data = IOUtils.toString(inputMessage.getBody(), StandardCharsets.UTF_8);
+//                byte[] decode = symmetricCrypto.decrypt(data);
+//                return new ByteArrayInputStream(decode);
+//            }
+//
+//            @Override
+//            public HttpHeaders getHeaders() {
+//                return inputMessage.getHeaders();
+//            }
+//        };
     }
 
     /**
