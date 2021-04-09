@@ -1,5 +1,6 @@
 package com.springboot.provider.module.common.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.util.concurrent.*;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
@@ -24,9 +25,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import javax.websocket.server.PathParam;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -199,5 +205,27 @@ public class CommonController {
             return ResultJson.success("consume: " + id + " success");
         }
         return ResultJson.failure(ResultCode.SERVICE_UNAVAILABLE, "access too frequently");
+    }
+
+    @RequestMapping(value = "/test/getJson")
+    public void getJson(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 获取 post 请求中 json 数据
+        String param = null;
+        BufferedReader streamReader = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
+        StringBuilder responseStrBuilder = new StringBuilder();
+        String inputStr;
+        while ((inputStr = streamReader.readLine()) != null) {
+            responseStrBuilder.append(inputStr);
+        }
+
+        if(responseStrBuilder.length() > 0){
+            JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
+            param = jsonObject.toJSONString();
+        }
+
+        // 返回 json 格式的数据
+        response.setContentType("application/json; charset=UTF-8");
+        assert param != null;
+        response.getWriter().write(param);
     }
 }
