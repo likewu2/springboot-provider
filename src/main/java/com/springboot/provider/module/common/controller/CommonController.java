@@ -1,6 +1,8 @@
 package com.springboot.provider.module.common.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.hash.BloomFilter;
+import com.google.common.hash.Funnels;
 import com.google.common.util.concurrent.*;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
@@ -44,6 +46,9 @@ public class CommonController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final RateLimiter rateLimiter = RateLimiter.create(5.0);
+
+    private final BloomFilter bloomFilter = BloomFilter.create(Funnels.integerFunnel(), 100);
+
 
     private final AtomicLong counter = new AtomicLong();
 
@@ -202,7 +207,8 @@ public class CommonController {
     @RequestMapping(value = "/test/limit/{id}")
     public ResultJson limit(@PathVariable String id) {
         if (rateLimiter.tryAcquire(1)) {
-            return ResultJson.success("consume: " + id + " success");
+            boolean b = bloomFilter.mightContain(1);
+            return ResultJson.success("consume: " + id + " success, Container might contain 1: " + b);
         }
         return ResultJson.failure(ResultCode.SERVICE_UNAVAILABLE, "access too frequently");
     }
