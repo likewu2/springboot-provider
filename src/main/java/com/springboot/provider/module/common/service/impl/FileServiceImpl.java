@@ -14,11 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -43,14 +45,14 @@ public class FileServiceImpl implements FileService {
         Path path = Paths.get(location + fileName);
         try {
             // write
-            Files.write(path, file.getBytes());
+            Path write = Files.write(path, file.getBytes());
 
             // copy
 //            InputStream inputStream = file.getInputStream();
 //            Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
 //            inputStream.close();
 
-            map.put(fileName, path);
+            map.put(fileName, write);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,14 +75,14 @@ public class FileServiceImpl implements FileService {
             Path path = Paths.get(location + fileName);
             try {
                 // write
-                Files.write(path, file.getBytes());
+                Path write = Files.write(path, file.getBytes());
 
                 // copy
 //                InputStream inputStream = file.getInputStream();
 //                Files.copy(inputStream, path, StandardCopyOption.REPLACE_EXISTING);
 //                inputStream.close();
 
-                map.put(fileName, path);
+                map.put(fileName, write);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -91,18 +93,26 @@ public class FileServiceImpl implements FileService {
     @Override
     public Map<String, Path> list() {
         Map<String, Path> map = new HashMap<>();
-        Stream<Path> stream = null;
-        try {
-            stream = Files.list(Paths.get(location));
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        File files = new File(location);
+        File[] list = files.listFiles();
+        for (File file : list) {
+            map.put(file.getName(), Paths.get(file.getAbsolutePath()));
         }
-        assert stream != null;
-        stream.forEach(file -> {
-            String s = file.getFileName().toString();
-            map.put(s, file.getFileName());
-        });
+
+//        Stream<Path> stream = null;
+//        try {
+//            stream = Files.list(Paths.get(location));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        assert stream != null;
+//        stream.forEach(file -> {
+//            String s = file.getFileName().toString();
+//            map.put(s, file.getFileName());
+//        });
         return map;
+
     }
 
     @Override
