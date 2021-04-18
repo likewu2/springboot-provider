@@ -18,7 +18,7 @@ import java.util.Map;
  * @Author: Xu Zhenkui
  * @Date: 2020/8/31 14:41
  */
-public class FieldUtil {
+public class FieldUtils {
 
     /**
      * @Description: 判断对象中的成员变量都不为空

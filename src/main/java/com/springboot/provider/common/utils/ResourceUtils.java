@@ -1,4 +1,4 @@
-package com.springboot.provider.common.reader;
+package com.springboot.provider.common.utils;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
@@ -11,17 +11,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class ResourceReader {
+public class ResourceUtils {
 
     /**
      *  获取 resources 目录下的资源文件
      *  ep: db/quartz_mysql.sql
-     * @param file
+     * @param fileName
      * @return
      */
-    public static String getResource(String file) {
+    public static String getResource(String fileName) {
         String content = "";
-        ClassPathResource classPathResource = new ClassPathResource(file);
+        ClassPathResource classPathResource = new ClassPathResource(fileName);
         try {
             byte[] bytes = FileCopyUtils.copyToByteArray(classPathResource.getInputStream());
             content = new String(bytes, StandardCharsets.UTF_8);
@@ -34,12 +34,12 @@ public class ResourceReader {
     /**
      *  获取 resources 目录下的资源文件
      *  ep: db/quartz_mysql.sql
-     * @param file
+     * @param fileName
      * @return
      */
-    public static String getResource(ResourceLoader resourceLoader, String file) {
+    public static String getResource(ResourceLoader resourceLoader, String fileName) {
         String content = "";
-        Resource resource = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResource(file);
+        Resource resource = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResource(fileName);
         try {
             InputStream inputStream = resource.getInputStream();
             byte[] bytes = IOUtils.toByteArray(inputStream);

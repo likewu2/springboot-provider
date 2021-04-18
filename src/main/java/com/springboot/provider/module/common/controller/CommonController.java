@@ -9,7 +9,8 @@ import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
 import com.springboot.provider.common.holder.*;
-import com.springboot.provider.common.reader.ResourceReader;
+import com.springboot.provider.common.utils.ResourceUtils;
+import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.pay.enums.PayStrategy;
@@ -80,11 +81,14 @@ public class CommonController {
             logger.info("servletContext.getContextPath() = " + servletContext.getContextPath());
             logger.info(ResourceLoaderHolder.getLoader().getResource("application.properties").getFile().toString());
             logger.info("EnvironmentHolder.getEnvironment().getProperty(\"server.port\") = " + EnvironmentHolder.getEnvironment().getProperty("server.port"));
+
+            logger.info("loadProperties: " + PropertyUtils.loadProperties("application.properties").getProperty("context.initializer.classes"));
+            logger.info("loadProperties: " + PropertyUtils.loadAbsolutePathProperties("D:\\IdeaProjects\\development\\src\\main\\resources\\application.properties").getProperty("server.port"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 //        return ResultJson.success(user);
-        String getCost = ResourceReader.getResource(null,"db/quartz_mysql.sql");
+        String getCost = ResourceUtils.getResource(null,"db/quartz_mysql.sql");
         return ResultJson.success(getCost);
     }
 
