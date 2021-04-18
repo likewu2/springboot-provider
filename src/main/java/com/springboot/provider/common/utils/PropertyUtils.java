@@ -6,6 +6,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
@@ -51,7 +52,7 @@ public class PropertyUtils {
         try {
             if (file.exists()) {
                 inputStream = new FileInputStream(file);
-                inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             }
             if (inputStream != null) {
                 properties.load(inputStreamReader);
