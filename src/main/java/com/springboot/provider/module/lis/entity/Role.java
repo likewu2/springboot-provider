@@ -3,11 +3,12 @@ package com.springboot.provider.module.lis.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author XuZhenkui
@@ -24,6 +25,20 @@ public class Role extends Model<Role> {
 
     private String title;
 
+    public Role() {
+    }
+
+    public Role(String name, String title) {
+        this.name = name;
+        this.title = title;
+    }
+
+    public Role(Integer id, String name, String title) {
+        this.id = id;
+        this.name = name;
+        this.title = title;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -31,6 +46,7 @@ public class Role extends Model<Role> {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
@@ -38,6 +54,7 @@ public class Role extends Model<Role> {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getTitle() {
         return title;
     }
@@ -54,9 +71,9 @@ public class Role extends Model<Role> {
     @Override
     public String toString() {
         return "Role{" +
-            "id=" + id +
-            ", name=" + name +
-            ", title=" + title +
-        "}";
+                "id=" + id +
+                ", name=" + name +
+                ", title=" + title +
+                "}";
     }
 }

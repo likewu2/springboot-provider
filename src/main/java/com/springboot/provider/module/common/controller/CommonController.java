@@ -13,6 +13,7 @@ import com.springboot.provider.common.utils.ResourceUtils;
 import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
+import com.springboot.provider.module.lis.entity.Role;
 import com.springboot.provider.module.pay.enums.PayStrategy;
 import com.springboot.provider.module.pay.factory.PayStrategyFactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -23,7 +24,9 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -36,10 +39,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 @RestController
 public class CommonController {
@@ -88,7 +95,7 @@ public class CommonController {
             e.printStackTrace();
         }
 //        return ResultJson.success(user);
-        String getCost = ResourceUtils.getResource(null,"db/quartz_mysql.sql");
+        String getCost = ResourceUtils.getResource(null, "db/quartz_mysql.sql");
         return ResultJson.success(getCost);
     }
 
@@ -128,8 +135,19 @@ public class CommonController {
     @RequestMapping("/test/getDataSource")
     public ResultJson getFromDataSource() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from role");
-        return ResultJson.success(maps);
+
+        RowMapper<Role> rowMapper = new BeanPropertyRowMapper<>(Role.class);
+//        List<Role> roles = jdbcTemplate.query("select * from role", rowMapper);
+        List<Role> roles = jdbcTemplate.query("select * from role where id = ?", rowMapper, 10);
+
+//        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from role");
+//        List<String> nameList = jdbcTemplate.queryForList("select name from role", String.class);
+//        List<String> nameList = jdbcTemplate.queryForList("select name from role where id >= ?", String.class, 9);
+
+//        String name = jdbcTemplate.queryForObject("select name from role where id = ?", String.class, 1);
+
+
+        return ResultJson.success(roles);
     }
 
     @RequestMapping("/test/insert")
@@ -228,7 +246,7 @@ public class CommonController {
             responseStrBuilder.append(inputStr);
         }
 
-        if(responseStrBuilder.length() > 0){
+        if (responseStrBuilder.length() > 0) {
             JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
             param = jsonObject.toJSONString();
         }
