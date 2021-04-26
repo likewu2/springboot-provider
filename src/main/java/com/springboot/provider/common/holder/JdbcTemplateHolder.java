@@ -23,7 +23,6 @@ public class JdbcTemplateHolder {
      */
     public static JdbcTemplate getJdbcTemplate(String dsName){
         if (StringUtils.hasText(dsName)){
-            dsName = dsName.toUpperCase();
             return JDBC_TEMPLATE_MAP.get(dsName);
         }
         return null;
@@ -36,7 +35,6 @@ public class JdbcTemplateHolder {
      */
     public static Boolean addJdbcTemplate(String dsName, DataSource dataSource){
         if (StringUtils.hasText(dsName) && dataSource != null){
-            dsName = dsName.toUpperCase();
 //        如果传入key对应的value已经存在，就返回存在的value，不进行替换。如果不存在，就添加key和value，返回null
             return JDBC_TEMPLATE_MAP.putIfAbsent(dsName, new JdbcTemplate(dataSource)) == null;
         }
@@ -50,7 +48,6 @@ public class JdbcTemplateHolder {
      */
     public static Boolean updateJdbcTemplate(String dsName, DataSource dataSource){
         if (StringUtils.hasText(dsName) && dataSource != null){
-            dsName = dsName.toUpperCase();
             JDBC_TEMPLATE_MAP.put(dsName, new JdbcTemplate(dataSource));
             return true;
         }
@@ -64,7 +61,6 @@ public class JdbcTemplateHolder {
      */
     public static Boolean removeJdbcTemplate(String dsName, DataSource dataSource){
         if (StringUtils.hasText(dsName) && dataSource != null){
-            dsName = dsName.toUpperCase();
             JDBC_TEMPLATE_MAP.remove(dsName);
             return true;
         }
