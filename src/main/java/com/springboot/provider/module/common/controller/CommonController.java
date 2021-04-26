@@ -9,6 +9,7 @@ import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
 import com.springboot.provider.common.holder.*;
+import com.springboot.provider.common.proxy.JdbcOperationsProxy;
 import com.springboot.provider.common.utils.ResourceUtils;
 import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.module.common.service.CommonService;
@@ -25,6 +26,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +41,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @RestController
 public class CommonController {
@@ -134,11 +132,12 @@ public class CommonController {
 
     @RequestMapping("/test/getDataSource")
     public ResultJson getFromDataSource() {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
+//        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
+        JdbcOperations jdbcTemplate = JdbcOperationsProxy.getProxyInstance("development");
 
         RowMapper<Role> rowMapper = new BeanPropertyRowMapper<>(Role.class);
 //        List<Role> roles = jdbcTemplate.query("select * from role", rowMapper);
-        List<Role> roles = jdbcTemplate.query("select * from role where id = ?", rowMapper, 10);
+        List<Role> roles = jdbcTemplate.query("select * from role where id = ? and title = ?", rowMapper, 10, "超级管理员");
 
 //        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from role");
 //        List<String> nameList = jdbcTemplate.queryForList("select name from role", String.class);
