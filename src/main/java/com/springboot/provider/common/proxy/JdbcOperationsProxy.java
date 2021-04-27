@@ -31,7 +31,7 @@ public class JdbcOperationsProxy {
         if (dataSource == null) {
             throw new RuntimeException(dsName + " datasource is not exists in MultiDataSourceHolder!");
         }
-        JdbcTemplate instance = new JdbcTemplate(dataSource);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         return (JdbcOperations) Proxy.newProxyInstance(JdbcOperations.class.getClassLoader(), new Class<?>[]{JdbcOperations.class}, (proxy, method, args) -> {
             long l = System.currentTimeMillis();
             AtomicReference<String> sql = new AtomicReference<>("");
@@ -44,7 +44,7 @@ public class JdbcOperationsProxy {
                     });
                 }
             });
-            Object result = method.invoke(instance, args);
+            Object result = method.invoke(jdbcTemplate, args);
             logger.info("\nJdbcOperations 方法: " + method.getName() + "\nSQL: " + sql.accumulateAndGet(";", (s, s2) -> s + s2) + "\n调用耗时: " + (System.currentTimeMillis() - l) + " ms");
             return result;
         });
