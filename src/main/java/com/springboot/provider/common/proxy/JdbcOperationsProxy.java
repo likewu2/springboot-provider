@@ -18,10 +18,7 @@ public class JdbcOperationsProxy {
 
     public static JdbcOperations getProxyInstance(String dsName) {
         if (JDBC_OPERATIONS_MAP.get(dsName) == null) {
-            JdbcOperations instance = getInstance(dsName);
-            if (instance != null) {
-                JDBC_OPERATIONS_MAP.putIfAbsent(dsName, instance);
-            }
+            JDBC_OPERATIONS_MAP.putIfAbsent(dsName, getInstance(dsName));
         }
         return JDBC_OPERATIONS_MAP.get(dsName);
     }
