@@ -1,6 +1,8 @@
 package com.springboot.provider.config;
 
 import com.springboot.provider.common.builder.AtomikosDataSourceBuilder;
+import com.springboot.provider.common.holder.MultiDataSourceHolder;
+import com.springboot.provider.common.proxy.JdbcOperationsProxy;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
@@ -13,6 +15,7 @@ import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
@@ -56,9 +59,12 @@ public class HisDataSourceConfig {
 //        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(xaDataSourceClassName, properties, RESOURCE_NAME);
     }
 
-    @Bean(name = "hisJdbcTemplate")
-    public JdbcTemplate hisJdbcTemplate(@Qualifier("hisDataSource") DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
+    @Bean(name = "hisJdbcOperations")
+    public JdbcOperations hisJdbcTemplate(@Qualifier("hisDataSource") DataSource dataSource) {
+        if (MultiDataSourceHolder.addDataSource(RESOURCE_NAME, dataSource)) {
+            return JdbcOperationsProxy.getProxyInstance(RESOURCE_NAME);
+        }
+        return null;
     }
 
     @Primary

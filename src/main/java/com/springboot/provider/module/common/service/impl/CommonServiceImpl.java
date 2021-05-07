@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,22 +30,22 @@ public class CommonServiceImpl implements CommonService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    @Qualifier("hisJdbcTemplate")
-    private JdbcTemplate hisJdbcTemplate;
+    @Qualifier("hisJdbcOperations")
+    private JdbcOperations hisJdbcOperations;
 
     @Autowired
-    @Qualifier("lisJdbcTemplate")
-    private JdbcTemplate lisJdbcTemplate;
+    @Qualifier("lisJdbcOperations")
+    private JdbcOperations lisJdbcOperations;
 
     @Override
     public Integer insert() {
         String username = UUID.randomUUID().toString();
         username  = username.substring(0,16);
 
-        int his = hisJdbcTemplate.update("insert into user(username,password) values(?,?)", username, passwordEncoder.encode(username));
+        int his = hisJdbcOperations.update("insert into user(username,password) values(?,?)", username, passwordEncoder.encode(username));
 //        int a= 1/0;
 
-        int lis = lisJdbcTemplate.update("insert into role(name,title) values(?,?)", "admin","ADMIN");
+        int lis = lisJdbcOperations.update("insert into role(name,title) values(?,?)", "admin","ADMIN");
 //        int i = 1/0;
         return his + lis;
     }
@@ -52,7 +53,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public Integer update(User user) {
         try {
-            return hisJdbcTemplate.update("update user set username=?,password=? where id=?",user.getUsername(),user.getPassword(),user.getId());
+            return hisJdbcOperations.update("update user set username=?,password=? where id=?",user.getUsername(),user.getPassword(),user.getId());
         } catch (DataAccessException e) {
             return null;
         }
@@ -61,7 +62,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public Integer deleteById(Long id) {
         try {
-            return hisJdbcTemplate.update("delete from user where id=?", id);
+            return hisJdbcOperations.update("delete from user where id=?", id);
         } catch (DataAccessException e) {
             return null;
         }
@@ -70,7 +71,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public List<User> selectAll() {
         try {
-            return hisJdbcTemplate.query("select * from user", new BeanPropertyRowMapper<>(User.class));
+            return hisJdbcOperations.query("select * from user", new BeanPropertyRowMapper<>(User.class));
         } catch (DataAccessException e) {
             return null;
         }
@@ -79,7 +80,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public List<User> selectByUsername(String username) {
         try {
-            return hisJdbcTemplate.query("select * from user where username = ?", new BeanPropertyRowMapper<>(User.class), username);
+            return hisJdbcOperations.query("select * from user where username = ?", new BeanPropertyRowMapper<>(User.class), username);
         } catch (DataAccessException e) {
             return null;
         }
@@ -88,7 +89,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public User selectById(Long id) {
         try {
-            return hisJdbcTemplate.queryForObject("select * from user where id = ?",new BeanPropertyRowMapper<>(User.class), id);
+            return hisJdbcOperations.queryForObject("select * from user where id = ?",new BeanPropertyRowMapper<>(User.class), id);
         } catch (DataAccessException e) {
             return null;
         }
