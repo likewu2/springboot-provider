@@ -44,19 +44,6 @@ public class MultiDataSourceHolder {
     }
 
     /**
-     * 修改数据源
-     * @param dsName 数据源名称
-     * @param dataSource 数据源
-     */
-    public static Boolean updateDataSource(String dsName, DataSource dataSource){
-        if (StringUtils.hasText(dsName) && dataSource != null){
-            DATA_SOURCE_MAP.put(dsName, dataSource);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * 删除数据源
      * @param dsName 数据源名称
      * @param dataSource 数据源

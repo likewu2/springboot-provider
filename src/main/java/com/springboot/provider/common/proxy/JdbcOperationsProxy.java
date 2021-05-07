@@ -42,7 +42,7 @@ public class JdbcOperationsProxy {
                 }
             });
             Object result = method.invoke(jdbcTemplate, args);
-            logger.info("\nJdbcOperations 方法: " + method.getName() + "\nSQL: " + sql.accumulateAndGet(";", (s, s2) -> s + s2) + "\n调用耗时: " + (System.currentTimeMillis() - l) + " ms");
+            logger.info("\nJdbcOperations Method: " + method.getName() + "\nSQL: " + sql.accumulateAndGet(";", (s, s2) -> s + s2) + "\nInvoke Cost: " + (System.currentTimeMillis() - l) + " ms");
             return result;
         });
     }
