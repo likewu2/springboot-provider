@@ -98,7 +98,7 @@ public class MultiDataSourceHolder {
     /**
      * 创建 Hikari 构造器
      *
-     * @return
+     * @return HikariDataSourceBuilder
      */
     public static HikariDataSourceBuilder builder() {
         return HikariDataSourceBuilder.create();

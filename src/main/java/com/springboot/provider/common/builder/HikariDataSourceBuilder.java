@@ -16,8 +16,8 @@ import java.util.Properties;
 public class HikariDataSourceBuilder {
     private Properties properties;
 
-    public HikariDataSourceBuilder() {
-        properties = new Properties();
+    private HikariDataSourceBuilder() {
+        this.properties = new Properties();
     }
 
     public static HikariDataSourceBuilder create() {
