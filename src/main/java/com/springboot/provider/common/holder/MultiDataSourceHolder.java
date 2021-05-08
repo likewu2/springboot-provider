@@ -1,5 +1,6 @@
 package com.springboot.provider.common.holder;
 
+import com.springboot.provider.common.builder.HikariDataSourceBuilder;
 import com.springboot.provider.common.enums.DataSourceEnum;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.util.StringUtils;
@@ -20,11 +21,12 @@ public class MultiDataSourceHolder {
 
     /**
      * 根据数据源名称获取数据源
+     *
      * @param dsName 数据源名称
      * @return
      */
-    public static DataSource getDataSource(String dsName){
-        if (StringUtils.hasText(dsName)){
+    public static DataSource getDataSource(String dsName) {
+        if (StringUtils.hasText(dsName)) {
             return DATA_SOURCE_MAP.get(dsName);
         }
         return null;
@@ -32,11 +34,12 @@ public class MultiDataSourceHolder {
 
     /**
      * 添加数据源
-     * @param dsName 数据源名称
+     *
+     * @param dsName     数据源名称
      * @param dataSource 数据源
      */
-    public static Boolean addDataSource(String dsName, DataSource dataSource){
-        if (StringUtils.hasText(dsName) && dataSource != null){
+    public static Boolean addDataSource(String dsName, DataSource dataSource) {
+        if (StringUtils.hasText(dsName) && dataSource != null) {
 //        如果传入key对应的value已经存在，就返回存在的value，不进行替换。如果不存在，就添加key和value，返回null
             return DATA_SOURCE_MAP.putIfAbsent(dsName, dataSource) == null;
         }
@@ -45,11 +48,12 @@ public class MultiDataSourceHolder {
 
     /**
      * 删除数据源
-     * @param dsName 数据源名称
+     *
+     * @param dsName     数据源名称
      * @param dataSource 数据源
      */
-    public static Boolean removeDataSource(String dsName, DataSource dataSource){
-        if (StringUtils.hasText(dsName) && dataSource != null){
+    public static Boolean removeDataSource(String dsName, DataSource dataSource) {
+        if (StringUtils.hasText(dsName) && dataSource != null) {
             DATA_SOURCE_MAP.remove(dsName);
             return true;
         }
@@ -58,6 +62,7 @@ public class MultiDataSourceHolder {
 
     /**
      * 构建数据源
+     *
      * @param dbType   数据库类型
      * @param ip       数据库地址
      * @param port     数据库端口
@@ -67,16 +72,16 @@ public class MultiDataSourceHolder {
      * @param etc      预留尾部参数配置
      * @return
      */
-    public static DataSource buildDataSource(String dbType, String ip, String port, String instance, String username,String password, String etc){
+    public static DataSource buildDataSource(String dbType, String ip, String port, String instance, String username, String password, String etc) {
         dbType = dbType.toUpperCase();
 
         String driverClassName;
         String url;
 
-        if (dbType.equals(DataSourceEnum.MYSQL.getDbType())){
+        if (dbType.equals(DataSourceEnum.MYSQL.getDbType())) {
             driverClassName = DataSourceEnum.MYSQL.getDriverClassName();
             url = DataSourceEnum.MYSQL.getPrefix() + ip + ":" + port + "/" + instance + DataSourceEnum.MYSQL.getSuffix() + etc;
-        } else if(dbType.equals(DataSourceEnum.ORACLE.getDbType())) {
+        } else if (dbType.equals(DataSourceEnum.ORACLE.getDbType())) {
             driverClassName = DataSourceEnum.ORACLE.getDriverClassName();
             url = DataSourceEnum.ORACLE.getPrefix() + ip + ":" + port + ":" + instance + DataSourceEnum.ORACLE.getSuffix() + etc;
         } else {
@@ -88,5 +93,14 @@ public class MultiDataSourceHolder {
                 .url(url)
                 .username(username)
                 .password(password).build();
+    }
+
+    /**
+     * 创建 Hikari 构造器
+     *
+     * @return
+     */
+    public static HikariDataSourceBuilder builder() {
+        return HikariDataSourceBuilder.create();
     }
 }

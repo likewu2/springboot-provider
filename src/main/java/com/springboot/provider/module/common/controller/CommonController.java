@@ -118,6 +118,13 @@ public class CommonController {
                 .username("root")
                 .password("root").build();
 
+        DataSource build1 = MultiDataSourceHolder.builder()
+                .driverClassName("com.mysql.cj.jdbc.Driver")
+                .jdbcUrl("jdbc:mysql://localhost:3306/development?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false")
+                .username("root")
+                .password("root").build();
+
+
         DataSource dataSource = MultiDataSourceHolder.buildDataSource("mysql", "localhost", "3306", "development", "root", "root", "");
 
         return ResultJson.success(MultiDataSourceHolder.addDataSource("development", dataSource));
