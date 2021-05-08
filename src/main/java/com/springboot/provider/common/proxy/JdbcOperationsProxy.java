@@ -12,6 +12,7 @@ import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
 
 public class JdbcOperationsProxy {
     private static final Logger logger = LoggerFactory.getLogger(JdbcOperationsProxy.class);
@@ -53,7 +54,7 @@ public class JdbcOperationsProxy {
                     sql.set((String) item);
                 } else if (item instanceof Object[]) {
                     Arrays.stream(((Object[]) item)).forEach(param -> {
-                        sql.updateAndGet(s -> s.replaceFirst("\\?", "'" + param + "'"));
+                        sql.updateAndGet(s -> s.replaceFirst("\\?", "'" + Matcher.quoteReplacement(param.toString()) + "'"));
                     });
                 }
             });
