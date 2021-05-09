@@ -20,19 +20,15 @@ public class JdbcOperationsProxy {
 
     public static JdbcOperations getProxyInstance(String dsName) {
         if (JDBC_OPERATIONS_MAP.get(dsName) == null) {
-            JDBC_OPERATIONS_MAP.putIfAbsent(dsName, getProxyInstance(dsName, null));
+            DataSource dataSource = MultiDataSourceHolder.getDataSource(dsName);
+            Assert.notNull(dataSource, dsName + " datasource is not exists in MultiDataSourceHolder!");
+            
+            JDBC_OPERATIONS_MAP.putIfAbsent(dsName, getProxyInstance(dataSource));
         }
         return JDBC_OPERATIONS_MAP.get(dsName);
     }
 
-    public static JdbcOperations getProxyInstance(String dsName, DataSource dataSource) {
-        Assert.notNull(dsName, "dsName requires non null!");
-
-        if (dataSource == null) {
-            dataSource = MultiDataSourceHolder.getDataSource(dsName);
-            Assert.notNull(dataSource, dsName + " datasource is not exists in MultiDataSourceHolder!");
-        }
-
+    public static JdbcOperations getProxyInstance(DataSource dataSource) {
         Assert.notNull(dataSource, "datasource requires non null!");
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
