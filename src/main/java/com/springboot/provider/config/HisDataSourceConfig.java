@@ -61,10 +61,12 @@ public class HisDataSourceConfig {
 
     @Bean(name = "hisJdbcOperations")
     public JdbcOperations hisJdbcTemplate(@Qualifier("hisDataSource") DataSource dataSource) {
-        if (MultiDataSourceHolder.addDataSource(RESOURCE_NAME, dataSource)) {
-            return JdbcOperationsProxy.getProxyInstance(RESOURCE_NAME);
-        }
-        return null;
+//        if (MultiDataSourceHolder.addDataSource(RESOURCE_NAME, dataSource)) {
+//            return JdbcOperationsProxy.getProxyInstance(RESOURCE_NAME);
+//        }
+//        return null;
+
+        return JdbcOperationsProxy.getProxyInstance(dataSource);
     }
 
     @Primary

@@ -59,10 +59,12 @@ public class LisDataSourceConfig {
 
     @Bean(name = "lisJdbcOperations")
     public JdbcOperations lisJdbcTemplate(@Qualifier("lisDataSource") DataSource dataSource) {
-        if (MultiDataSourceHolder.addDataSource(RESOURCE_NAME, dataSource)) {
-            return JdbcOperationsProxy.getProxyInstance(RESOURCE_NAME);
-        }
-        return null;
+//        if (MultiDataSourceHolder.addDataSource(RESOURCE_NAME, dataSource)) {
+//            return JdbcOperationsProxy.getProxyInstance(RESOURCE_NAME);
+//        }
+//        return null;
+
+        return JdbcOperationsProxy.getProxyInstance(dataSource);
     }
 
     @Bean(name = "lisSqlSessionFactory")
