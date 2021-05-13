@@ -25,13 +25,13 @@ public class ThreadPoolExecutorHolder {
 
     private final static TimeUnit TIME_UNIT = TimeUnit.SECONDS;
 
-    private final static BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>();
+    private final static BlockingQueue<Runnable> WORK_QUEUE = new LinkedBlockingQueue<>(5);
 
-    private final static ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat(ThreadPoolExecutorHolder.class.getSimpleName() + "-%d").build();
+    private final static ThreadFactory THREAD_FACTORY = new ThreadFactoryBuilder().setNameFormat(ThreadPoolExecutorHolder.class.getSimpleName() + "-%d").build();
 
     private static ExecutorService threadPoolExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
             KEEP_ALIVE_TIME, TIME_UNIT,
-            workQueue, threadFactory, new ThreadPoolExecutor.AbortPolicy());
+            WORK_QUEUE, THREAD_FACTORY, new ThreadPoolExecutor.AbortPolicy());
 
     public static ExecutorService getThreadPoolExecutor() {
         return threadPoolExecutor;
