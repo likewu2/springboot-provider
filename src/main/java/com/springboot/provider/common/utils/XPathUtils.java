@@ -1,12 +1,11 @@
 package com.springboot.provider.common.utils;
 
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
@@ -22,22 +21,20 @@ import java.io.StringReader;
 public class XPathUtils {
 
     public static String getValueFromXml(String xml, String expression) {
-        Assert.notNull(xml, "xml must not be null");
-        Assert.notNull(expression, "expression must not be null");
+        String evaluate = "";
 
-        InputSource is = new InputSource(new StringReader(xml));
-        Object evaluate;
-
-        try {
-            XPath xPath = XPathFactory.newInstance().newXPath();
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            Document document = builder.parse(is);
-            evaluate = xPath.evaluate(expression, document, XPathConstants.STRING);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        if (StringUtils.isNotBlank(xml)) {
+            try {
+                InputSource is = new InputSource(new StringReader(xml));
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                Document document = builder.parse(is);
+                evaluate = (String) xPath.evaluate(expression, document, XPathConstants.STRING);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return (String) evaluate;
+        return evaluate;
     }
 
     public static void main(String[] args) {

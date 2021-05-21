@@ -1,5 +1,6 @@
 package com.springboot.provider.common.utils;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -33,6 +34,10 @@ public class ClassUtils {
      * @return 类的完整名称
      */
     public static Set<String> getClassName(String packageName, boolean isRecursion) {
+        if (StringUtils.isBlank(packageName)) {
+            return null;
+        }
+
         Set<String> classNames = null;
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         String packagePath = packageName.replace(".", "/");
@@ -67,6 +72,10 @@ public class ClassUtils {
      * @return 类的完整名称
      */
     private static Set<String> getClassNameFromDir(String filePath, String packageName, boolean isRecursion) {
+        if (StringUtils.isBlank(filePath) || StringUtils.isBlank(packageName)) {
+            return null;
+        }
+
         Set<String> className = new HashSet<>();
         File file = new File(filePath);
         File[] files = file.listFiles();
@@ -89,6 +98,10 @@ public class ClassUtils {
     }
 
     private static Set<String> getClassNameFromJar(Enumeration<JarEntry> jarEntries, String packageName, boolean isRecursion) {
+        if (jarEntries == null || StringUtils.isBlank(packageName)) {
+            return null;
+        }
+
         Set<String> classNames = new HashSet<>();
 
         while (jarEntries.hasMoreElements()) {
@@ -117,6 +130,10 @@ public class ClassUtils {
      * @return 类的完整名称
      */
     private static Set<String> getClassNameFromJars(URL[] urls, String packageName, boolean isRecursion) {
+        if (urls == null || StringUtils.isBlank(packageName)) {
+            return null;
+        }
+
         Set<String> classNames = new HashSet<>();
         for (URL url : urls) {
             String classPath = url.getPath();

@@ -70,7 +70,10 @@ public class EnableBeanAutoSelector implements ImportSelector {
         Set<String> classNames = new HashSet<>();
 
         for (String packageName : packages) {
-            classNames.addAll(ClassUtils.getClassName(packageName, isRecursion));
+            Set<String> classNameSet = ClassUtils.getClassName(packageName, isRecursion);
+            if (classNameSet != null) {
+                classNames.addAll(classNameSet);
+            }
         }
         //将类打印到日志中
         for (String className : classNames) {
