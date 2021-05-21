@@ -1,5 +1,6 @@
 package com.springboot.provider.common.utils;
 
+import org.springframework.util.Assert;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -20,25 +21,17 @@ import java.io.StringReader;
  **/
 public class XPathUtils {
 
-    private static XPath xPath = null;
-    private static DocumentBuilder builder = null;
-
-    static {
-        try {
-            xPath = XPathFactory.newInstance().newXPath();
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static String getValueFromXml(String xml, String expression) {
+        Assert.notNull(xml, "xml must not be null");
+        Assert.notNull(expression, "expression must not be null");
+
         InputSource is = new InputSource(new StringReader(xml));
-        Document document = null;
-        Object evaluate = null;
+        Object evaluate;
 
         try {
-            document = builder.parse(is);
+            XPath xPath = XPathFactory.newInstance().newXPath();
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document document = builder.parse(is);
             evaluate = xPath.evaluate(expression, document, XPathConstants.STRING);
         } catch (Exception e) {
             e.printStackTrace();

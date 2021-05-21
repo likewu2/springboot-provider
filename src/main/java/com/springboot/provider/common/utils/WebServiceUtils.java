@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.xfire.client.Client;
+import org.springframework.util.Assert;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -17,24 +18,14 @@ import java.io.StringReader;
 import java.net.URL;
 
 public class WebServiceUtils {
-
     private Log logger = LogFactory.getLog(WebServiceUtils.class);
-
-    private static XPath xPath = null;
-    private static DocumentBuilder builder = null;
-
-    static {
-        try {
-            xPath = XPathFactory.newInstance().newXPath();
-            builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        }
-    }
 
     private static String url = "http://10.80.5.34:9528/hai/WebServiceEntry?wsdl";
 
     public String getPlatform(String xml, String service) {
+        Assert.notNull(xml, "xml must not be null");
+        Assert.notNull(service, "service must not be null");
+
         logger.info(" >>> 调用 WebService 接口：service: " + service + "; 入参: " + xml);
         String reStr = null;
         try {
@@ -55,10 +46,15 @@ public class WebServiceUtils {
     }
 
     private String getReXml(String xml, String expression) {
+        Assert.notNull(xml, "xml must not be null");
+        Assert.notNull(expression, "expression must not be null");
+
         String content = "";
         if (StringUtils.isNotBlank(xml)) {
             try {
                 InputSource is = new InputSource(new StringReader(xml));
+                XPath xPath = XPathFactory.newInstance().newXPath();
+                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
                 Document document = builder.parse(is);
                 content = (String) xPath.evaluate(expression, document, XPathConstants.STRING);
 

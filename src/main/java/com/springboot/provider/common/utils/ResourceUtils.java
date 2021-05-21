@@ -5,6 +5,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
+import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.IOException;
@@ -20,6 +21,8 @@ public class ResourceUtils {
      * @return
      */
     public static String getResource(String fileName) {
+        Assert.notNull(fileName, "fileName must not be null");
+
         String content = "";
         ClassPathResource classPathResource = new ClassPathResource(fileName);
         try {
@@ -38,6 +41,8 @@ public class ResourceUtils {
      * @return
      */
     public static String getResource(ResourceLoader resourceLoader, String fileName) {
+        Assert.notNull(fileName, "fileName must not be null");
+
         String content = "";
         Resource resource = ResourcePatternUtils.getResourcePatternResolver(resourceLoader).getResource(fileName);
         try {
