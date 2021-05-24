@@ -1,5 +1,6 @@
 package com.springboot.provider.module.common.service.impl;
 
+import cn.hutool.core.util.ZipUtil;
 import com.springboot.provider.module.common.service.FileService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -126,6 +127,27 @@ public class FileServiceImpl implements FileService {
         headers.setContentDispositionFormData("attachment", filename);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> downloadZipFile(String filePath) throws IOException {
+        if (!StringUtils.hasText(filePath) || filePath.contains("..")) {
+            return null;
+        }
+
+        File file = new File(filePath);
+        if (file.isDirectory()) {
+            String zipPath = file.getParentFile().getPath() + File.separator + file.getName() + ".zip";
+            File zip = ZipUtil.zip(filePath, zipPath , true);
+
+            HttpHeaders headers = new HttpHeaders();
+            String attachment = new String(zip.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+
+            headers.setContentDispositionFormData("attachment", attachment);
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.CREATED);
+        }
+        return null;
     }
 
     @Override
