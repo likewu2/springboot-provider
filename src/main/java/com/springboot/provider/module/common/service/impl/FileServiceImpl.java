@@ -62,16 +62,14 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Map<String, Path> uploadMultipart(MultipartFile[] files) {
+        Map<String, Path> map = new HashMap<>();
+
         for (MultipartFile file : files) {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             if (file.isEmpty() || fileName.contains("..")) {
-                return null;
+                continue;
             }
-        }
 
-        Map<String, Path> map = new HashMap<>();
-        for (MultipartFile file : files) {
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             // Get the file and save it somewhere
             Path path = Paths.get(location + fileName);
             try {
@@ -96,22 +94,25 @@ public class FileServiceImpl implements FileService {
         Map<String, Path> map = new HashMap<>();
 
         File files = new File(location);
-        File[] list = files.listFiles();
-        for (File file : list) {
-            map.put(file.getName(), Paths.get(file.getAbsolutePath()));
-        }
+        if (files.exists()) {
+            File[] list = files.listFiles();
 
-//        Stream<Path> stream = null;
-//        try {
-//            stream = Files.list(Paths.get(location));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        assert stream != null;
-//        stream.forEach(file -> {
-//            String s = file.getFileName().toString();
-//            map.put(s, file.getFileName());
-//        });
+            for (File file : list) {
+                map.put(file.getName(), Paths.get(file.getAbsolutePath()));
+            }
+
+//            Stream<Path> stream = null;
+//            try {
+//                stream = Files.list(Paths.get(location));
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            assert stream != null;
+//            stream.forEach(file -> {
+//                String s = file.getFileName().toString();
+//                map.put(s, file.getFileName());
+//            });
+        }
         return map;
     }
 
@@ -121,12 +122,16 @@ public class FileServiceImpl implements FileService {
             return null;
         }
         File file = new File(location + File.separator + filename);
-        HttpHeaders headers = new HttpHeaders();
-        filename = new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 
-        headers.setContentDispositionFormData("attachment", filename);
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.CREATED);
+        if (file.exists()) {
+            HttpHeaders headers = new HttpHeaders();
+            filename = new String(filename.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+
+            headers.setContentDispositionFormData("attachment", filename);
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.CREATED);
+        }
+        return null;
     }
 
     @Override
@@ -134,18 +139,17 @@ public class FileServiceImpl implements FileService {
         if (!StringUtils.hasText(filePath) || filePath.contains("..")) {
             return null;
         }
-
         File file = new File(filePath);
-        if (file.isDirectory()) {
-            String zipPath = file.getParentFile().getPath() + File.separator + file.getName() + ".zip";
-            File zip = ZipUtil.zip(filePath, zipPath , true);
+
+        if (file.exists()) {
+            File zip = ZipUtil.zip(file);
 
             HttpHeaders headers = new HttpHeaders();
             String attachment = new String(zip.getName().getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
 
             headers.setContentDispositionFormData("attachment", attachment);
             headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            return new ResponseEntity<>(Files.readAllBytes(file.toPath()), headers, HttpStatus.CREATED);
+            return new ResponseEntity<>(Files.readAllBytes(zip.toPath()), headers, HttpStatus.CREATED);
         }
         return null;
     }
@@ -158,9 +162,12 @@ public class FileServiceImpl implements FileService {
         Path path = Paths.get(location + filename);
         Resource resource = new UrlResource(path.toUri());
 
-        filename = new String(Objects.requireNonNull(resource.getFilename()).getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + filename + "\"")
-                .body(resource);
+        if (resource.exists()) {
+            filename = new String(Objects.requireNonNull(resource.getFilename()).getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + filename + "\"")
+                    .body(resource);
+        }
+        return null;
     }
 }
