@@ -43,7 +43,7 @@ public class FileServiceImpl implements FileService {
 
         Map<String, Path> map = new HashMap<>();
         // Get the file and save it somewhere
-        Path path = Paths.get(location + fileName);
+        Path path = Paths.get(location + File.separator + fileName);
         try {
             // write
             Path write = Files.write(path, file.getBytes());
@@ -71,7 +71,7 @@ public class FileServiceImpl implements FileService {
             }
 
             // Get the file and save it somewhere
-            Path path = Paths.get(location + fileName);
+            Path path = Paths.get(location + File.separator + fileName);
             try {
                 // write
                 Path write = Files.write(path, file.getBytes());
@@ -159,7 +159,7 @@ public class FileServiceImpl implements FileService {
         if (!StringUtils.hasText(filename) || filename.contains("..")) {
             return null;
         }
-        Path path = Paths.get(location + filename);
+        Path path = Paths.get(location + File.separator + filename);
         Resource resource = new UrlResource(path.toUri());
 
         if (resource.exists()) {
