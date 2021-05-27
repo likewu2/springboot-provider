@@ -3,6 +3,7 @@ package com.springboot.provider;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.springboot.provider.common.annotation.EnableBeans;
+import com.springboot.provider.common.annotation.EnableHttps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
+@EnableHttps
 // 自定义数据源一定要排除SpringBoot自动配置数据源，不然会出现循环引用的问题，The dependencies of some of the beans in the application context form a cycle
 @SpringBootApplication/*(exclude = {DataSourceAutoConfiguration.class})*/
 @EnableBeans(packages = "com.springboot.provider.module.his.entity")

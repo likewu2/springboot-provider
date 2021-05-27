@@ -17,8 +17,8 @@ import java.util.Map;
  * @create: 2020-11-19 10:24
  **/
 public class LogConfigurationSelector implements ImportSelector {
-    private static final String LOG_INFO_CONFIG = "com.springboot.provider.selector.LogInfoConfig";
-    private static final String LOG_ERROR_CONFIG = "com.springboot.provider.selector.LogErrorConfig";
+    public static final String LOG_INFO_CONFIG = "com.springboot.provider.selector.LogInfoConfig";
+    public static final String LOG_ERROR_CONFIG = "com.springboot.provider.selector.LogErrorConfig";
 
     /**
      * The default advice mode attribute name.
