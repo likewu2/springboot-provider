@@ -28,6 +28,6 @@ public class BeanFactoryAwareHandler implements BeanFactoryAware {
      */
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        System.out.println("[BeanFactoryAwareHandler] " + beanFactory.getBean(BeanFactoryAwareHandler.class).getClass().getSimpleName());
+        System.out.println("[BeanFactoryAwareHandler] setBeanFactory: " + beanFactory.getBean(BeanFactoryAwareHandler.class).getClass().getSimpleName());
     }
 }

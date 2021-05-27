@@ -24,6 +24,6 @@ public class BeanFactoryPostProcessorHandler implements BeanFactoryPostProcessor
      */
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        System.out.println("[BeanFactoryPostProcessor]");
+        System.out.println("[BeanFactoryPostProcessorHandler] postProcessBeanFactory");
     }
 }

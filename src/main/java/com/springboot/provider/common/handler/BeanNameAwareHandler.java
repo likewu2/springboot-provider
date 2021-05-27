@@ -13,11 +13,6 @@ import org.springframework.stereotype.Component;
 * */
 @Component
 public class BeanNameAwareHandler implements BeanNameAware {
-
-    public BeanNameAwareHandler() {
-        System.out.println("[BeanNameAwareHandler] constructor");
-    }
-
     /**
      * Set the name of the bean in the bean factory that created this bean.
      * <p>Invoked after population of normal bean properties but before an
@@ -33,6 +28,6 @@ public class BeanNameAwareHandler implements BeanNameAware {
      */
     @Override
     public void setBeanName(String name) {
-        System.out.println("[BeanNameAwareHandler] " + name);
+        System.out.println("[BeanNameAwareHandler] setBeanName: " + name);
     }
 }

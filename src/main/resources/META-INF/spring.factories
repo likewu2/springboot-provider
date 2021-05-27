@@ -1,1 +1,4 @@
-#org.springframework.context.ApplicationContextInitializer=com.springboot.provider.common.handler.ApplicationContextInitializerHandler
+org.springframework.boot.SpringApplicationRunListener = com.springboot.provider.common.handler.SpringApplicationRunListenerHandler
+org.springframework.boot.env.EnvironmentPostProcessor = com.springboot.provider.common.handler.EnvironmentPostProcessorHandler
+org.springframework.context.ApplicationContextInitializer = com.springboot.provider.common.handler.ApplicationContextInitializerHandler
+org.springframework.boot.diagnostics.FailureAnalyzer = com.springboot.provider.common.handler.ProjectConstraintViolationFailureHandler

@@ -19,6 +19,6 @@ public class CommandLineRunnerHandler implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("[CommandLineRunnerHandler]");
+        System.out.println("[CommandLineRunnerHandler] run");
     }
 }

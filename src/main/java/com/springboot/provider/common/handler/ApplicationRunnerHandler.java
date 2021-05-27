@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 * */
 @Component
 public class ApplicationRunnerHandler implements ApplicationRunner {
-
     /**
      * Callback used to run the bean.
      *
@@ -23,6 +22,6 @@ public class ApplicationRunnerHandler implements ApplicationRunner {
      */
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        System.out.println("[ApplicationRunnerHandler]");
+        System.out.println("[ApplicationRunnerHandler] run");
     }
 }

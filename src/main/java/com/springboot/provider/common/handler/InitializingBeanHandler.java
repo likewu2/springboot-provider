@@ -24,6 +24,6 @@ public class InitializingBeanHandler implements InitializingBean {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        System.out.println("[InitializingBean] InitializingBeanHandler");
+        System.out.println("[InitializingBeanHandler] afterPropertiesSet");
     }
 }

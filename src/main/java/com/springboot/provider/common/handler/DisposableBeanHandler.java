@@ -17,6 +17,6 @@ public class DisposableBeanHandler implements DisposableBean {
      */
     @Override
     public void destroy() throws Exception {
-        System.out.println("[DisposableBean] DisposableBeanHandler");
+        System.out.println("[DisposableBeanHandler] destroy");
     }
 }

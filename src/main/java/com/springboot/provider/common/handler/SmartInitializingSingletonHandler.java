@@ -25,6 +25,6 @@ public class SmartInitializingSingletonHandler implements SmartInitializingSingl
      */
     @Override
     public void afterSingletonsInstantiated() {
-        System.out.println("[SmartInitializingSingletonHandler]");
+        System.out.println("[SmartInitializingSingletonHandler] afterSingletonsInstantiated");
     }
 }
