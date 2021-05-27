@@ -4,6 +4,7 @@ import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class HttpsConfig {
      * @Date: 2021-05-27 16:17
      */
     @Bean
-    public TomcatServletWebServerFactory servletContainer(Connector connector) {
+    public TomcatServletWebServerFactory servletContainer(@Qualifier("httpConnector") Connector connector) {
         TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
             @Override
             protected void postProcessContext(Context context) {
