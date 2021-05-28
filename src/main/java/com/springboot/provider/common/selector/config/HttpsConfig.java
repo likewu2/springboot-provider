@@ -1,4 +1,4 @@
-package com.springboot.provider.config;
+package com.springboot.provider.common.selector.config;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;

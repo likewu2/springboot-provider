@@ -1,7 +1,7 @@
 package com.springboot.provider.common.selector;
 
 import com.springboot.provider.common.annotation.EnableHttps;
-import com.springboot.provider.config.HttpsConfig;
+import com.springboot.provider.common.selector.config.HttpsConfig;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;
 
@@ -13,7 +13,7 @@ import org.springframework.core.type.AnnotationMetadata;
  * @Date 2021-05-27 16:31
  */
 public class EnableHttpsSelector implements ImportSelector {
-    public static final String HTTPS_CONFIG = "com.springboot.provider.config.HttpsConfig";
+    public static final String HTTPS_CONFIG = "com.springboot.provider.common.selector.config.HttpsConfig";
 
     @Override
     public String[] selectImports(AnnotationMetadata annotationMetadata) {
