@@ -1,6 +1,6 @@
 package com.springboot.provider.module.common.controller;
 
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.google.common.util.concurrent.*;
@@ -69,6 +69,9 @@ public class CommonController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     /*
      * @cache（“something");这个相当于save（）操作，
@@ -252,14 +255,14 @@ public class CommonController {
             responseStrBuilder.append(inputStr);
         }
 
-        if (responseStrBuilder.length() > 0) {
-            JSONObject jsonObject = JSONObject.parseObject(responseStrBuilder.toString());
-            param = jsonObject.toJSONString();
-        }
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("许振奎");
+        user.setPassword(responseStrBuilder.toString());
 
         // 返回 json 格式的数据
         response.setContentType("application/json; charset=UTF-8");
         assert param != null;
-        response.getWriter().write(param);
+        response.getWriter().write(objectMapper.writeValueAsString(user));
     }
 }

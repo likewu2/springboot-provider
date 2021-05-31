@@ -1,6 +1,5 @@
 package com.springboot.provider.common.exception;
 
-import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -8,7 +7,6 @@ import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import java.lang.reflect.Method;
 
 public class AsyncException implements AsyncUncaughtExceptionHandler {
-
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -21,6 +19,6 @@ public class AsyncException implements AsyncUncaughtExceptionHandler {
     @Override
     public void handleUncaughtException(Throwable ex, Method method, Object... params) {
         logger.error("异步执行错误, message={}", ex.getMessage());
-        logger.error("发生错误的方法: {}, 参数: {}", method.getName(), JSON.toJSONString(params));
+        logger.error("发生错误的方法: {}, 参数: {}", method.getName(), params);
     }
 }
