@@ -254,6 +254,7 @@ public class CommonController {
         while ((inputStr = streamReader.readLine()) != null) {
             responseStrBuilder.append(inputStr);
         }
+        streamReader.close();
 
         User user = new User();
         user.setId(1L);
