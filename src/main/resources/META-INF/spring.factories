@@ -1,3 +1,4 @@
+org.springframework.boot.BootstrapRegistryInitializer = com.springboot.provider.common.handler.BootstrapRegistryInitializerHandler
 org.springframework.boot.SpringApplicationRunListener = com.springboot.provider.common.handler.SpringApplicationRunListenerHandler
 org.springframework.boot.env.EnvironmentPostProcessor = com.springboot.provider.common.handler.EnvironmentPostProcessorHandler
 org.springframework.context.ApplicationContextInitializer = com.springboot.provider.common.handler.ApplicationContextInitializerHandler
