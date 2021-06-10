@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 
@@ -52,7 +53,8 @@ public class MyBatisGenerator {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + "/src/main/java");    // 生成路径
         gc.setAuthor("XuZhenkui");  // 作者
-        gc.setActiveRecord(true);   // 是否支持AR模式
+        gc.setActiveRecord(false);   // 是否支持AR模式
+        gc.setDateType(DateType.ONLY_DATE);
 //        gc.setFileOverride(true);   // 文件覆盖
         gc.setIdType(IdType.AUTO);  // 主键策略
         gc.setServiceName("%sService");     // 设置生成的service接口名字首字母是否为 I
@@ -74,8 +76,10 @@ public class MyBatisGenerator {
 
         // 包配置
         PackageConfig pc = new PackageConfig();
+        String parent = "com.springboot.provider.module";
+        String domain = scanner("所属域(eg: HIS, LIS... )");
         pc.setModuleName(scanner("模块名"));
-        pc.setParent("com.springboot.provider.module");
+        pc.setParent(parent + "." + domain.toLowerCase());
         mpg.setPackageInfo(pc);
 
         // 自定义配置
@@ -98,7 +102,7 @@ public class MyBatisGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输出文件名 ， 如果你 Entity 设置了前后缀、此处注意 xml 的名称会跟着发生变化！！
-                return projectPath + "/src/main/resources/mapper/zb/" + pc.getModuleName()
+                return projectPath + "/src/main/resources/mapper/zb/" + domain.toLowerCase() + "/" + pc.getModuleName()
                         + "/" + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
