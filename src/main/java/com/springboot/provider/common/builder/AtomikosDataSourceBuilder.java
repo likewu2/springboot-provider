@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
+import javax.sql.XADataSource;
 import java.util.*;
 
 /**
@@ -26,8 +27,20 @@ public class AtomikosDataSourceBuilder {
     /**
      * 创建AtomikosDataSourceBean是使用Atomikos连接池的首选类
      */
-    public static AtomikosDataSourceBean createAtomikosDataSourceBean(String xaDataSourceClassName,
-                                                                      Properties properties, String resourceName) {
+    public static AtomikosDataSourceBean createAtomikosDataSourceBean(String resourceName, String xaDataSourceClassName,
+                                                                      XADataSource xaDataSource) {
+        AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
+        atomikosDataSourceBean.setUniqueResourceName(resourceName);
+        atomikosDataSourceBean.setXaDataSourceClassName(xaDataSourceClassName);
+        atomikosDataSourceBean.setXaDataSource(xaDataSource);
+        return atomikosDataSourceBean;
+    }
+
+    /**
+     * 创建AtomikosDataSourceBean是使用Atomikos连接池的首选类
+     */
+    public static AtomikosDataSourceBean createAtomikosDataSourceBean(String resourceName, String xaDataSourceClassName,
+                                                                      Properties properties) {
         AtomikosDataSourceBean atomikosDataSourceBean = new AtomikosDataSourceBean();
         atomikosDataSourceBean.setUniqueResourceName(resourceName);
         atomikosDataSourceBean.setXaDataSourceClassName(xaDataSourceClassName);
