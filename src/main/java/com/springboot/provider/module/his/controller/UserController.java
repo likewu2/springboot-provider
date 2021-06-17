@@ -65,4 +65,14 @@ public class UserController {
     public ResultJson getById(@RequestBody User user){
         return ResultJson.success(userService.getByUserId(user.getId()));
     }
+
+    @RequestMapping("save")
+    public ResultJson save(@RequestBody User user){
+        return ResultJson.success(userService.save(user));
+    }
+
+    @RequestMapping("updateById")
+    public ResultJson updateById(@RequestBody User user){
+        return ResultJson.success(userService.updateById(user));
+    }
 }
