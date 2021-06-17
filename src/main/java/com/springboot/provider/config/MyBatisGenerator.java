@@ -138,7 +138,7 @@ public class MyBatisGenerator {
         strategy.setEntityTableFieldAnnotationEnable(true);
         strategy.setNaming(NamingStrategy.underline_to_camel);  // 数据库表映射到实体命名策略
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setSuperEntityClass("com.baomidou.mybatisplus.extension.activerecord.Model");
+        strategy.setSuperEntityClass(com.baomidou.mybatisplus.extension.activerecord.Model.class);
         strategy.setRestControllerStyle(true);
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(",")); // 用于生成代码的数据库中的表
         strategy.setControllerMappingHyphenStyle(true);
