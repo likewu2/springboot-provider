@@ -56,19 +56,19 @@ public class ResultJson<T> implements Serializable {
         this.data = data;
     }
 
-    public static <T> ResultJson success() {
-        return success("");
+    public static <T> ResultJson<T> success() {
+        return success(null);
     }
 
-    public static <T> ResultJson success(T body) {
+    public static <T> ResultJson<T> success(T body) {
         return new ResultJson<>(ResultCode.SUCCESS, body);
     }
 
-    public static <T> ResultJson failure(ResultCode resultCode) {
-        return failure(resultCode, "");
+    public static <T> ResultJson<T> failure(ResultCode resultCode) {
+        return failure(resultCode, null);
     }
 
-    public static <T> ResultJson failure(ResultCode resultCode, T body) {
+    public static <T> ResultJson<T> failure(ResultCode resultCode, T body) {
         return new ResultJson<>(resultCode, body);
     }
 
