@@ -14,6 +14,24 @@ public class ResultJson<T> implements Serializable {
     private String message;
     private T data;
 
+    public ResultJson() {
+    }
+
+    public ResultJson(int code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
+    public ResultJson(ResultCode resultCode) {
+        setResultCode(resultCode);
+    }
+
+    public ResultJson(ResultCode resultCode, T data) {
+        setResultCode(resultCode);
+        this.data = data;
+    }
+
     public int getCode() {
         return code;
     }
@@ -38,41 +56,23 @@ public class ResultJson<T> implements Serializable {
         this.data = data;
     }
 
-    public static ResultJson success(){
+    public static <T> ResultJson success() {
         return success("");
     }
 
-    public static ResultJson success(Object o){
-        return new ResultJson(ResultCode.SUCCESS, o);
+    public static <T> ResultJson success(T body) {
+        return new ResultJson<>(ResultCode.SUCCESS, body);
     }
 
-    public static ResultJson failure(ResultCode resultCode){
+    public static <T> ResultJson failure(ResultCode resultCode) {
         return failure(resultCode, "");
     }
 
-    public static ResultJson failure(ResultCode resultCode, Object o){
-        return new ResultJson(resultCode,o);
+    public static <T> ResultJson failure(ResultCode resultCode, T body) {
+        return new ResultJson<>(resultCode, body);
     }
 
-    public ResultJson() {
-    }
-
-    public ResultJson(int code, String message, T data) {
-        this.code = code;
-        this.message = message;
-        this.data = data;
-    }
-
-    public ResultJson(ResultCode resultCode){
-        setResultCode(resultCode);
-    }
-
-    public ResultJson(ResultCode resultCode, T data){
-        setResultCode(resultCode);
-        this.data = data;
-    }
-
-    public void setResultCode(ResultCode resultCode){
+    public void setResultCode(ResultCode resultCode) {
         this.code = resultCode.getCode();
         this.message = resultCode.getMessage();
     }
