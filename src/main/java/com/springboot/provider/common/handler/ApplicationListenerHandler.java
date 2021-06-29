@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 *
 * */
 @Component
-public class ApplicationListenerHandler implements ApplicationListener {
+public class ApplicationListenerHandler implements ApplicationListener<ApplicationEvent> {
     /**
      * Handle an application event.
      *
@@ -32,6 +32,6 @@ public class ApplicationListenerHandler implements ApplicationListener {
      */
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        System.out.println("[ApplicationListenerHandler] onApplicationEvent " + event.toString());
+        System.out.println("[ApplicationListenerHandler] onApplicationEvent: " + event.toString());
     }
 }
