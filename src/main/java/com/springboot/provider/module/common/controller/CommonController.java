@@ -49,7 +49,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class CommonController {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final RateLimiter rateLimiter = RateLimiter.create(5.0);
 

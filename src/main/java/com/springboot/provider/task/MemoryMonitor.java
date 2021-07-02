@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2020/5/1 22:54
  */
 public class MemoryMonitor {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private ScheduledExecutorService scheduledExecutorService;
 

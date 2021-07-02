@@ -19,7 +19,7 @@ import java.util.Objects;
 @Aspect
 @Component
 public class LogAspect {
-    private Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     @Autowired
     ObjectMapper objectMapper;

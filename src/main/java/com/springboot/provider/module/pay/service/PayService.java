@@ -8,5 +8,9 @@ package com.springboot.provider.module.pay.service;
  * @create: 2021-01-08 09:11
  **/
 public interface PayService {
-    void pay();
+
+    Boolean pay();
+
+    Boolean valid();
+
 }

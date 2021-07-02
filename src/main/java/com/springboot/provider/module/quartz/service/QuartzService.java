@@ -20,7 +20,7 @@ import java.util.*;
  **/
 @Service
 public class QuartzService {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private Scheduler scheduler;

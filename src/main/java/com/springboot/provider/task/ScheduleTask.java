@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @EnableScheduling
 public class ScheduleTask {
 
-    private Logger logger = LoggerFactory.getLogger(ScheduleTask.class);
+    private final Logger logger = LoggerFactory.getLogger(ScheduleTask.class);
 
     @Scheduled(cron = "0 0/30 * * * ?") //间隔30分钟
     public void unReadMessageTask(){

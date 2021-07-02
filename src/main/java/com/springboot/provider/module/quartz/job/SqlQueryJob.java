@@ -25,7 +25,7 @@ import java.util.Map;
 @Component
 public class SqlQueryJob extends QuartzJobBean {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {

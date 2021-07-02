@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class ShutdownHook {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostConstruct
     protected void init(){

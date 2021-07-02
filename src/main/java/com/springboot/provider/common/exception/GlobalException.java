@@ -15,7 +15,7 @@ import java.sql.SQLException;
 @RestControllerAdvice
 public class GlobalException {
 
-    private Logger logger = LoggerFactory.getLogger(GlobalException.class);
+    private final Logger logger = LoggerFactory.getLogger(GlobalException.class);
 
     @Value("${spring.servlet.multipart.max-file-size}")
     private String maxFileSize;

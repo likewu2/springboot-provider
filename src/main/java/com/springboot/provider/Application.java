@@ -31,7 +31,7 @@ import java.util.Arrays;
 @SpringBootApplication/*(exclude = {DataSourceAutoConfiguration.class})*/
 @EnableBeans(packages = "com.springboot.provider.module.his.entity")
 public class Application {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${sm4.key:spring-framework}")
     private String key;

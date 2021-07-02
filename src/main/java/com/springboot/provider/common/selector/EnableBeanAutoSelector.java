@@ -22,7 +22,7 @@ import java.util.Set;
  * @create: 2021-02-11 11:47
  **/
 public class EnableBeanAutoSelector implements ImportSelector {
-    Logger logger = LoggerFactory.getLogger(EnableBeanAutoSelector.class);
+    private final Logger logger = LoggerFactory.getLogger(EnableBeanAutoSelector.class);
 
     /**
      * The default enable beans annotation attribute name.
