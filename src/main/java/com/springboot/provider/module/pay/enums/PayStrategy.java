@@ -1,6 +1,7 @@
 package com.springboot.provider.module.pay.enums;
 
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 /**
  * @program: springboot-provider
@@ -50,17 +51,12 @@ public enum PayStrategy {
 
     //根据key获取value
     public static String getValueByKey(String key) {
-        for (PayStrategy strategy : PayStrategy.values()) {
-            if (strategy.getKey().equals(key)) {
-                return strategy.getValue();
-            }
-        }
-        return null;
+        return getEnumByKey(key).getValue();
     }
 
     //根据key获取枚举
     public static PayStrategy getEnumByKey(String key) {
-        return Arrays.stream(PayStrategy.values()).filter(item -> item.getKey().equals(key)).findFirst().get();
+        return Arrays.stream(PayStrategy.values()).filter(item -> item.getKey().equals(key)).findFirst().orElse(UNION);
     }
 
 

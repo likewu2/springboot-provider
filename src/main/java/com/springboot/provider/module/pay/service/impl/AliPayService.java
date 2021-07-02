@@ -21,8 +21,12 @@ public class AliPayService implements PayService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @PostConstruct
-    public void init(){
+//    @PostConstruct
+//    public void init(){
+//        PayStrategyFactory.register(PayStrategy.ALI, this);
+//    }
+
+    public AliPayService(){
         PayStrategyFactory.register(PayStrategy.ALI, this);
     }
 

@@ -21,8 +21,12 @@ public class WechatPayService implements PayService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @PostConstruct
-    public void init(){
+//    @PostConstruct
+//    public void init(){
+//        PayStrategyFactory.register(PayStrategy.WECHAT, this);
+//    }
+
+    public WechatPayService(){
         PayStrategyFactory.register(PayStrategy.WECHAT, this);
     }
 

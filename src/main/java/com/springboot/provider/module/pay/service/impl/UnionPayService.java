@@ -21,8 +21,12 @@ public class UnionPayService implements PayService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @PostConstruct
-    public void init(){
+//    @PostConstruct
+//    public void init(){
+//        PayStrategyFactory.register(PayStrategy.UNION, this);
+//    }
+
+    public UnionPayService(){
         PayStrategyFactory.register(PayStrategy.UNION, this);
     }
 
