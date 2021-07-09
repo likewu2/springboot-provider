@@ -25,19 +25,19 @@ public class LogAspect {
     ObjectMapper objectMapper;
 
     @Pointcut("execution(public * com.springboot.provider.module.*.controller.*.*(..))")
-    public void log(){}
+    public void log() {}
 
     @Around("log()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
 
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 
-        long startTimeMillis = System.currentTimeMillis();
+        long l = System.currentTimeMillis();
         //调用 proceed() 方法才会真正的执行实际被代理的方法
         Object result = joinPoint.proceed();
 
-        long consultTime = System.currentTimeMillis() - startTimeMillis;
-        logger.info("\n请求URL: "+request.getRequestURL()+"\n请求path: "+request.getRequestURI()+"\n入参:"+ Arrays.toString(joinPoint.getArgs()) +"\n出参:"+ objectMapper.writeValueAsString(result) +"\n执行时间: "+ consultTime +" 毫秒");
+        logger.info("\nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {} \nReturn: {} \nInvoke Cost: {}",
+                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), Arrays.toString(joinPoint.getArgs()), objectMapper.writeValueAsString(result), (System.currentTimeMillis() - l) + "ms");
 
         return result;
     }

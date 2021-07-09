@@ -22,7 +22,7 @@ public class JdbcOperationsProxy {
         if (JDBC_OPERATIONS_MAP.get(dsName) == null) {
             DataSource dataSource = MultiDataSourceHolder.getDataSource(dsName);
             Assert.notNull(dataSource, dsName + " datasource is not exists in MultiDataSourceHolder!");
-            
+
             JDBC_OPERATIONS_MAP.putIfAbsent(dsName, getProxyInstance(dataSource));
         }
         return JDBC_OPERATIONS_MAP.get(dsName);
@@ -41,7 +41,6 @@ public class JdbcOperationsProxy {
         Assert.notNull(jdbcTemplate, "jdbcTemplate requires non null!");
 
         return (JdbcOperations) Proxy.newProxyInstance(JdbcOperations.class.getClassLoader(), new Class<?>[]{JdbcOperations.class}, (proxy, method, args) -> {
-            long l = System.currentTimeMillis();
             AtomicReference<String> sql = new AtomicReference<>("");
 
             // implant the args to sql
@@ -55,9 +54,10 @@ public class JdbcOperationsProxy {
                 }
             });
 
+            long l = System.currentTimeMillis();
             Object result = method.invoke(jdbcTemplate, args);
 
-            logger.info("\nJdbcOperations Method: " + method.getName() + "\nSQL: " + sql.accumulateAndGet(";", (s, s2) -> s + s2) + "\nInvoke Cost: " + (System.currentTimeMillis() - l) + " ms");
+            logger.info("\nJdbcOperations Method: {} \nSQL: {} \nInvoke Cost: {}", method.getName(), sql.accumulateAndGet(";", (s, s2) -> s + s2), (System.currentTimeMillis() - l) + "ms");
             return result;
         });
     }

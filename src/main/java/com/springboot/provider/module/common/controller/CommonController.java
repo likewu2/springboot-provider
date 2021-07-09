@@ -147,7 +147,7 @@ public class CommonController {
 
         RowMapper<Role> rowMapper = new BeanPropertyRowMapper<>(Role.class);
 //        List<Role> roles = jdbcTemplate.query("select * from role", rowMapper);
-        List<Role> roles = jdbcTemplate.query("select * from role where id = ? and title = ?", rowMapper, 10, "超级管理员");
+        List<Role> roles = jdbcTemplate.query("select * from role where id = ? and title = ?", rowMapper, 1, "超级管理员");
 
 //        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from role");
 //        List<String> nameList = jdbcTemplate.queryForList("select name from role", String.class);
