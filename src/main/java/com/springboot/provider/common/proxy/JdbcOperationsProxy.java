@@ -3,12 +3,15 @@ package com.springboot.provider.common.proxy;
 import com.springboot.provider.common.holder.MultiDataSourceHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -55,7 +58,12 @@ public class JdbcOperationsProxy {
             });
 
             long l = System.currentTimeMillis();
-            Object result = method.invoke(jdbcTemplate, args);
+            Object result = null;
+            try {
+                result = method.invoke(jdbcTemplate, args);
+            } catch (Exception  e) {
+                logger.error("\nSQL: {} Empty Data Set! \nError Message: {}", sql.accumulateAndGet(";", (s, s2) -> s + s2), e.getMessage());
+            }
 
             logger.info("\nJdbcOperations Method: {} \nSQL: {} \nInvoke Cost: {}",
                     method.getName(), sql.accumulateAndGet(";", (s, s2) -> s + s2), (System.currentTimeMillis() - l) + "ms");
