@@ -61,12 +61,13 @@ public class JdbcOperationsProxy {
             Object result = null;
             try {
                 result = method.invoke(jdbcTemplate, args);
+
+                logger.info("\nJdbcOperations Method: {} \nSQL: {} \nInvoke Cost: {}",
+                        method.getName(), sql.accumulateAndGet(";", (s, s2) -> s + s2), (System.currentTimeMillis() - l) + "ms");
             } catch (Exception  e) {
-                logger.error("\nSQL: {} Empty Data Set! \nError Message: {}", sql.accumulateAndGet(";", (s, s2) -> s + s2), e.getMessage());
+                logger.error("\nSQL: {} \nError Message: {}", sql.accumulateAndGet(";", (s, s2) -> s + s2), e.getCause().toString());
             }
 
-            logger.info("\nJdbcOperations Method: {} \nSQL: {} \nInvoke Cost: {}",
-                    method.getName(), sql.accumulateAndGet(";", (s, s2) -> s + s2), (System.currentTimeMillis() - l) + "ms");
             return result;
         });
     }
