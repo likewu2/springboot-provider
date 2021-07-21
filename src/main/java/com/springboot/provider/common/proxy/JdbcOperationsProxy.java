@@ -57,9 +57,9 @@ public class JdbcOperationsProxy {
                 }
             });
 
-            long l = System.currentTimeMillis();
             Object result = null;
             try {
+                long l = System.currentTimeMillis();
                 result = method.invoke(jdbcTemplate, args);
 
                 logger.info("\nJdbcOperations Method: {} \nSQL: {} \nInvoke Cost: {}",
