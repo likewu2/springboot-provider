@@ -80,6 +80,14 @@ public class User extends Model<User> {
         this.updateTime = updateTime;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
