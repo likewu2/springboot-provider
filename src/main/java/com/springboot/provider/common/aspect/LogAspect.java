@@ -21,8 +21,7 @@ import java.util.Objects;
 public class LogAspect {
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-    @Autowired
-    ObjectMapper objectMapper;
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Pointcut("execution(public * com.springboot.provider.module.*.controller.*.*(..))")
     public void log() {}
@@ -37,7 +36,7 @@ public class LogAspect {
         Object result = joinPoint.proceed();
 
         logger.info("\nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {} \nReturn: {} \nInvoke Cost: {}",
-                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), Arrays.toString(joinPoint.getArgs()), objectMapper.writeValueAsString(result), (System.currentTimeMillis() - l) + "ms");
+                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), objectMapper.writeValueAsString(joinPoint.getArgs()), objectMapper.writeValueAsString(result), (System.currentTimeMillis() - l) + "ms");
 
         return result;
     }

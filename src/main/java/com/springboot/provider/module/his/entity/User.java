@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -30,11 +31,11 @@ public class User extends Model<User> {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // post请求使用formdata格式传参
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")     // post请求使用json格式传参
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // post请求使用formdata格式传参
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")     // post请求使用json格式传参
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     private Integer status;
 
@@ -64,19 +65,19 @@ public class User extends Model<User> {
         return serialVersionUID;
     }
 
-    public LocalDateTime getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(LocalDateTime createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
-    public LocalDateTime getUpdateTime() {
+    public Date getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(LocalDateTime updateTime) {
+    public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
 
