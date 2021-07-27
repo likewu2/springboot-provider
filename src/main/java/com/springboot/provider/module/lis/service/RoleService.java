@@ -15,4 +15,6 @@ import java.util.List;
  */
 public interface RoleService extends IService<Role> {
     List<Role> getRoleList();
+
+    Integer insert(Role role);
 }

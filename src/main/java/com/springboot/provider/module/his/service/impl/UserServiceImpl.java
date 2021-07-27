@@ -34,4 +34,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public User getByUserId(Long id) {
         return userMapper.getByUserId(id);
     }
+
+    @Override
+    public Integer insert(User user) {
+        return userMapper.insert(user);
+    }
 }

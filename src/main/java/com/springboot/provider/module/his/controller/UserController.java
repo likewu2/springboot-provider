@@ -44,10 +44,10 @@ public class UserController {
         Role role = new Role();
         role.setTitle("USER");
         role.setName("user");
-        userService.save(user);
-        roleService.save(role);
+        userService.insert(user);
+        roleService.insert(role);
 
-//        int i = 1/0;
+        int i = 1/0;
         List<User> userList = userService.getAllUser();
         List<Role> roleList = roleService.getRoleList();
         Map<String, Object> map = new HashMap<>();

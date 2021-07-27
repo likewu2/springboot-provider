@@ -6,6 +6,8 @@ import com.springboot.provider.module.lis.service.RoleService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
  * @since 2020-12-10
  */
 @Service
+@Transactional(transactionManager = "transactionManager")
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Autowired
@@ -26,5 +29,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<Role> getRoleList() {
         return roleMapper.getRoleList();
+    }
+
+//    @Transactional(transactionManager = "transactionManager", propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public Integer insert(Role role) {
+        return roleMapper.insert(role);
     }
 }
