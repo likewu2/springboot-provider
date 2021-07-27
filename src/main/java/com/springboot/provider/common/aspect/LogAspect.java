@@ -21,7 +21,8 @@ import java.util.Objects;
 public class LogAspect {
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Pointcut("execution(public * com.springboot.provider.module.*.controller.*.*(..))")
     public void log() {}
