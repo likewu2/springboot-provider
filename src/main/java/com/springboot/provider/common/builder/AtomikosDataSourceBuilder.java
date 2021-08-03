@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.autoconfigure.SpringBootVFS;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import com.springboot.provider.common.interceptor.DataScopeInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.core.io.Resource;
@@ -80,6 +81,7 @@ public class AtomikosDataSourceBuilder {
         sessionFactoryBean.setMapperLocations(resourceSet.toArray(new Resource[0]));
 
         MybatisConfiguration configuration = new MybatisConfiguration();
+        configuration.addInterceptor(new DataScopeInterceptor(dataSource));
         configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
         sessionFactoryBean.setConfiguration(configuration);
 
