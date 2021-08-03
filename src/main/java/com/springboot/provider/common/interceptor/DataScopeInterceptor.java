@@ -36,7 +36,7 @@ import java.util.Properties;
 public class DataScopeInterceptor extends AbstractSqlParserHandler implements Interceptor {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public DataScopeInterceptor(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -90,8 +90,8 @@ public class DataScopeInterceptor extends AbstractSqlParserHandler implements In
             return invocation.proceed();
 
         }
-        return invocation.proceed();
 
+        return invocation.proceed();
     }
 
     /**
