@@ -71,9 +71,9 @@ public class AtomikosDataSourceBuilder {
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setVfs(SpringBootVFS.class);
         sessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
-        sessionFactoryBean.setPlugins(new MybatisPlusInterceptor());
+        sessionFactoryBean.setPlugins(new MybatisPlusInterceptor(), new DataScopeInterceptor(dataSource));
 
-        Set<Resource> resourceSet = new LinkedHashSet(16);
+        Set<Resource> resourceSet = new LinkedHashSet<>(16);
         for (String mapperLocation : mapperLocations) {
             Resource[] resources = resolver.getResources(mapperLocation);
             resourceSet.addAll(Arrays.asList(resources));
@@ -81,7 +81,6 @@ public class AtomikosDataSourceBuilder {
         sessionFactoryBean.setMapperLocations(resourceSet.toArray(new Resource[0]));
 
         MybatisConfiguration configuration = new MybatisConfiguration();
-        configuration.addInterceptor(new DataScopeInterceptor(dataSource));
         configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
         sessionFactoryBean.setConfiguration(configuration);
 
