@@ -1,5 +1,6 @@
 package com.springboot.provider.config;
 
+import com.mysql.cj.jdbc.MysqlXADataSource;
 import com.springboot.provider.common.builder.AtomikosDataSourceBuilder;
 import com.springboot.provider.common.holder.MultiDataSourceHolder;
 import com.springboot.provider.common.proxy.JdbcOperationsProxy;
@@ -18,6 +19,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+import javax.sql.XADataSource;
 import java.util.Properties;
 
 /**
@@ -44,17 +46,24 @@ public class LisDataSourceConfig {
     @Value("${spring.jta.atomikos.datasource.lis.xa-data-source-class-name}")
     private String xaDataSourceClassName;
 
-    @Bean(value = "lisProperties")
-    @ConfigurationProperties(prefix = "spring.datasource.lis")
-    public Properties lisProperties() {
-        return new Properties();
-    }
+//    @Bean(value = "lisProperties")
+//    @ConfigurationProperties(prefix = "spring.datasource.lis")
+//    public Properties lisProperties() {
+//        return new Properties();
+//    }
+
+//    @Bean(name = "lisXADataSource")
+//    @ConfigurationProperties(prefix = "spring.datasource.lis")
+//    public XADataSource mysqlXADataSource(){
+//        return new MysqlXADataSource();
+//    }
 
     @Bean(name = "lisDataSource")
     @ConfigurationProperties(prefix = "spring.jta.atomikos.datasource.lis")
-    public DataSource lisDataSource(@Qualifier("lisProperties") Properties properties) {
+    public DataSource lisDataSource(/*@Qualifier("lisProperties") Properties properties*/   /*@Qualifier("lisXADataSource") XADataSource xaDataSource*/) {
         return new AtomikosDataSourceBean();
-//        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(xaDataSourceClassName, properties, RESOURCE_NAME);
+//        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(RESOURCE_NAME, xaDataSourceClassName, properties);
+//        return AtomikosDataSourceBuilder.createAtomikosDataSourceBean(RESOURCE_NAME, xaDataSourceClassName, xaDataSource);
     }
 
     @Bean(name = "lisJdbcOperations")
