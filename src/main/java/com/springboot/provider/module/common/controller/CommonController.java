@@ -25,10 +25,11 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -41,9 +42,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.sql.ParameterMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -128,7 +131,7 @@ public class CommonController {
                 .password("root").build();
 
 
-        DataSource dataSource = MultiDataSourceHolder.buildDataSource("mysql", "localhost", "3306", "development", "root", "root", "");
+        DataSource dataSource = MultiDataSourceHolder.buildDataSource("mysql", "localhost", "3306", "test1", "root", "root", "");
 
         return ResultJson.success(MultiDataSourceHolder.addDataSource("development", dataSource));
     }
@@ -144,6 +147,19 @@ public class CommonController {
     public ResultJson getFromDataSource() {
 //        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
         JdbcOperations jdbcTemplate = JdbcOperationsProxy.getProxyInstance("development");
+
+//        List<Object[]> list = new ArrayList<>();
+//        list.add(new Object[]{"admin", "ADMIN"});
+//        list.add(new Object[]{"dba", "DBA"});
+//        int[] ints = jdbcTemplate.batchUpdate("insert into role (name, title) values (?, ?)", list);
+
+//        List<Role> roleList = new ArrayList<>();
+//        roleList.add(new Role("admin", "ADMIN"));
+//        roleList.add(new Role("dba", "DBA"));
+//        int[][] ints = jdbcTemplate.batchUpdate("insert into role (name, title) values (?, ?)", roleList, roleList.size(), (preparedStatement, role) -> {
+//            preparedStatement.setString(1, role.getName());
+//            preparedStatement.setString(2, role.getTitle());
+//        });
 
         RowMapper<Role> rowMapper = new BeanPropertyRowMapper<>(Role.class);
 //        List<Role> roles = jdbcTemplate.query("select * from role", rowMapper);
