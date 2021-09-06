@@ -28,13 +28,14 @@ public class OptionLogAspect {
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     @Pointcut(value = "@annotation(com.springboot.provider.common.annotation.OptionLog)")
-    public void methodPointcut(){}
+    public void methodPointcut() {
+    }
 
     /**
      * 对带注解@OpLog的方法进行切面，并获取到注解的属性值
      */
-    @Around(value= "methodPointcut() && @annotation(optionLog)" , argNames= "point,optionLog")
-    public Object around(ProceedingJoinPoint point, OptionLog optionLog) throws Throwable{
+    @Around(value = "methodPointcut() && @annotation(optionLog)", argNames = "point,optionLog")
+    public Object around(ProceedingJoinPoint point, OptionLog optionLog) throws Throwable {
 
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 

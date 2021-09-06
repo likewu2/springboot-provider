@@ -23,7 +23,8 @@ public class LogAspect {
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
     @Pointcut("execution(public * com.springboot.provider.module.*.controller.*.*(..))")
-    public void log() {}
+    public void log() {
+    }
 
     @Around("log()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
@@ -35,7 +36,7 @@ public class LogAspect {
         Object result = joinPoint.proceed();
 
         logger.info("\nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {} \nReturn: {} \nInvoke Cost: {}",
-                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(),JsonAndXmlUtils.objectToJson(joinPoint.getArgs()), JsonAndXmlUtils.objectToJson(request), (System.currentTimeMillis() - l) + "ms");
+                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), JsonAndXmlUtils.objectToJson(joinPoint.getArgs()), JsonAndXmlUtils.objectToJson(request), (System.currentTimeMillis() - l) + "ms");
 
         return result;
     }
