@@ -1,6 +1,7 @@
 package com.springboot.provider.common.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.provider.common.utils.JsonAndXmlUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -21,9 +22,6 @@ import java.util.Objects;
 public class LogAspect {
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     @Pointcut("execution(public * com.springboot.provider.module.*.controller.*.*(..))")
     public void log() {}
 
@@ -37,7 +35,7 @@ public class LogAspect {
         Object result = joinPoint.proceed();
 
         logger.info("\nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {} \nReturn: {} \nInvoke Cost: {}",
-                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), objectMapper.writeValueAsString(joinPoint.getArgs()), objectMapper.writeValueAsString(result), (System.currentTimeMillis() - l) + "ms");
+                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(),JsonAndXmlUtils.objectToJson(joinPoint.getArgs()), JsonAndXmlUtils.objectToJson(request), (System.currentTimeMillis() - l) + "ms");
 
         return result;
     }

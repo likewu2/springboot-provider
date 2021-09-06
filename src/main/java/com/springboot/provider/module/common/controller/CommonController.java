@@ -6,10 +6,12 @@ import com.google.common.hash.Funnels;
 import com.google.common.util.concurrent.*;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
+import com.springboot.provider.common.annotation.OptionLog;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
 import com.springboot.provider.common.holder.*;
 import com.springboot.provider.common.proxy.JdbcOperationsProxy;
+import com.springboot.provider.common.utils.JsonAndXmlUtils;
 import com.springboot.provider.common.utils.ResourceUtils;
 import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.module.common.service.CommonService;
@@ -212,6 +214,7 @@ public class CommonController {
         return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
     }
 
+    @OptionLog(mode = 1, source = "api")
     @RequestMapping(value = "/test/xml", method = RequestMethod.POST, produces = {"application/xml;charset=utf-8"})
     public String xml(@RequestBody String xml) {
         return xml;
@@ -280,6 +283,6 @@ public class CommonController {
         // 返回 json 格式的数据
         response.setContentType("application/json; charset=UTF-8");
         assert param != null;
-        response.getWriter().write(objectMapper.writeValueAsString(user));
+        response.getWriter().write(JsonAndXmlUtils.objectToJson(user));
     }
 }
