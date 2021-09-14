@@ -50,10 +50,9 @@ public class MultiDataSourceHolder {
      * 删除数据源
      *
      * @param dsName     数据源名称
-     * @param dataSource 数据源
      */
-    public static Boolean removeDataSource(String dsName, DataSource dataSource) {
-        if (StringUtils.hasText(dsName) && dataSource != null) {
+    public static Boolean removeDataSource(String dsName) {
+        if (StringUtils.hasText(dsName)) {
             DATA_SOURCE_MAP.remove(dsName);
             return true;
         }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<namespace xmlns="http://localhost/schema/framework"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://localhost/schema/framework http://localhost/schema/framework/framework.xsd"
+           mapper="com.springboot.provider.mjt.constants.Mapper">
+
+    <sql id="selectById">
+        select * from role where id = ? and title = ?
+    </sql>
+
+    <sql id="selectById">
+        select * from user
+    </sql>
+
+
+
+
+</namespace>

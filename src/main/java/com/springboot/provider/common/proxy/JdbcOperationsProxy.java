@@ -32,7 +32,7 @@ public class JdbcOperationsProxy {
     }
 
     public static JdbcOperations getProxyInstance(DataSource dataSource) {
-        Assert.notNull(dataSource, "datasource requires non null!");
+        Assert.notNull(dataSource, "DataSource must not be null");
 
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 
@@ -41,7 +41,7 @@ public class JdbcOperationsProxy {
 
 
     private static JdbcOperations getInstance(JdbcTemplate jdbcTemplate) {
-        Assert.notNull(jdbcTemplate, "jdbcTemplate requires non null!");
+        Assert.notNull(jdbcTemplate, "JdbcTemplate must not be null");
 
         return (JdbcOperations) Proxy.newProxyInstance(JdbcOperations.class.getClassLoader(), new Class<?>[]{JdbcOperations.class}, (proxy, method, args) -> {
             AtomicReference<String> sql = new AtomicReference<>("");
