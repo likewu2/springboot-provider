@@ -13,4 +13,11 @@
     </sql>
 
 
+    <sql id="saveUser">
+        insert into user(username, password, create_time, status) values (?, ?, ?, ?)
+    </sql>
+
+    <sql id="saveRole">
+        insert into role(name, title) values (?, ?)
+    </sql>
 </namespace>

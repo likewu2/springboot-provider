@@ -10,5 +10,7 @@ package com.springboot.provider.mjt.constants;
 public class Mapper {
 
     public static final String selectById = "com.springboot.provider.mjt.constants.Mapper.selectById";
+    public static final String saveUser = "com.springboot.provider.mjt.constants.Mapper.saveUser";
+    public static final String saveRole = "com.springboot.provider.mjt.constants.Mapper.saveRole";
 
 }
