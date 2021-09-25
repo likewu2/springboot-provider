@@ -12,7 +12,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 import javax.sql.XADataSource;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * @program: springboot-provider
@@ -73,18 +75,27 @@ public class AtomikosDataSourceBuilder {
         sessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
         sessionFactoryBean.setPlugins(new MybatisPlusInterceptor(), new DataScopeInterceptor(dataSource));
 
-        Set<Resource> resourceSet = new LinkedHashSet<>(16);
-        for (String mapperLocation : mapperLocations) {
-            Resource[] resources = resolver.getResources(mapperLocation);
-            resourceSet.addAll(Arrays.asList(resources));
-        }
-        sessionFactoryBean.setMapperLocations(resourceSet.toArray(new Resource[0]));
+        Resource[] resources = resolveMapperLocations(mapperLocations);
+        sessionFactoryBean.setMapperLocations(resources);
 
         MybatisConfiguration configuration = new MybatisConfiguration();
         configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
         sessionFactoryBean.setConfiguration(configuration);
 
         return sessionFactoryBean.getObject();
+    }
+
+    public static Resource[] resolveMapperLocations(String[] baseLocations) {
+        return Stream.of(Optional.ofNullable(baseLocations).orElse(new String[0]))
+                .flatMap(location -> Stream.of(getResources(location))).toArray(Resource[]::new);
+    }
+
+    private static Resource[] getResources(String location) {
+        try {
+            return resolver.getResources(location);
+        } catch (IOException e) {
+            return new Resource[0];
+        }
     }
 
 }
