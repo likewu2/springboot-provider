@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.google.common.util.concurrent.*;
-import com.springboot.mjt.factory.DataSourceFactory;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.annotation.OptionLog;
@@ -15,7 +14,6 @@ import com.springboot.provider.common.proxy.JdbcOperationsProxy;
 import com.springboot.provider.common.utils.JsonAndXmlUtils;
 import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.common.utils.ResourceUtils;
-import com.springboot.provider.mjt.constants.Mapper;
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.lis.entity.Role;
@@ -33,7 +31,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,7 +43,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -176,29 +172,6 @@ public class CommonController {
 
 
         return ResultJson.success(roles);
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @RequestMapping("/test/mjt")
-    public ResultJson sql() {
-//        DataSource dataSource = MultiDataSourceHolder.buildDataSource("mysql", "localhost", "3306", "development", "root", "root", "");
-//        DataSourceFactory.addDataSource("development", dataSource);
-//
-//        JdbcOperations jdbcTemplate = com.springboot.mjt.proxy.JdbcOperationsProxy.getProxyInstance("development");
-//
-//        RowMapper<Role> rowMapper = new BeanPropertyRowMapper<>(Role.class);
-////        List<Role> roles = jdbcTemplate.query("select * from role", rowMapper);
-//        List<Role> roles = jdbcTemplate.query(Mapper.selectById, rowMapper, 1, "超级管理员");
-
-        JdbcOperations hisDataSource = com.springboot.mjt.proxy.JdbcOperationsProxy.getProxyInstance("hisDataSource");
-        JdbcOperations lisDataSource = com.springboot.mjt.proxy.JdbcOperationsProxy.getProxyInstance("lisDataSource");
-
-        int saveUser = hisDataSource.update(Mapper.saveUser, "xzk", "123456", new Date(), 1);
-//        int a = 1 / 0;
-        int saveRole = lisDataSource.update(Mapper.saveRole, "AUDITOR", "auditor");
-//        int b = 1 / 0;
-
-        return ResultJson.success(saveRole == saveUser);
     }
 
     @RequestMapping("/test/insert")
