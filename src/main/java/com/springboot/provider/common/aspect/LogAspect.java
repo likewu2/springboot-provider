@@ -36,7 +36,7 @@ public class LogAspect {
         Object result = joinPoint.proceed();
 
         logger.info("\nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {} \nReturn: {} \nInvoke Cost: {}",
-                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), JsonAndXmlUtils.objectToJson(joinPoint.getArgs()), JsonAndXmlUtils.objectToJson(request), (System.currentTimeMillis() - l) + "ms");
+                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), JsonAndXmlUtils.objectToJson(joinPoint.getArgs()), JsonAndXmlUtils.objectToJson(result), (System.currentTimeMillis() - l) + "ms");
 
         return result;
     }
