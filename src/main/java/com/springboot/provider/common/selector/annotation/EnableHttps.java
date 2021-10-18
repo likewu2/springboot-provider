@@ -1,4 +1,4 @@
-package com.springboot.provider.common.annotation;
+package com.springboot.provider.common.selector.annotation;
 
 import com.springboot.provider.common.selector.EnableHttpsSelector;
 import org.springframework.context.annotation.Import;

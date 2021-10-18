@@ -1,6 +1,6 @@
 package com.springboot.provider.common.selector;
 
-import com.springboot.provider.common.annotation.EnableBeans;
+import com.springboot.provider.common.selector.annotation.EnableBeans;
 import com.springboot.provider.common.utils.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +21,8 @@ import java.util.Set;
  * @author: XuZhenkui
  * @create: 2021-02-11 11:47
  **/
-public class EnableBeanAutoSelector implements ImportSelector {
-    private final Logger logger = LoggerFactory.getLogger(EnableBeanAutoSelector.class);
+public class EnableBeansAutoSelector implements ImportSelector {
+    private final Logger logger = LoggerFactory.getLogger(EnableBeansAutoSelector.class);
 
     /**
      * The default enable beans annotation attribute name.

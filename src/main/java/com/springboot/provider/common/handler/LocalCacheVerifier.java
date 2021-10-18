@@ -1,4 +1,4 @@
-package com.springboot.provider.common.verifier;
+package com.springboot.provider.common.handler;
 
 import com.springboot.provider.common.exception.CacheCompletelyBrokenException;
 import org.springframework.boot.availability.AvailabilityChangeEvent;

@@ -1,6 +1,6 @@
 package com.springboot.provider.common.selector;
 
-import com.springboot.provider.common.annotation.EnableHttps;
+import com.springboot.provider.common.selector.annotation.EnableHttps;
 import com.springboot.provider.common.selector.config.HttpsConfig;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.type.AnnotationMetadata;

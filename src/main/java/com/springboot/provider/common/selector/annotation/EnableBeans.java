@@ -1,6 +1,6 @@
-package com.springboot.provider.common.annotation;
+package com.springboot.provider.common.selector.annotation;
 
-import com.springboot.provider.common.selector.EnableBeanAutoSelector;
+import com.springboot.provider.common.selector.EnableBeansAutoSelector;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(EnableBeanAutoSelector.class)
+@Import(EnableBeansAutoSelector.class)
 public @interface EnableBeans {
     //传入包名
     String[] packages() default "";

@@ -1,4 +1,4 @@
-package com.springboot.provider.common.exporter;
+package com.springboot.provider.common.event.exporter;
 
 import org.springframework.boot.availability.AvailabilityChangeEvent;
 import org.springframework.boot.availability.ReadinessState;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * @Description
  * @Project springboot-provider
- * @Package com.springboot.provider.common.exporter
+ * @Package com.springboot.provider.common.event.exporter
  * @Author xuzhenkui
  * @Date 2021-05-2516:31
  */
