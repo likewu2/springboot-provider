@@ -27,4 +27,8 @@
     <sql id="getRoleById">
         select * from role where id = ?
     </sql>
+
+    <sql id="getUserById">
+        select * from user where id = :id
+    </sql>
 </namespace>

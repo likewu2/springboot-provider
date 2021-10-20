@@ -3,15 +3,11 @@ package com.springboot.provider.common.proxy;
 import com.springboot.provider.common.holder.MultiDataSourceHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.*;
 import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -52,7 +48,7 @@ public class JdbcOperationsProxy {
                 result = method.invoke(jdbcTemplate, args);
 
                 logger.info("\nJdbcOperations Method: {} \nSQL: {} \nInvoke Cost: {}", method.getName(), sql, (System.currentTimeMillis() - l) + "ms");
-            } catch (Exception  e) {
+            } catch (Exception e) {
                 logger.error("\nSQL: {} \nError Message: {}", sql, e.getCause().toString());
             }
 
@@ -71,6 +67,10 @@ public class JdbcOperationsProxy {
                 Arrays.stream(((Object[]) item)).forEach(param -> {
                     sql.updateAndGet(s -> s.replaceFirst("\\?", "'" + Matcher.quoteReplacement(param.toString()) + "'"));
                 });
+            } else if (item instanceof PreparedStatementCreator && item instanceof PreparedStatementSetter
+                    && item instanceof SqlProvider && item instanceof ParameterDisposer) {
+
+                sql.set(((SqlProvider) item).getSql());
             }
         });
 

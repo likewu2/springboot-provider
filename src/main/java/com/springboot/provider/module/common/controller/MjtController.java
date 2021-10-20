@@ -1,16 +1,25 @@
 package com.springboot.provider.module.common.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
+import com.springboot.mjt.factory.DataSourceFactory;
 import com.springboot.mjt.proxy.JdbcOperationsProxy;
+import com.springboot.mjt.proxy.NamedParameterJdbcOperationsProxy;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.mjt.constants.Mapper;
+import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.lis.entity.Role;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.namedparam.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/test")
@@ -53,6 +62,42 @@ public class MjtController {
 //        });
 
         return ResultJson.success(roles);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @RequestMapping("/name")
+    public ResultJson name() throws JsonProcessingException {
+
+//        NamedParameterJdbcOperations namedParameterJdbcTemplate = NamedParameterJdbcOperationsProxy.getProxyInstance(DataSourceFactory.getDataSource("hisDataSource"));
+//////        NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(DataSourceFactory.getDataSource("hisDataSource"));
+//////        List<User> query = namedParameterJdbcTemplate.query("select * from user limit 1", new BeanPropertyRowMapper<>(User.class));
+////
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("id", 1);
+//        map.put("name", "dsd");
+//
+////        BeanPropertySqlParameterSource beanPropertySqlParameterSource = new BeanPropertySqlParameterSource(query.get(0));
+//
+//        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+//        mapSqlParameterSource.addValues(map);
+//        mapSqlParameterSource.addValue("age", 12);
+//
+//        User user = new User();
+//        user.setId(1L);
+//        BeanPropertySqlParameterSource beanPropertySqlParameterSource1 = new BeanPropertySqlParameterSource(user);
+////        List<User> query1 = namedParameterJdbcTemplate.query(Mapper.getUserById, beanPropertySqlParameterSource1, new BeanPropertyRowMapper<>(User.class));
+//
+//        Map parmas = ImmutableMap.of("id",1L);
+//        List query = namedParameterJdbcTemplate.query("select * from user where id = :id", parmas, new BeanPropertyRowMapper<>(User.class));
+
+        NamedParameterJdbcOperations namedParameterJdbcTemplate = NamedParameterJdbcOperationsProxy.getProxyInstance("hisDataSource", false);
+
+        Map parmas = ImmutableMap.of("id",1L);
+        List query = namedParameterJdbcTemplate.query("select * from user where id = :id", parmas, new BeanPropertyRowMapper<>(User.class));
+        return ResultJson.success(query);
     }
 
 }

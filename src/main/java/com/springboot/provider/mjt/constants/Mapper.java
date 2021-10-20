@@ -14,5 +14,6 @@ public class Mapper {
     public static final String saveRole = "com.springboot.provider.mjt.constants.Mapper.saveRole";
     public static final String batchSaveRole = "com.springboot.provider.mjt.constants.Mapper.batchSaveRole";
     public static final String getRoleById = "com.springboot.provider.mjt.constants.Mapper.getRoleById";
+    public static final String getUserById = "com.springboot.provider.mjt.constants.Mapper.getUserById";
 
 }
