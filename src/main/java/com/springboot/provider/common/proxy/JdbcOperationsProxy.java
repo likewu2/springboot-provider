@@ -40,7 +40,7 @@ public class JdbcOperationsProxy {
         Assert.notNull(jdbcTemplate, "JdbcTemplate must not be null");
 
         return (JdbcOperations) Proxy.newProxyInstance(JdbcOperations.class.getClassLoader(), new Class<?>[]{JdbcOperations.class}, (proxy, method, args) -> {
-            String sql = format(args);
+            String sql = preparedStatementFormatter(args);
 
             Object result = null;
             try {
@@ -56,7 +56,7 @@ public class JdbcOperationsProxy {
         });
     }
 
-    private static String format(Object[] args) {
+    private static String preparedStatementFormatter(Object[] args) {
         AtomicReference<String> sql = new AtomicReference<>("");
 
         // implant the args to sql

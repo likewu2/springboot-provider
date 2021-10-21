@@ -93,10 +93,17 @@ public class MjtController {
 //        Map parmas = ImmutableMap.of("id",1L);
 //        List query = namedParameterJdbcTemplate.query("select * from user where id = :id", parmas, new BeanPropertyRowMapper<>(User.class));
 
-        NamedParameterJdbcOperations namedParameterJdbcTemplate = NamedParameterJdbcOperationsProxy.getProxyInstance("hisDataSource", false);
+        NamedParameterJdbcOperations namedParameterJdbcTemplate = NamedParameterJdbcOperationsProxy.getProxyInstance("hisDataSource", true);
 
-        Map parmas = ImmutableMap.of("id",1L);
-        List query = namedParameterJdbcTemplate.query("select * from user where id = :id", parmas, new BeanPropertyRowMapper<>(User.class));
+        Map parmas = ImmutableMap.of("id", 1L);
+
+        User user = new User();
+        user.setId(1L);
+        BeanPropertySqlParameterSource beanPropertySqlParameterSource1 = new BeanPropertySqlParameterSource(user);
+
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource(parmas);
+
+        List query = namedParameterJdbcTemplate.query(Mapper.getUserById, mapSqlParameterSource, new BeanPropertyRowMapper<>(User.class));
         return ResultJson.success(query);
     }
 
