@@ -1,6 +1,7 @@
 package com.springboot.provider.common.proxy;
 
 import com.springboot.provider.common.holder.MultiDataSourceHolder;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.*;
@@ -64,8 +65,9 @@ public class JdbcOperationsProxy {
             if (item instanceof String) {
                 sql.set((String) item);
             } else if (item instanceof Object[]) {
-                Arrays.stream(((Object[]) item)).forEach(param -> {
-                    sql.updateAndGet(s -> s.replaceFirst("\\?", "'" + Matcher.quoteReplacement(param.toString()) + "'"));
+                Arrays.stream(((Object[]) item)).forEach(data -> {
+                    String value = Matcher.quoteReplacement(String.valueOf(data));
+                    sql.updateAndGet(s -> s.replaceFirst("\\?", StringUtils.center(value, value.length() + 2, "'")));
                 });
             } else if (item instanceof PreparedStatementCreator && item instanceof PreparedStatementSetter
                     && item instanceof SqlProvider && item instanceof ParameterDisposer) {
