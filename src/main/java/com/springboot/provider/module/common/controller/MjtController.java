@@ -17,9 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/test")
@@ -104,6 +102,24 @@ public class MjtController {
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource(parmas);
 
         List query = namedParameterJdbcTemplate.query(Mapper.getUserById, mapSqlParameterSource, new BeanPropertyRowMapper<>(User.class));
+
+        User user1 = new User();
+        user1.setUsername("xzk1");
+        user1.setPassword("123");
+        user1.setCreateTime(new Date());
+        user1.setStatus(1);
+        User user2 = new User();
+        user2.setUsername("xzk1");
+        user2.setPassword("123");
+        user2.setCreateTime(new Date());
+        user2.setStatus(1);
+
+        List<BeanPropertySqlParameterSource> userList = new ArrayList<>();
+        userList.add(new BeanPropertySqlParameterSource(user1));
+        userList.add(new BeanPropertySqlParameterSource(user2));
+
+        namedParameterJdbcTemplate.batchUpdate(Mapper.batchSaveUser, userList.toArray(new BeanPropertySqlParameterSource[0]));
+
         return ResultJson.success(query);
     }
 

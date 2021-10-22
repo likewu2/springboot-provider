@@ -31,4 +31,8 @@
     <sql id="getUserById">
         select * from user where id = :id
     </sql>
+
+    <sql id="batchSaveUser">
+        insert into user(username, password, create_time, status) values (:username, :password, :createTime, :status)
+    </sql>
 </namespace>
