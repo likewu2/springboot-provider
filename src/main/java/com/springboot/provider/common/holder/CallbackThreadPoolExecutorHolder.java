@@ -29,7 +29,7 @@ public class CallbackThreadPoolExecutorHolder {
 
     private final static BlockingQueue<Runnable> WORK_QUEUE = new LinkedBlockingQueue<>(5);
 
-    private final static ThreadFactory THREAD_FACTORY = new ThreadFactoryBuilder().setNameFormat(CallbackThreadPoolExecutorHolder.class.getSimpleName() + "-%d").build();
+    private final static ThreadFactory THREAD_FACTORY = new ThreadFactoryBuilder().setNameFormat(CallbackThreadPoolExecutorHolder.class.getName() + "-pool-%d").build();
 
     private static ListeningExecutorService threadPoolExecutor = MoreExecutors.listeningDecorator(
             new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,

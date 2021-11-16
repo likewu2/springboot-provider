@@ -27,7 +27,7 @@ public class ThreadPoolExecutorHolder {
 
     private final static BlockingQueue<Runnable> WORK_QUEUE = new LinkedBlockingQueue<>(5);
 
-    private final static ThreadFactory THREAD_FACTORY = new ThreadFactoryBuilder().setNameFormat(ThreadPoolExecutorHolder.class.getSimpleName() + "-%d").build();
+    private final static ThreadFactory THREAD_FACTORY = new ThreadFactoryBuilder().setNameFormat(ThreadPoolExecutorHolder.class.getName() + "-pool-%d").build();
 
     private static ExecutorService threadPoolExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE,
             KEEP_ALIVE_TIME, TIME_UNIT,
