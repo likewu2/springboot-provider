@@ -25,7 +25,7 @@ import java.util.Objects;
 @Aspect
 @Component
 public class OptionLogAspect {
-    private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
+    private final Logger logger = LoggerFactory.getLogger(OptionLogAspect.class);
 
     @Pointcut(value = "@annotation(com.springboot.provider.common.annotation.OptionLog)")
     public void methodPointcut() {

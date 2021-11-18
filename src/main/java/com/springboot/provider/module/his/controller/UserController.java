@@ -1,6 +1,7 @@
 package com.springboot.provider.module.his.controller;
 
 
+import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.his.service.UserService;
@@ -8,11 +9,13 @@ import com.springboot.provider.module.lis.entity.Role;
 import com.springboot.provider.module.lis.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +65,10 @@ public class UserController {
     }
 
     @RequestMapping("getById")
-    public ResultJson getById(@RequestBody User user){
+    public ResultJson getById(@RequestBody @Valid User user, BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            return ResultJson.failure(ResultCode.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
+        }
         return ResultJson.success(userService.getByUserId(user.getId()));
     }
 
