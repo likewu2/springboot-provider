@@ -79,7 +79,11 @@ public class AtomikosDataSourceBuilder {
         sessionFactoryBean.setDataSource(dataSource);
         sessionFactoryBean.setVfs(SpringBootVFS.class);
         sessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
-        sessionFactoryBean.setPlugins(new MybatisPlusInterceptor(), new DataScopeInterceptor(dataSource));
+
+        MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL)); // 分页
+        mybatisPlusInterceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor()); // 乐观锁
+        sessionFactoryBean.setPlugins(mybatisPlusInterceptor, new DataScopeInterceptor(dataSource));
 
         Resource[] resources = resolveMapperLocations(mapperLocations);
         sessionFactoryBean.setMapperLocations(resources);
@@ -88,12 +92,6 @@ public class AtomikosDataSourceBuilder {
         configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
         // configuration.getGlobalConfig().setMetaObjectHandler(new MyBatisMetaObjectHandler());
         GlobalConfigUtils.getGlobalConfig(configuration).setMetaObjectHandler(new MyBatisMetaObjectHandler());
-
-        MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
-        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL)); // 分页
-        mybatisPlusInterceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor()); // 乐观锁
-        configuration.addInterceptor(mybatisPlusInterceptor);
-
         sessionFactoryBean.setConfiguration(configuration);
 
         return sessionFactoryBean.getObject();
