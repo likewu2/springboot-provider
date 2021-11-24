@@ -114,11 +114,16 @@ public class MjtController {
         user2.setCreateTime(new Date());
         user2.setStatus(1);
 
-        List<BeanPropertySqlParameterSource> userList = new ArrayList<>();
-        userList.add(new BeanPropertySqlParameterSource(user1));
-        userList.add(new BeanPropertySqlParameterSource(user2));
+        // List<BeanPropertySqlParameterSource> userList = new ArrayList<>();
+        // userList.add(new BeanPropertySqlParameterSource(user1));
+        // userList.add(new BeanPropertySqlParameterSource(user2));
+        // namedParameterJdbcTemplate.batchUpdate(Mapper.batchSaveUser, userList.toArray(new BeanPropertySqlParameterSource[0]));
 
-        namedParameterJdbcTemplate.batchUpdate(Mapper.batchSaveUser, userList.toArray(new BeanPropertySqlParameterSource[0]));
+        List<User> userList1 = new ArrayList<>();
+        userList1.add(user1);
+        userList1.add(user2);
+        SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(userList1);
+        namedParameterJdbcTemplate.batchUpdate(Mapper.batchSaveUser, batch);
 
         return ResultJson.success(query);
     }
