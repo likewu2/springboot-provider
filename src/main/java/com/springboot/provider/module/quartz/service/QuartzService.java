@@ -4,7 +4,6 @@ import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,11 @@ import java.util.*;
 public class QuartzService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private Scheduler scheduler;
+    private final Scheduler scheduler;
+
+    public QuartzService(Scheduler scheduler) {
+        this.scheduler = scheduler;
+    }
 
     @PostConstruct
     public void startScheduler() {

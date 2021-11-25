@@ -8,7 +8,6 @@ import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.his.service.UserService;
 import com.springboot.provider.module.lis.entity.Role;
 import com.springboot.provider.module.lis.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,11 +32,14 @@ import java.util.Map;
 @RequestMapping("/his/user")
 public class UserController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    RoleService roleService;
+    private final RoleService roleService;
+
+    public UserController(UserService userService, RoleService roleService) {
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @RequestMapping("add")

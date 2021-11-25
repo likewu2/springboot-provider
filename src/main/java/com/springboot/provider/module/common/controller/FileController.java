@@ -3,7 +3,6 @@ package com.springboot.provider.module.common.controller;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.module.common.service.FileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +25,11 @@ import java.util.Map;
 @RequestMapping("/file")
 public class FileController {
 
-    @Autowired
-    private FileService fileService;
+    private final FileService fileService;
 
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
+    }
 
     @RequestMapping(value = "/uploadSingle", method = RequestMethod.POST)
     public ResultJson singleFileUpload(MultipartFile file) {

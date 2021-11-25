@@ -22,7 +22,6 @@ import com.springboot.provider.module.pay.factory.PayStrategyFactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
@@ -60,20 +59,23 @@ public class CommonController {
 
     private final AtomicLong counter = new AtomicLong();
 
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Autowired
-    private ServletContext servletContext;
+    private final ServletContext servletContext;
 
-    @Autowired
-    private CommonService commonService;
+    private final CommonService commonService;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+
+    public CommonController(ApplicationEventPublisher applicationEventPublisher, ServletContext servletContext, CommonService commonService, RestTemplate restTemplate, ObjectMapper objectMapper) {
+        this.applicationEventPublisher = applicationEventPublisher;
+        this.servletContext = servletContext;
+        this.commonService = commonService;
+        this.restTemplate = restTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     /*
      * @cache（“something");这个相当于save（）操作，

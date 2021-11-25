@@ -4,7 +4,6 @@ import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.module.quartz.entity.QuartzJob;
 import com.springboot.provider.module.quartz.service.QuartzService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class QuartzController {
 
-    @Autowired
-    private QuartzService quartzService;
+    private final QuartzService quartzService;
+
+    public QuartzController(QuartzService quartzService) {
+        this.quartzService = quartzService;
+    }
 
     /**
      *  {
