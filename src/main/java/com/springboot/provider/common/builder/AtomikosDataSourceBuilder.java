@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import com.springboot.provider.common.handler.MyBatisMetaObjectHandler;
 import com.springboot.provider.common.interceptor.DataScopeInterceptor;
+import com.springboot.provider.common.interceptor.PerformanceInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.core.io.Resource;
@@ -83,7 +84,7 @@ public class AtomikosDataSourceBuilder {
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL)); // 分页
         mybatisPlusInterceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor()); // 乐观锁
-        sessionFactoryBean.setPlugins(mybatisPlusInterceptor, new DataScopeInterceptor(dataSource));
+        sessionFactoryBean.setPlugins(mybatisPlusInterceptor, new DataScopeInterceptor(dataSource), new PerformanceInterceptor());
 
         Resource[] resources = resolveMapperLocations(mapperLocations);
         sessionFactoryBean.setMapperLocations(resources);
