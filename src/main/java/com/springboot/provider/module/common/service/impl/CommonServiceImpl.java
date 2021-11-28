@@ -2,12 +2,10 @@ package com.springboot.provider.module.common.service.impl;
 
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,26 +24,27 @@ import java.util.UUID;
 @Transactional(transactionManager = "transactionManager")
 public class CommonServiceImpl implements CommonService {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    @Qualifier("hisJdbcOperations")
-    private JdbcOperations hisJdbcOperations;
+    private final JdbcOperations hisJdbcOperations;
 
-    @Autowired
-    @Qualifier("lisJdbcOperations")
-    private JdbcOperations lisJdbcOperations;
+    private final JdbcOperations lisJdbcOperations;
+
+    public CommonServiceImpl(PasswordEncoder passwordEncoder, @Qualifier("hisJdbcOperations") JdbcOperations hisJdbcOperations, @Qualifier("lisJdbcOperations") JdbcOperations lisJdbcOperations) {
+        this.passwordEncoder = passwordEncoder;
+        this.hisJdbcOperations = hisJdbcOperations;
+        this.lisJdbcOperations = lisJdbcOperations;
+    }
 
     @Override
     public Integer insert() {
         String username = UUID.randomUUID().toString();
-        username  = username.substring(0,16);
+        username = username.substring(0, 16);
 
         int his = hisJdbcOperations.update("insert into user(username,password) values(?,?)", username, passwordEncoder.encode(username));
 //        int a= 1/0;
 
-        int lis = lisJdbcOperations.update("insert into role(name,title) values(?,?)", "admin","ADMIN");
+        int lis = lisJdbcOperations.update("insert into role(name,title) values(?,?)", "admin", "ADMIN");
 //        int i = 1/0;
         return his + lis;
     }
@@ -53,7 +52,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public Integer update(User user) {
         try {
-            return hisJdbcOperations.update("update user set username=?,password=? where id=?",user.getUsername(),user.getPassword(),user.getId());
+            return hisJdbcOperations.update("update user set username=?,password=? where id=?", user.getUsername(), user.getPassword(), user.getId());
         } catch (DataAccessException e) {
             return null;
         }
@@ -89,7 +88,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public User selectById(Long id) {
         try {
-            return hisJdbcOperations.queryForObject("select * from user where id = ?",new BeanPropertyRowMapper<>(User.class), id);
+            return hisJdbcOperations.queryForObject("select * from user where id = ?", new BeanPropertyRowMapper<>(User.class), id);
         } catch (DataAccessException e) {
             return null;
         }

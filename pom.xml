@@ -83,7 +83,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
-<!--            <version>3.3.0</version>-->
+            <!--            <version>3.3.0</version>-->
             <version>3.5.1</version>
         </dependency>
         <dependency>
@@ -194,20 +194,20 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>cn.joylau.code</groupId>-->
-<!--                <artifactId>joylau-springboot-daemon-windows</artifactId>-->
-<!--                <version>1.1.RELEASE</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>make-win-service</id>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>make-win-service</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>cn.joylau.code</groupId>-->
+            <!--                <artifactId>joylau-springboot-daemon-windows</artifactId>-->
+            <!--                <version>1.1.RELEASE</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>make-win-service</id>-->
+            <!--                        <phase>package</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>make-win-service</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 

@@ -26,18 +26,19 @@ public class QuartzController {
     }
 
     /**
-     *  {
-     *     "jobClass":"com.springboot.provider.module.quartz.job.SqlQueryJob",
-     *     "jobName":"job_1",
-     *     "jobGroupName":"job_group_1",
-     *     "cronExpression":"0/1 * * * * ?",
-     *     "jobData":{
-     *         "sql":"select * from user where status = #status#",
-     *         "params": {
-     *             "#status#":"1"
-     *         }
-     *     }
-     *  }
+     * {
+     * "jobClass":"com.springboot.provider.module.quartz.job.SqlQueryJob",
+     * "jobName":"job_1",
+     * "jobGroupName":"job_group_1",
+     * "cronExpression":"0/1 * * * * ?",
+     * "jobData":{
+     * "sql":"select * from user where status = #status#",
+     * "params": {
+     * "#status#":"1"
+     * }
+     * }
+     * }
+     *
      * @param job
      * @return
      */
@@ -59,6 +60,7 @@ public class QuartzController {
 
     /**
      * 暂停
+     *
      * @param job
      * @return
      */
@@ -74,6 +76,7 @@ public class QuartzController {
 
     /**
      * 修改
+     *
      * @param job
      * @return
      */
@@ -89,6 +92,7 @@ public class QuartzController {
 
     /**
      * 重启
+     *
      * @param job
      * @return
      */
@@ -104,6 +108,7 @@ public class QuartzController {
 
     /**
      * 触发一次
+     *
      * @param job
      * @return
      */
@@ -119,6 +124,7 @@ public class QuartzController {
 
     /**
      * 删除
+     *
      * @param job
      * @return
      */
@@ -134,6 +140,7 @@ public class QuartzController {
 
     /**
      * 所有在运行的定时任务
+     *
      * @param job
      * @return
      */
@@ -144,6 +151,7 @@ public class QuartzController {
 
     /**
      * 所有定时任务
+     *
      * @param job
      * @return
      */

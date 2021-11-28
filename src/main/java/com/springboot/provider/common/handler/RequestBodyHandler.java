@@ -1,21 +1,15 @@
 package com.springboot.provider.common.handler;
 
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
-import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJacksonInputMessage;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @program: springboot-provider
@@ -27,8 +21,11 @@ import java.nio.charset.StandardCharsets;
 @RestControllerAdvice
 public class RequestBodyHandler implements RequestBodyAdvice {
 
-    @Autowired
-    private SymmetricCrypto symmetricCrypto;
+    private final SymmetricCrypto symmetricCrypto;
+
+    public RequestBodyHandler(SymmetricCrypto symmetricCrypto) {
+        this.symmetricCrypto = symmetricCrypto;
+    }
 
     /**
      * Invoked first to determine if this interceptor applies.

@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author XuZhenkui
@@ -32,7 +32,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         return roleMapper.getRoleList();
     }
 
-//    @Transactional(transactionManager = "transactionManager", propagation = Propagation.REQUIRES_NEW)
+    // @Transactional(transactionManager = "transactionManager", propagation = Propagation.REQUIRES_NEW)
     @Override
     public Integer insert(Role role) {
         return roleMapper.insert(role);

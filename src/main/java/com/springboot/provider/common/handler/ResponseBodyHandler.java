@@ -2,7 +2,6 @@ package com.springboot.provider.common.handler;
 
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -21,10 +20,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @RestControllerAdvice
 public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
 
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private SymmetricCrypto symmetricCrypto;
+    private final ObjectMapper objectMapper;
+
+    private final SymmetricCrypto symmetricCrypto;
+
+    public ResponseBodyHandler(ObjectMapper objectMapper, SymmetricCrypto symmetricCrypto) {
+        this.objectMapper = objectMapper;
+        this.symmetricCrypto = symmetricCrypto;
+    }
 
     /**
      * Whether this component supports the given controller method return type
