@@ -71,7 +71,7 @@ public class UserController {
 
     @RequestMapping("getById")
     public ResultJson getById(@RequestBody @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() && bindingResult.getFieldError() != null) {
             return ResultJson.failure(ResultCode.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
         }
         return ResultJson.success(userService.getByUserId(user.getId()));
