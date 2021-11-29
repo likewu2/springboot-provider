@@ -71,11 +71,7 @@ public class PerformanceInterceptor extends AbstractSqlParserHandler implements 
             }
         }
 
-        String originalSql = null;
-        if (originalSql == null) {
-            originalSql = statement.toString();
-        }
-        originalSql = originalSql.replaceAll("[\\s]+", " ");
+        String originalSql = statement.toString().replaceAll("[\\s]+", " ");
         int index = indexOfSqlStart(originalSql);
         if (index > 0) {
             originalSql = originalSql.substring(index);
