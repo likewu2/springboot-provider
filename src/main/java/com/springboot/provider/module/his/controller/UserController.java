@@ -82,8 +82,17 @@ public class UserController {
         return ResultJson.success(userService.save(user));
     }
 
+    // 乐观锁
     @RequestMapping("updateById")
     public ResultJson updateById(@RequestBody User user) {
+        User byId = userService.getById(user.getId());
+        byId.setStatus(user.getStatus());
         return ResultJson.success(userService.updateById(user));
+    }
+
+    // 逻辑删除
+    @RequestMapping("removeById")
+    public ResultJson removeById(@RequestBody User user) {
+        return ResultJson.success(userService.removeById(user.getId()));
     }
 }

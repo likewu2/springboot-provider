@@ -186,7 +186,6 @@ public class PerformanceInterceptor extends AbstractSqlParserHandler implements 
         return list.get(0);
     }
 
-    private final static SqlFormatter sqlFormatter = new SqlFormatter();
 
     /**
      * 格式sql
@@ -198,7 +197,7 @@ public class PerformanceInterceptor extends AbstractSqlParserHandler implements 
     public static String sqlFormat(String boundSql, boolean format) {
         if (format) {
             try {
-                return sqlFormatter.format(boundSql);
+                return SqlFormatter.format(boundSql);
             } catch (Exception ignored) {
             }
         }
