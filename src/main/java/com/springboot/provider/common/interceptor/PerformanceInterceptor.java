@@ -96,7 +96,7 @@ public class PerformanceInterceptor extends AbstractSqlParserHandler implements 
         formatSql.append("\n Execute SQL：").append(sqlFormat(originalSql, format)).append("\n");
         if (this.isWriteInLog()) {
             if (this.getMaxTime() >= 1 && timing > this.getMaxTime()) {
-                logger.info(formatSql.toString());
+                logger.error(formatSql.toString());
             } else {
                 logger.info(formatSql.toString());
             }
