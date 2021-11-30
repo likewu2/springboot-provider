@@ -45,12 +45,12 @@ public class User extends Model<User> {
 
     private Integer status;
 
-    @TableLogic(value = "0", delval = "1")
+    @TableLogic
     @TableField(value = "delete_flag", fill = FieldFill.INSERT)
     private Integer deleteFlag;
 
     @Version
-    @TableField(fill = FieldFill.INSERT)
+    @TableField(value = "version", fill = FieldFill.INSERT)
     private Integer version;
 
     public Long getId() {

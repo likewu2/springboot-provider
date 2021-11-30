@@ -1,11 +1,13 @@
 package com.springboot.provider.config;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.FastAutoGenerator;
 import com.baomidou.mybatisplus.generator.config.OutputFile;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.baomidou.mybatisplus.generator.fill.Column;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -63,11 +65,22 @@ public class MyBatisFastAutoGenerator {
                                 .enableTableFieldAnnotation()
                                 .naming(NamingStrategy.underline_to_camel)
                                 .columnNaming(NamingStrategy.underline_to_camel)
+                                .addTableFills(Arrays.asList(
+                                        new Column("create_time", FieldFill.INSERT),
+                                        new Column("update_time", FieldFill.INSERT_UPDATE),
+                                        new Column("delete_flag", FieldFill.INSERT),
+                                        new Column("version", FieldFill.INSERT)
+                                ))
+                                .logicDeleteColumnName("delete_flag")
+                                .versionColumnName("version")
                                 .build()
                             .mapperBuilder()
                                 .enableBaseColumnList()
                                 .enableBaseResultMap()
                                 .enableMapperAnnotation()
+                            .serviceBuilder()
+                                .formatServiceFileName("%sService")
+                                .formatServiceImplFileName("%sServiceImpl")
                             .controllerBuilder()
                                 .enableRestStyle()
                                 .enableHyphenStyle()
