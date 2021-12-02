@@ -12,7 +12,6 @@ import com.springboot.provider.common.handler.MyBatisMetaObjectHandler;
 import com.springboot.provider.common.interceptor.DataScopeInterceptor;
 import com.springboot.provider.common.interceptor.EasySqlInjector;
 import com.springboot.provider.common.interceptor.PerformanceInterceptor;
-import org.apache.ibatis.builder.MapperBuilderAssistant;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.core.io.Resource;
