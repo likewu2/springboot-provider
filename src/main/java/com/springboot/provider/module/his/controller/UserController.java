@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -80,6 +78,18 @@ public class UserController {
     @RequestMapping("save")
     public ResultJson save(@RequestBody User user) {
         return ResultJson.success(userService.save(user));
+    }
+
+    @RequestMapping("batchSave")
+    public ResultJson batchSave(@RequestBody User user) {
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            User user1 = new User();
+            user1.setUsername("xzk" + i);
+            user1.setPassword("pwd" + i);
+            userList.add(user1);
+        }
+        return ResultJson.success(userService.insertBatchSomeColumn(userList));
     }
 
     // 乐观锁

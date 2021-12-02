@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -40,5 +41,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public Integer insert(User user) {
         return userMapper.insert(user);
+    }
+
+    @Override
+    public Integer insertBatchSomeColumn(Collection<User> entityList) {
+        return baseMapper.insertBatchSomeColumn(entityList);
     }
 }

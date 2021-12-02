@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -20,4 +21,12 @@ public interface UserMapper extends BaseMapper<User> {
     List<User> getAllUser();
 
     User getByUserId(@Param("id")Long id);
+
+    /**
+     * 批量插入 仅适用于mysql
+     *
+     * @param entityList 实体列表
+     * @return 影响行数
+     */
+    Integer insertBatchSomeColumn(Collection<User> entityList);
 }
