@@ -40,11 +40,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .headers()
+                    .frameOptions()
+                    // .disable(); // 任何跨域
+                    .sameOrigin(); // 同源跨域
+
+        http
                     .cors()
                 .and()
-                    .csrf()
-                    .disable()
-                    .authorizeRequests()
+                    .csrf().disable()
+                .authorizeRequests()
                     .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                     .antMatchers("/","/test/**","/his/**","/lis/**").permitAll()
                     .antMatchers("/user/**").hasRole("USER")

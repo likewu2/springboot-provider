@@ -21,8 +21,8 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
 //        registry.addViewController("/home").setViewName("home");
-//        registry.addViewController("/").setViewName("home");
 //        registry.addViewController("/hello").setViewName("hello");
 //        registry.addViewController("/login").setViewName("login");
 //        registry.addViewController("/upload").setViewName("uploadForm");
@@ -55,6 +55,13 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/img/**").addResourceLocations("file:"+ header);
         // http://127.0.0.1:8090/file/ssr.txt
         registry.addResourceHandler("/file/**").addResourceLocations("file:"+ file);
+
+        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
+        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
+        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/images/");
+        registry.addResourceHandler("/lib/**").addResourceLocations("classpath:/static/lib/");
+        registry.addResourceHandler("/page/**").addResourceLocations("classpath:/static/page/");
+
     }
 
     /**

@@ -84,7 +84,7 @@ public class CommonController {
      * */
 
     @Cacheable("index")
-    @RequestMapping("/")
+    @RequestMapping("/common")
     public ResultJson index() {
         User user = new User();
         user.setUsername("spring boot");
@@ -284,4 +284,35 @@ public class CommonController {
         assert param != null;
         response.getWriter().write(JsonAndXmlUtils.objectToJson(user));
     }
+
+    @GetMapping(value = "/api/init")
+    public String init() {
+        return ResourceUtils.getResource("/static/api/init.json");
+    }
+
+    @GetMapping(value = "/api/clear")
+    public String clear() {
+        return ResourceUtils.getResource("/static/api/clear.json");
+    }
+
+    @GetMapping(value = "/api/menus")
+    public String menus() {
+        return ResourceUtils.getResource("/static/api/menus.json");
+    }
+
+    @GetMapping(value = "/api/table")
+    public String table() {
+        return ResourceUtils.getResource("/static/api/table.json");
+    }
+
+    @GetMapping(value = "/api/tableSelect")
+    public String tableSelect() {
+        return ResourceUtils.getResource("/static/api/tableSelect.json");
+    }
+
+    @GetMapping(value = "/api/upload")
+    public String upload() {
+        return ResourceUtils.getResource("/static/api/upload.json");
+    }
+
 }
