@@ -51,21 +51,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .csrf().disable()
                 .authorizeRequests()
                     .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                    .antMatchers("/","/test/**","/his/**","/lis/**").permitAll()
+                    .antMatchers("/", "/index.html", "/api/**", "/test/**", "/his/**", "/lis/**").permitAll()
+                    .antMatchers("/js/**", "/css/**", "/images/**", "/lib/**", "/page/**").permitAll()
                     .antMatchers("/user/**").hasRole("USER")
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/file/**").hasAnyRole("USER","ADMIN")
-                    .anyRequest().authenticated()
-                .and()
-                    .formLogin()
-                    .successForwardUrl("/")
-                    .permitAll()
-                .and()
-                    .logout()
-                    .deleteCookies()
-                    .invalidateHttpSession(true)
-                    .clearAuthentication(true)
-                    .permitAll();
+                    .anyRequest().authenticated();
+//                .and()
+//                    .formLogin()
+//                    .loginPage("/page/login.html")
+//                    .successForwardUrl("/index.html")
+//                    .permitAll()
+//                .and()
+//                    .logout()
+//                    .deleteCookies()
+//                    .invalidateHttpSession(true)
+//                    .clearAuthentication(true)
+//                    .permitAll();
     }
 
     /**
