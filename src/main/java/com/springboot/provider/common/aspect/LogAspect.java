@@ -19,6 +19,8 @@ import java.util.Objects;
 public class LogAspect {
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
+    private final Gson gson = new Gson();
+
     @Pointcut("execution(public * com.springboot.provider.module.*.controller.*.*(..))")
     public void log() {
     }
@@ -33,7 +35,7 @@ public class LogAspect {
         Object result = joinPoint.proceed();
 
         logger.info("\nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {} \nReturn: {} \nInvoke Cost: {}",
-                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), new Gson().toJson(joinPoint.getArgs()), new Gson().toJson(result), (System.currentTimeMillis() - start) + "ms");
+                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), gson.toJson(joinPoint.getArgs()), gson.toJson(result), (System.currentTimeMillis() - start) + "ms");
 
         return result;
     }
