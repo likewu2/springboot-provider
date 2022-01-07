@@ -19,4 +19,6 @@ public interface FileService {
     ResponseEntity<Resource> downloadFile(String filename) throws MalformedURLException;
 
     ResponseEntity<byte[]> downloadZipFile(String filePath) throws IOException;
+
+    ResponseEntity<Resource> downloadPDFFile(String id) throws Exception;
 }
