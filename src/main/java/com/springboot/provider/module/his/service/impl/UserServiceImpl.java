@@ -1,13 +1,12 @@
 package com.springboot.provider.module.his.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.his.mapper.UserMapper;
 import com.springboot.provider.module.his.service.UserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,8 +42,4 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.insert(user);
     }
 
-    @Override
-    public Integer insertBatchSomeColumn(Collection<User> entityList) {
-        return baseMapper.insertBatchSomeColumn(entityList);
-    }
 }

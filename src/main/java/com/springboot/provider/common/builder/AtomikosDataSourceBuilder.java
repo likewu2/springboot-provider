@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.autoconfigure.SpringBootVFS;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import com.springboot.provider.common.handler.MyBatisMetaObjectHandler;
 import com.springboot.provider.common.interceptor.DataScopeInterceptor;
-import com.springboot.provider.common.interceptor.EasySqlInjector;
 import com.springboot.provider.common.interceptor.PerformanceInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
@@ -83,18 +83,17 @@ public class AtomikosDataSourceBuilder {
         sessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
 
         MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
-        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL)); // 分页
+        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL)); // 分页拦截器
         mybatisPlusInterceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor()); // 乐观锁
-        sessionFactoryBean.setPlugins(mybatisPlusInterceptor, new DataScopeInterceptor(dataSource), new PerformanceInterceptor());
+        mybatisPlusInterceptor.addInnerInterceptor(new BlockAttackInnerInterceptor()); // 攻击 SQL 阻断解析器,防止全表更新与删除
+        sessionFactoryBean.setPlugins(mybatisPlusInterceptor, new DataScopeInterceptor(dataSource), new PerformanceInterceptor(dataSource));
 
         Resource[] resources = resolveMapperLocations(mapperLocations);
         sessionFactoryBean.setMapperLocations(resources);
 
         MybatisConfiguration configuration = new MybatisConfiguration();
         configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
-        // configuration.getGlobalConfig().setMetaObjectHandler(new MyBatisMetaObjectHandler());
         GlobalConfigUtils.getGlobalConfig(configuration).setMetaObjectHandler(new MyBatisMetaObjectHandler());
-        GlobalConfigUtils.getGlobalConfig(configuration).setSqlInjector(new EasySqlInjector());
         sessionFactoryBean.setConfiguration(configuration);
 
         return sessionFactoryBean.getObject();

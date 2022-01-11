@@ -4,19 +4,15 @@ import cn.hutool.db.sql.SqlFormatter;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.core.toolkit.SystemClock;
-import com.baomidou.mybatisplus.extension.handlers.AbstractSqlParserHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.statement.StatementHandler;
-import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.plugin.*;
-import org.apache.ibatis.reflection.MetaObject;
-import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.ResultHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.sql.Statement;
 import java.util.*;
 
@@ -30,7 +26,7 @@ import java.util.*;
 @Intercepts({@Signature(type = StatementHandler.class, method = "query", args = {Statement.class, ResultHandler.class}),
         @Signature(type = StatementHandler.class, method = "update", args = {Statement.class}),
         @Signature(type = StatementHandler.class, method = "batch", args = {Statement.class})})
-public class PerformanceInterceptor extends AbstractSqlParserHandler implements Interceptor {
+public class PerformanceInterceptor implements Interceptor {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -48,30 +44,29 @@ public class PerformanceInterceptor extends AbstractSqlParserHandler implements 
      */
     private boolean writeInLog = false;
 
+    private final DataSource dataSource;
+
+    public PerformanceInterceptor(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public PerformanceInterceptor(DataSource dataSource, long maxTime, boolean format, boolean writeInLog) {
+        this.maxTime = maxTime;
+        this.format = format;
+        this.writeInLog = writeInLog;
+        this.dataSource = dataSource;
+    }
+
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        Statement statement;
-        Object firstArg = invocation.getArgs()[0];
-        if (Proxy.isProxyClass(firstArg.getClass())) {
-            statement = (Statement) SystemMetaObject.forObject(firstArg).getValue("h.statement");
-        } else {
-            statement = (Statement) firstArg;
-        }
-        MetaObject stmtMetaObj = SystemMetaObject.forObject(statement);
-        try {
-            statement = (Statement) stmtMetaObj.getValue("stmt.statement");
-        } catch (Exception e) {
-            // do nothing
-        }
-        if (stmtMetaObj.hasGetter("delegate")) {//Hikari
-            try {
-                statement = (Statement) stmtMetaObj.getValue("delegate");
-            } catch (Exception e) {
+        StatementHandler statementHandler = PluginUtils.realTarget(invocation.getTarget());
 
-            }
-        }
+        PluginUtils.MPStatementHandler mpStatementHandler = PluginUtils.mpStatementHandler(statementHandler);
 
-        String originalSql = statement.toString().replaceAll("[\\s]+", " ");
+        String originalSql = mpStatementHandler.mPBoundSql().sql();
+        Object parameterObject = mpStatementHandler.mPBoundSql().parameterObject();
+
+        originalSql = originalSql.replaceAll("[\\s]+", " ");
         int index = indexOfSqlStart(originalSql);
         if (index > 0) {
             originalSql = originalSql.substring(index);
@@ -83,13 +78,12 @@ public class PerformanceInterceptor extends AbstractSqlParserHandler implements 
         long timing = SystemClock.now() - start;
 
         // 格式化 SQL 打印执行结果
-        Object target = PluginUtils.realTarget(invocation.getTarget());
-        MetaObject metaObject = SystemMetaObject.forObject(target);
-        MappedStatement ms = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
+
         StringBuilder formatSql = new StringBuilder();
-        formatSql.append(" Time：").append(timing);
-        formatSql.append(" ms - ID：").append(ms.getId());
-        formatSql.append("\n Execute SQL：").append(sqlFormat(originalSql, format)).append("\n");
+        formatSql.append(" Datasource：").append(dataSource.toString());
+        formatSql.append(" - ID：").append(mpStatementHandler.mappedStatement().getId());
+        formatSql.append(" - Cost：").append(timing);
+        formatSql.append(" ms\n Execute SQL：").append(sqlFormat(originalSql, format)).append("\n");
         if (this.isWriteInLog()) {
             if (this.getMaxTime() >= 1 && timing > this.getMaxTime()) {
                 logger.error(formatSql.toString());

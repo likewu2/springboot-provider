@@ -64,11 +64,6 @@ public class Role extends Model<Role> {
     }
 
     @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
-    @Override
     public String toString() {
         return "Role{" +
                 "id=" + id +
