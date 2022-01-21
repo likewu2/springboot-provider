@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
+import java.time.Duration;
+
 /**
  * @Description
  * @Project springboot-provider
@@ -68,16 +70,18 @@ public class SpringApplicationRunListenerHandler implements SpringApplicationRun
         System.out.println("[SpringApplicationRunListenerHandler] contextLoaded");
     }
 
+
     /**
      * The context has been refreshed and the application has started but
      * {@link CommandLineRunner CommandLineRunners} and {@link ApplicationRunner
      * ApplicationRunners} have not been called.
      *
-     * @param context the application context.
-     * @since 2.0.0
+     * @param context   the application context.
+     * @param timeTaken the time taken to start the application or {@code null} if unknown
+     * @since 2.6.0
      */
     @Override
-    public void started(ConfigurableApplicationContext context) {
+    public void started(ConfigurableApplicationContext context, Duration timeTaken) {
         System.out.println("[SpringApplicationRunListenerHandler] started");
     }
 
@@ -86,12 +90,14 @@ public class SpringApplicationRunListenerHandler implements SpringApplicationRun
      * been refreshed and all {@link CommandLineRunner CommandLineRunners} and
      * {@link ApplicationRunner ApplicationRunners} have been called.
      *
-     * @param context the application context.
-     * @since 2.0.0
+     * @param context   the application context.
+     * @param timeTaken the time taken for the application to be ready or {@code null} if
+     *                  unknown
+     * @since 2.6.0
      */
     @Override
-    public void running(ConfigurableApplicationContext context) {
-        System.out.println("[SpringApplicationRunListenerHandler] running");
+    public void ready(ConfigurableApplicationContext context, Duration timeTaken) {
+        System.out.println("[SpringApplicationRunListenerHandler] ready");
     }
 
     /**
