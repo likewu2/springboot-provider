@@ -3,6 +3,7 @@ package com.springboot.provider.module.his.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.springboot.provider.module.his.entity.User;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -20,4 +21,5 @@ public interface UserService extends IService<User> {
 
     Integer insert(User user);
 
+    Integer insertBatchSomeColumn(Collection<User> entityList);
 }

@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import com.springboot.provider.common.handler.MyBatisMetaObjectHandler;
 import com.springboot.provider.common.interceptor.DataScopeInterceptor;
+import com.springboot.provider.common.interceptor.EasySqlInjector;
 import com.springboot.provider.common.interceptor.PerformanceInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
@@ -93,6 +94,7 @@ public class AtomikosDataSourceBuilder {
 
         MybatisConfiguration configuration = new MybatisConfiguration();
         configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
+        GlobalConfigUtils.getGlobalConfig(configuration).setSqlInjector(new EasySqlInjector());
         GlobalConfigUtils.getGlobalConfig(configuration).setMetaObjectHandler(new MyBatisMetaObjectHandler());
         sessionFactoryBean.setConfiguration(configuration);
 

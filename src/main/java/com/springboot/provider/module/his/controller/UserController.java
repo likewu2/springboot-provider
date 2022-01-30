@@ -80,6 +80,18 @@ public class UserController {
         return ResultJson.success(userService.save(user));
     }
 
+    @RequestMapping("batchSave")
+    public ResultJson batchSave(@RequestBody User user) {
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            User user1 = new User();
+            user1.setUsername("xzk" + i);
+            user1.setPassword("pwd" + i);
+            userList.add(user1);
+        }
+        return ResultJson.success(userService.insertBatchSomeColumn(userList));
+    }
+
     // 乐观锁
     @RequestMapping("updateById")
     public ResultJson updateById(@RequestBody User user) {
