@@ -72,26 +72,32 @@ public class PerformanceInterceptor implements Interceptor {
             originalSql = originalSql.substring(index);
         }
 
+        // 格式化 SQL 打印执行结果
+        StringBuilder formatSql = new StringBuilder();
+        formatSql.append(" >>> Datasource：").append(dataSource.toString());
+        formatSql.append(" - ID：").append(mpStatementHandler.mappedStatement().getId());
+        formatSql.append("\n Execute SQL：").append(sqlFormat(originalSql, format));
+
         // 计算执行 SQL 耗时
         long start = SystemClock.now();
         Object result = invocation.proceed();
         long timing = SystemClock.now() - start;
 
-        // 格式化 SQL 打印执行结果
-
-        StringBuilder formatSql = new StringBuilder();
-        formatSql.append(" Datasource：").append(dataSource.toString());
-        formatSql.append(" - ID：").append(mpStatementHandler.mappedStatement().getId());
-        formatSql.append(" - Cost：").append(timing);
-        formatSql.append(" ms\n Execute SQL：").append(sqlFormat(originalSql, format)).append("\n");
+        // 打印SQL执行时间
+        StringBuilder invokeCost = new StringBuilder();
+        invokeCost.append(" >>> ID：").append(mpStatementHandler.mappedStatement().getId());
+        invokeCost.append(" - Cost：").append(timing).append(" ms");
         if (this.isWriteInLog()) {
             if (this.getMaxTime() >= 1 && timing > this.getMaxTime()) {
                 logger.error(formatSql.toString());
+                logger.error(invokeCost.toString());
             } else {
                 logger.info(formatSql.toString());
+                logger.info(invokeCost.toString());
             }
         } else {
             logger.info(formatSql.toString());
+            logger.info(invokeCost.toString());
             if (this.getMaxTime() >= 1 && timing > this.getMaxTime()) {
                 throw new RuntimeException(" The SQL execution time is too large, please optimize ! ");
             }
@@ -115,7 +121,7 @@ public class PerformanceInterceptor implements Interceptor {
             this.maxTime = Long.parseLong(maxTime);
         }
         if (StringUtils.isNotEmpty(format)) {
-            this.format = Boolean.valueOf(format);
+            this.format = Boolean.parseBoolean(format);
         }
     }
 
