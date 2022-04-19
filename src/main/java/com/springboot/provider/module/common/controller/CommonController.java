@@ -15,6 +15,7 @@ import com.springboot.provider.common.utils.JsonAndXmlUtils;
 import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.common.utils.ResourceUtils;
 import com.springboot.provider.module.common.service.CommonService;
+import com.springboot.provider.module.common.service.PayService;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.lis.entity.Role;
 import com.springboot.provider.module.pay.enums.PayStrategy;
@@ -69,12 +70,17 @@ public class CommonController {
 
     private final ObjectMapper objectMapper;
 
-    public CommonController(ApplicationEventPublisher applicationEventPublisher, ServletContext servletContext, CommonService commonService, RestTemplate restTemplate, ObjectMapper objectMapper) {
+    private final PayService payService;
+
+    public CommonController(ApplicationEventPublisher applicationEventPublisher, ServletContext servletContext,
+                            CommonService commonService, RestTemplate restTemplate, ObjectMapper objectMapper,
+                            PayService payService) {
         this.applicationEventPublisher = applicationEventPublisher;
         this.servletContext = servletContext;
         this.commonService = commonService;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
+        this.payService = payService;
     }
 
     /*
@@ -211,6 +217,11 @@ public class CommonController {
     public String payForm(@PathParam("type") String type) {
         PayStrategyFactory.get(PayStrategy.getEnumByKey(type)).pay();
         return Objects.requireNonNull(PayStrategy.getEnumByKey(type)).toString();
+    }
+
+    @RequestMapping("/test/payProperty")
+    public String payProperty() {
+        return payService.pay();
     }
 
     @OptionLog(mode = 1, source = "api")
