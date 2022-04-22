@@ -57,11 +57,12 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         // http://127.0.0.1:8090/file/ssr.txt
         registry.addResourceHandler("/file/**").addResourceLocations("file:"+ file);
 
-        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
-        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
-        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/images/");
-        registry.addResourceHandler("/lib/**").addResourceLocations("classpath:/static/lib/");
-        registry.addResourceHandler("/page/**").addResourceLocations("classpath:/static/page/");
+//        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
+//        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
+//        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/static/images/");
+//        registry.addResourceHandler("/lib/**").addResourceLocations("classpath:/static/lib/");
+//        registry.addResourceHandler("/page/**").addResourceLocations("classpath:/static/page/");
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
 
     }
 
