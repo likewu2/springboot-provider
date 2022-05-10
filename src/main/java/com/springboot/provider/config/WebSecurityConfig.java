@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -56,12 +57,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/**").hasRole("USER")
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/file/**").hasAnyRole("USER","ADMIN")
-                    .anyRequest().authenticated();
-//                .and()
-//                    .formLogin()
+                    .anyRequest().authenticated()
+                .and()
+                    .formLogin()
 //                    .loginPage("/page/login.html")
-//                    .successForwardUrl("/index.html")
-//                    .permitAll()
+                    .successForwardUrl("/index.html")
+                    .permitAll();
 //                .and()
 //                    .logout()
 //                    .deleteCookies()

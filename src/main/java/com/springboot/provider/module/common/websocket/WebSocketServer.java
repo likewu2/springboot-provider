@@ -40,7 +40,9 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        String userId = this.session.getQueryString();
+        String id = session.getId();
+//        String userId = this.session.getQueryString();
+        String userId = this.session.getUserPrincipal().getName();
 
         if (StringUtils.hasText(userId)) {
             if (WEB_SOCKET_SERVER_MAP.get(userId) == null) {
@@ -63,7 +65,8 @@ public class WebSocketServer {
      */
     @OnClose
     public void onClose() {
-        String userId = this.session.getQueryString();
+//        String userId = this.session.getQueryString();
+        String userId = this.session.getUserPrincipal().getName();
         CopyOnWriteArraySet<WebSocketServer> webSocketServers = WEB_SOCKET_SERVER_MAP.get(userId);
         webSocketServers.remove(this);
         subOnlineCount(); // 在线数减1
@@ -96,11 +99,37 @@ public class WebSocketServer {
      */
     public void sendMessage(String message) {
         try {
-            this.session.getBasicRemote().sendText(message);
+            this.session.getBasicRemote().sendText(message);    // 向此session发送消息
             LOGGER.info("消息发送成功：{}", message);
         } catch (IOException e) {
             LOGGER.error("消息发送失败", e);
         }
+    }
+
+    /**
+     * 实现服务器主动推送, 单用户单端登录
+     */
+    public void sendUserSingleMessage(String message) {
+        try {
+            this.session.getBasicRemote().sendText(message);    // 向此session发送消息
+            LOGGER.info("消息发送成功：{}", message);
+        } catch (IOException e) {
+            LOGGER.error("消息发送失败", e);
+        }
+    }
+
+    /**
+     * 实现服务器主动推送, 单用户多端登录
+     */
+    public void sendUserMultiMessage(String message) {
+        WEB_SOCKET_SERVER_MAP.get(this.session.getUserPrincipal().getName()).forEach(webSocketServer -> {
+            try {
+                webSocketServer.session.getBasicRemote().sendText(message);
+                LOGGER.info("消息发送成功：{}", message);
+            } catch (IOException e) {
+                LOGGER.error("消息发送失败", e);
+            }
+        });
     }
 
     /**
@@ -111,15 +140,14 @@ public class WebSocketServer {
             // 全局发送消息
             if ("0".equals(message.getReceiveUserId())) {
                 WEB_SOCKET_SERVER_MAP.forEach((key, webSocketServers) -> {
-                    for (WebSocketServer item : webSocketServers) {
-                        item.sendMessage(GSON.toJson(message));
-                    }
+                    webSocketServers.forEach(webSocketServer -> {
+                        webSocketServer.sendMessage(GSON.toJson(message));
+                    });
                 });
             } else if (WEB_SOCKET_SERVER_MAP.get(message.getReceiveUserId()) != null) {
-                for (WebSocketServer item : WEB_SOCKET_SERVER_MAP.get(message.getReceiveUserId())) {
-                    item.sendMessage(GSON.toJson(message));
-                }
-
+                WEB_SOCKET_SERVER_MAP.get(message.getReceiveUserId()).forEach(webSocketServer -> {
+                    webSocketServer.sendMessage(GSON.toJson(message));
+                });
             } else {
                 LOGGER.error("没有找到消息发送的目标对象");
             }
