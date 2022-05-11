@@ -52,7 +52,7 @@ public class MyBatisFastAutoGenerator {
                 .packageConfig(builder -> {
                     builder.parent(BASE_PACKAGE) // 设置父包名
                             .moduleName(moduleName) // 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, MAPPER_PATH + ORGANIZATION +  "/" + domain + "/" + moduleName + "/")); // 设置mapperXml生成路径
+                            .pathInfo(Collections.singletonMap(OutputFile.xml, MAPPER_PATH + ORGANIZATION +  "/" + domain + "/" + moduleName + "/")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
                     builder.enableCapitalMode()
