@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 //@EnableHttps
+@EnableFeignClients
 // 自定义数据源一定要排除SpringBoot自动配置数据源，不然会出现循环引用的问题，The dependencies of some of the beans in the application context form a cycle
 @SpringBootApplication/*(exclude = {DataSourceAutoConfiguration.class})*/
 @EnableBeans(packages = "com.springboot.provider.module.his.entity")

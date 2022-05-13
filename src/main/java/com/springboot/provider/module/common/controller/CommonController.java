@@ -15,6 +15,7 @@ import com.springboot.provider.common.utils.JsonAndXmlUtils;
 import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.common.utils.ResourceUtils;
 import com.springboot.provider.module.common.service.CommonService;
+import com.springboot.provider.module.common.service.HttpFeignClientService;
 import com.springboot.provider.module.common.service.PayService;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.lis.entity.Role;
@@ -72,15 +73,18 @@ public class CommonController {
 
     private final PayService payService;
 
+    private final HttpFeignClientService httpFeignClientService;
+
     public CommonController(ApplicationEventPublisher applicationEventPublisher, ServletContext servletContext,
                             CommonService commonService, RestTemplate restTemplate, ObjectMapper objectMapper,
-                            PayService payService) {
+                            PayService payService, HttpFeignClientService httpFeignClientService) {
         this.applicationEventPublisher = applicationEventPublisher;
         this.servletContext = servletContext;
         this.commonService = commonService;
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
         this.payService = payService;
+        this.httpFeignClientService = httpFeignClientService;
     }
 
     /*
@@ -222,6 +226,16 @@ public class CommonController {
     @RequestMapping("/test/payProperty")
     public String payProperty() {
         return payService.pay();
+    }
+
+    @RequestMapping("/test/batchDataSourceItemReaderJob")
+    public String batchDataSourceItemReaderJob() {
+        return httpFeignClientService.batchDataSourceItemReaderJob();
+    }
+
+    @RequestMapping("/test/getUser")
+    public ResultJson<User> getUser(@RequestBody User user) {
+        return httpFeignClientService.getUser(user);
     }
 
     @OptionLog(mode = 1, source = "api")

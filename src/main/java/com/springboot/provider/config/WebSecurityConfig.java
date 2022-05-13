@@ -57,12 +57,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/user/**").hasRole("USER")
                     .antMatchers("/admin/**").hasRole("ADMIN")
                     .antMatchers("/file/**").hasAnyRole("USER","ADMIN")
-                    .anyRequest().authenticated()
-                .and()
-                    .formLogin()
-//                    .loginPage("/page/login.html")
-                    .successForwardUrl("/index.html")
-                    .permitAll();
+                    .anyRequest().authenticated();
+//                .and()
+//                    .formLogin()
+////                    .loginPage("/page/login.html")
+//                    .successForwardUrl("/index.html")
+//                    .permitAll();
 //                .and()
 //                    .logout()
 //                    .deleteCookies()
