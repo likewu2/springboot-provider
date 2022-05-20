@@ -1,6 +1,9 @@
 package com.springboot.provider.module.his.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
@@ -10,12 +13,14 @@ import com.springboot.provider.module.lis.entity.Role;
 import com.springboot.provider.module.lis.service.RoleService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.util.*;
 
 /**
@@ -65,6 +70,13 @@ public class UserController {
         // List<User> userList = userService.getAllUser();
         Page<User> page = userService.page(new Page<>(), null);
         return ResultJson.success(page);
+    }
+
+    @RequestMapping("getAllUserPage")
+    public ResultJson getAllUserPage(@PathParam("current") int current, @PathParam("size") int size) {
+        // List<User> userList = userService.getAllUser();
+        Page<User> result = userService.page(Page.of(current, size), null);
+        return ResultJson.success(result);
     }
 
     @RequestMapping("getById")
