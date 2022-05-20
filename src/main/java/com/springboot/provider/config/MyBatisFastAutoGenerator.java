@@ -8,10 +8,13 @@ import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.baomidou.mybatisplus.generator.fill.Column;
+import com.springboot.provider.common.utils.PropertyUtils;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @Description
@@ -29,7 +32,16 @@ public class MyBatisFastAutoGenerator {
     private static final String MAPPER_PATH = PROJECT_PATH + "/src/main/resources/mapper/";
 
     private static final String BASE_PACKAGE = "com.springboot.provider.module";
-    private static final String ORGANIZATION = "zb";
+    private static String ORGANIZATION;
+
+    static {
+        try {
+            Object profile = Objects.requireNonNull(PropertyUtils.load("application.properties", "spring.profiles.active")).get(0);
+            ORGANIZATION = String.valueOf(profile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
 

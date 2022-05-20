@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 public class PropertyUtils {
 
-    public static List<Object> load(String key, String fileName) throws IOException {
+    public static List<Object> load(String fileName, String key) throws IOException {
         Assert.notNull(key, "key must not be null");
         Assert.notNull(fileName, "fileName must not be null");
 
@@ -32,7 +32,7 @@ public class PropertyUtils {
     }
 
     public static Properties loadProperties(String fileName) {
-        Assert.notNull(fileName, "filePath must not be null");
+        Assert.notNull(fileName, "fileName must not be null");
 
         Properties properties = new Properties();
         InputStream inputStream;
@@ -49,13 +49,13 @@ public class PropertyUtils {
         return properties;
     }
 
-    public static Properties loadAbsolutePathProperties(String filePath) {
-        Assert.notNull(filePath, "filePath must not be null");
+    public static Properties loadAbsolutePathProperties(String fileName) {
+        Assert.notNull(fileName, "fileName must not be null");
 
         Properties properties = new Properties();
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
-        File file = new File(filePath);
+        File file = new File(fileName);
 
         try {
             if (file.exists()) {
@@ -82,7 +82,7 @@ public class PropertyUtils {
 //            e.printStackTrace();
 //        }
 
-        System.out.println(PropertyUtils.load("server.port","application.properties"));
+        System.out.println(PropertyUtils.load("application.properties","server.port"));
 
     }
 
