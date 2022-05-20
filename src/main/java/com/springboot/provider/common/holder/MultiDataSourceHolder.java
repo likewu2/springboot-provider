@@ -49,7 +49,7 @@ public class MultiDataSourceHolder {
     /**
      * 删除数据源
      *
-     * @param dsName     数据源名称
+     * @param dsName 数据源名称
      */
     public static Boolean removeDataSource(String dsName) {
         if (StringUtils.hasText(dsName)) {
@@ -74,21 +74,22 @@ public class MultiDataSourceHolder {
     public static DataSource buildDataSource(String dbType, String ip, String port, String instance, String username, String password, String etc) {
         dbType = dbType.toUpperCase();
 
+        Class dataSourceType;
         String driverClassName;
         String url;
 
         if (dbType.equals(DataSourceEnum.MYSQL.getDbType())) {
-            driverClassName = DataSourceEnum.MYSQL.getDriverClassName();
+            dataSourceType = DataSourceEnum.MYSQL.getDataSourceType();
             url = DataSourceEnum.MYSQL.getPrefix() + ip + ":" + port + "/" + instance + DataSourceEnum.MYSQL.getSuffix() + etc;
         } else if (dbType.equals(DataSourceEnum.ORACLE.getDbType())) {
-            driverClassName = DataSourceEnum.ORACLE.getDriverClassName();
+            dataSourceType = DataSourceEnum.ORACLE.getDataSourceType();
             url = DataSourceEnum.ORACLE.getPrefix() + ip + ":" + port + ":" + instance + DataSourceEnum.ORACLE.getSuffix() + etc;
         } else {
             return null;
         }
 
         return DataSourceBuilder.create()
-                .driverClassName(driverClassName)
+                .type(dataSourceType)
                 .url(url)
                 .username(username)
                 .password(password).build();

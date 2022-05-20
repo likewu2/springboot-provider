@@ -1,5 +1,8 @@
 package com.springboot.provider.common.enums;
 
+import com.mysql.cj.jdbc.MysqlDataSource;
+import oracle.jdbc.pool.OracleDataSource;
+
 /**
  * @program: springboot-dev
  * @package com.spring.development.common.enums
@@ -9,29 +12,29 @@ package com.springboot.provider.common.enums;
  **/
 public enum DataSourceEnum {
 
-    MYSQL("MYSQL", "com.mysql.cj.jdbc.Driver", "jdbc:mysql://",
+    MYSQL("MYSQL", MysqlDataSource.class, "jdbc:mysql://",
             "?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false"),
 
-    ORACLE("ORACLE", "oracle.jdbc.OracleDriver", "jdbc:oracle:thin:@","");
+    ORACLE("ORACLE", OracleDataSource.class, "jdbc:oracle:thin:@","");
 
     private final String dbType;
-    private final String driverClassName;
+    private final Class dataSourceType;
     private final String prefix;
     private final String suffix;
 
-    DataSourceEnum(String dbType, String driverClassName, String prefix, String suffix) {
+    DataSourceEnum(String dbType, Class dataSourceType, String prefix, String suffix) {
         this.dbType = dbType;
-        this.driverClassName = driverClassName;
+        this.dataSourceType = dataSourceType;
         this.prefix = prefix;
         this.suffix = suffix;
     }
 
-    public String getDriverClassName() {
-        return driverClassName;
-    }
-
     public String getDbType() {
         return dbType;
+    }
+
+    public Class getDataSourceType() {
+        return dataSourceType;
     }
 
     public String getPrefix() {

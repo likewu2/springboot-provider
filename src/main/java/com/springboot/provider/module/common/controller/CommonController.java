@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.google.common.util.concurrent.*;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import com.springboot.provider.common.ResultCode;
 import com.springboot.provider.common.ResultJson;
 import com.springboot.provider.common.annotation.OptionLog;
+import com.springboot.provider.common.enums.DataSourceEnum;
 import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
 import com.springboot.provider.common.holder.*;
@@ -130,26 +132,25 @@ public class CommonController {
     @RequestMapping("/test/addDataSource")
     public ResultJson addDataSource() {
         DataSource build = DataSourceBuilder.create()
-                .driverClassName("com.mysql.cj.jdbc.Driver")
-                .url("jdbc:mysql://localhost:3306/development?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false")
+                .type(MysqlDataSource.class)
+                .url("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false")
                 .username("root")
                 .password("root").build();
 
         DataSource build1 = MultiDataSourceHolder.builder()
-                .driverClassName("com.mysql.cj.jdbc.Driver")
-                .jdbcUrl("jdbc:mysql://localhost:3306/development?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false")
+                .jdbcUrl("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false")
                 .username("root")
                 .password("root").build();
 
 
-        DataSource dataSource = MultiDataSourceHolder.buildDataSource("mysql", "localhost", "3306", "test1", "root", "root", "");
+        DataSource dataSource = MultiDataSourceHolder.buildDataSource(DataSourceEnum.MYSQL.getDbType(), "localhost", "3306", "test", "root", "root", "");
 
-        return ResultJson.success(MultiDataSourceHolder.addDataSource("development", dataSource));
+        return ResultJson.success(MultiDataSourceHolder.addDataSource("test", build1));
     }
 
     @RequestMapping("/test/getRunningSQL")
     public ResultJson getRunningSQL() {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("test")));
         List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT * FROM information_schema.processlist WHERE STATE = 'Sending data'");
         return ResultJson.success(maps);
     }
@@ -157,7 +158,7 @@ public class CommonController {
     @RequestMapping("/test/getDataSource")
     public ResultJson getFromDataSource() {
 //        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("development")));
-        JdbcOperations jdbcTemplate = JdbcOperationsProxy.getProxyInstance("development");
+        JdbcOperations jdbcTemplate = JdbcOperationsProxy.getProxyInstance("test");
 
 //        List<Object[]> list = new ArrayList<>();
 //        list.add(new Object[]{"admin", "ADMIN"});
@@ -174,7 +175,7 @@ public class CommonController {
 
         RowMapper<Role> rowMapper = new BeanPropertyRowMapper<>(Role.class);
 //        List<Role> roles = jdbcTemplate.query("select * from role", rowMapper);
-        List<Role> roles = jdbcTemplate.query("select * from role where id = ? and title = ?", rowMapper, 1, "超级管理员");
+        List<Role> roles = jdbcTemplate.query("select * from role where id = ? and code = ?", rowMapper, 1, "admin");
 
 //        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from role");
 //        List<String> nameList = jdbcTemplate.queryForList("select name from role", String.class);
@@ -257,7 +258,7 @@ public class CommonController {
 //            logger.info(LocalDateTime.now().toString());
 //            throw new RuntimeException("error");
 
-            ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity("http://baidu.com", null, String.class);
+            ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity("https://baidu.com", null, String.class);
             return stringResponseEntity;
         });
 
