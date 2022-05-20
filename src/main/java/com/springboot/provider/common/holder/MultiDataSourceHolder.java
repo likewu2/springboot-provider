@@ -75,7 +75,6 @@ public class MultiDataSourceHolder {
         dbType = dbType.toUpperCase();
 
         Class dataSourceType;
-        String driverClassName;
         String url;
 
         if (dbType.equals(DataSourceEnum.MYSQL.getDbType())) {
