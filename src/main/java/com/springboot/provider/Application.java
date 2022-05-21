@@ -4,18 +4,17 @@ import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.springboot.mjt.annotation.EnableMappingJdbcTemplate;
 import com.springboot.provider.common.selector.annotation.EnableBeans;
-import com.springboot.provider.common.selector.annotation.EnableHttps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -69,11 +68,11 @@ public class Application {
 
     @Bean
     public RestTemplate restTemplate() {
-        RestTemplate restTemplate = new RestTemplate(new OkHttp3ClientHttpRequestFactory());
+        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
         MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         mappingJackson2HttpMessageConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
-        restTemplate.getMessageConverters().add(mappingJackson2HttpMessageConverter);
-        return restTemplate;
+        restTemplateBuilder.additionalMessageConverters(mappingJackson2HttpMessageConverter);
+        return restTemplateBuilder.build();
     }
 
     @Bean

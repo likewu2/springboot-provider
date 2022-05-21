@@ -1,15 +1,10 @@
 package com.springboot.provider.common.utils;
 
-import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
-import java.io.StringReader;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+import java.io.IOException;
 
 /**
  * @program: test
@@ -21,20 +16,12 @@ import java.io.StringReader;
 public class XPathUtils {
 
     public static String getValueFromXml(String xml, String expression) {
-        String evaluate = "";
-
-        if (StringUtils.isNotBlank(xml)) {
-            try {
-                InputSource is = new InputSource(new StringReader(xml));
-                XPath xPath = XPathFactory.newInstance().newXPath();
-                DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                Document document = builder.parse(is);
-                evaluate = (String) xPath.evaluate(expression, document, XPathConstants.STRING);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        try {
+            return WebServiceUtils.getReXml(xml, expression);
+        } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
+            e.printStackTrace();
         }
-        return evaluate;
+        return null;
     }
 
     public static void main(String[] args) {
