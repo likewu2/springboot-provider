@@ -3,6 +3,8 @@ package com.springboot.provider.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -78,5 +80,16 @@ public class WebSecurityConfig {
                 .roles("USER")
                 .build();
         return new InMemoryUserDetailsManager(user);
+    }
+
+    /*
+     * 多个继承关系用 \n 隔开即可，如下 ROLE_A > ROLE_B \n ROLE_C > ROLE_D。
+     * 如果角色层级关系是连续的，也可以这样配置 ROLE_A > ROLE_B > ROLE_C > ROLE_D。
+     * */
+    @Bean
+    RoleHierarchy roleHierarchy(){
+        RoleHierarchyImpl hierarchy = new RoleHierarchyImpl();
+        hierarchy.setHierarchy("ROLE_ADMIN > ROLE_USER");
+        return hierarchy;
     }
 }
