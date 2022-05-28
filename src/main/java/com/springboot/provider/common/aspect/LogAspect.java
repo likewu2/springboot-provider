@@ -1,5 +1,6 @@
 package com.springboot.provider.common.aspect;
 
+import cn.hutool.core.lang.id.NanoId;
 import com.google.gson.Gson;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,12 +31,17 @@ public class LogAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
 
+        String invokeId =  NanoId.randomNanoId();
+
+        logger.info("\nInvokeId: {} \nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {}",
+                invokeId, request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), gson.toJson(joinPoint.getArgs()));
+
         long start = System.currentTimeMillis();
         //调用 proceed() 方法才会真正的执行实际被代理的方法
         Object result = joinPoint.proceed();
 
-        logger.info("\nRemote Address: {} \nRequest URL: {} \nRequest URI: {} \nParameter: {} \nReturn: {} \nInvoke Cost: {}",
-                request.getRemoteAddr(), request.getRequestURL(), request.getRequestURI(), gson.toJson(joinPoint.getArgs()), gson.toJson(result), (System.currentTimeMillis() - start) + "ms");
+        logger.info("\nInvokeId: {} \nReturn: {} \nInvoke Cost: {}",
+                invokeId, gson.toJson(result), (System.currentTimeMillis() - start) + "ms");
 
         return result;
     }
