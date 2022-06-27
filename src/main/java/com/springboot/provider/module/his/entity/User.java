@@ -22,7 +22,7 @@ public class User extends Model<User> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     @NotNull(message="用户ID不能为空")
     private Long id;
 

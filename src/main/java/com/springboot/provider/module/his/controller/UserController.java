@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -106,10 +107,17 @@ public class UserController {
 
     // 乐观锁
     @RequestMapping("updateById")
-    public ResultJson updateById(@RequestBody User user) {
+    public ResultJson updateById(@RequestBody @Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors() && bindingResult.getFieldError() != null) {
+            return ResultJson.failure(ResultCode.BAD_REQUEST, bindingResult.getFieldError().getDefaultMessage());
+        }
         User byId = userService.getById(user.getId());
-        byId.setStatus(user.getStatus());
-        return ResultJson.success(userService.updateById(user));
+        if (byId != null) {
+            byId.setStatus(user.getStatus());
+            return ResultJson.success(userService.updateById(byId));
+        } else {
+            return ResultJson.failure(ResultCode.GONE, "user id: " + user.getId() + " not exist");
+        }
     }
 
     // 逻辑删除

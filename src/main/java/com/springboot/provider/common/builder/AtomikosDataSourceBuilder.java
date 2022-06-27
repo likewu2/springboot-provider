@@ -1,8 +1,11 @@
 package com.springboot.provider.common.builder;
 
+import cn.hutool.core.net.NetUtil;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.SpringBootVFS;
 import com.baomidou.mybatisplus.core.MybatisConfiguration;
+import com.baomidou.mybatisplus.core.config.GlobalConfig;
+import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.toolkit.GlobalConfigUtils;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
@@ -94,6 +97,8 @@ public class AtomikosDataSourceBuilder {
 
         MybatisConfiguration configuration = new MybatisConfiguration();
         configuration.setLogImpl(org.apache.ibatis.logging.stdout.StdOutImpl.class);
+        GlobalConfigUtils.getGlobalConfig(configuration).setDbConfig(new GlobalConfig.DbConfig());
+        GlobalConfigUtils.getGlobalConfig(configuration).setIdentifierGenerator(new DefaultIdentifierGenerator(NetUtil.getLocalhost()));
         GlobalConfigUtils.getGlobalConfig(configuration).setSqlInjector(new EasySqlInjector());
         GlobalConfigUtils.getGlobalConfig(configuration).setMetaObjectHandler(new MyBatisMetaObjectHandler());
         sessionFactoryBean.setConfiguration(configuration);

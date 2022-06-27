@@ -74,7 +74,7 @@ public class MyBatisFastAutoGenerator {
 //                                .superClass(com.baomidou.mybatisplus.extension.activerecord.Model.class)
                                 .disableSerialVersionUID()
                                 .enableChainModel()
-                                .idType(IdType.AUTO)
+                                .idType(IdType.ASSIGN_ID)
                                 .enableTableFieldAnnotation()
                                 .naming(NamingStrategy.underline_to_camel)
                                 .columnNaming(NamingStrategy.underline_to_camel)
