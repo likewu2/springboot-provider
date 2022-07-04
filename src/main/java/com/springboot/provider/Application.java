@@ -4,6 +4,7 @@ import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.symmetric.SymmetricCrypto;
 import com.springboot.mjt.annotation.EnableMappingJdbcTemplate;
 import com.springboot.provider.common.selector.annotation.EnableBeans;
+import com.springboot.provider.config.SSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -72,6 +73,7 @@ public class Application {
         MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         mappingJackson2HttpMessageConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         restTemplateBuilder.additionalMessageConverters(mappingJackson2HttpMessageConverter);
+        restTemplateBuilder.requestFactory(SSL::new);
         return restTemplateBuilder.build();
     }
 
