@@ -52,7 +52,7 @@ public class WebSecurityConfig {
                     .anyRequest().authenticated();
 //                .and()
 //                    .formLogin()
-//                    .loginPage("/page/login.html")
+//                    .loginPage("/page/login.ftlh")
 //                    .successForwardUrl("/index.ftlh")
 //                    .permitAll();
 //                .and()
