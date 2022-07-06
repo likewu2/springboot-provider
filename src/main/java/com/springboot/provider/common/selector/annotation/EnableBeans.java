@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 @Import(EnableBeansAutoSelector.class)
 public @interface EnableBeans {
     //传入包名
-    String[] packages() default "";
+    String[] packages() default {};
 
     boolean isRecursion() default false;
 }

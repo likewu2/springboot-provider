@@ -41,6 +41,7 @@ public class BasicComponentRegistrar implements ImportBeanDefinitionRegistrar {
     private Set<String> getPackagesToScan(AnnotationMetadata metadata) {
         AnnotationAttributes attributes = AnnotationAttributes
                 .fromMap(metadata.getAnnotationAttributes(BasicComponentScan.class.getName()));
+        assert attributes != null;
         String[] basePackages = attributes.getStringArray("basePackages");
         Class<?>[] basePackageClasses = attributes.getClassArray("basePackageClasses");
         Set<String> packagesToScan = new LinkedHashSet<>(Arrays.asList(basePackages));
