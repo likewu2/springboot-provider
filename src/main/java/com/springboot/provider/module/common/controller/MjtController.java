@@ -1,9 +1,7 @@
 package com.springboot.provider.module.common.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-import com.springboot.mjt.factory.DataSourceFactory;
 import com.springboot.mjt.proxy.JdbcOperationsProxy;
 import com.springboot.mjt.proxy.NamedParameterJdbcOperationsProxy;
 import com.springboot.provider.common.ResultJson;
@@ -17,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/test")
@@ -106,12 +106,10 @@ public class MjtController {
         User user1 = new User();
         user1.setUsername("xzk1");
         user1.setPassword("123");
-        user1.setCreateTime(new Date());
         user1.setStatus(1);
         User user2 = new User();
         user2.setUsername("xzk1");
         user2.setPassword("123");
-        user2.setCreateTime(new Date());
         user2.setStatus(1);
 
         // List<BeanPropertySqlParameterSource> userList = new ArrayList<>();

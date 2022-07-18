@@ -1,6 +1,5 @@
 package com.springboot.provider.module.common.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.google.common.util.concurrent.*;
@@ -13,7 +12,6 @@ import com.springboot.provider.common.event.ApplicationMessageEvent;
 import com.springboot.provider.common.event.ApplicationNotifyEvent;
 import com.springboot.provider.common.holder.*;
 import com.springboot.provider.common.proxy.JdbcOperationsProxy;
-import com.springboot.provider.common.utils.JsonAndXmlUtils;
 import com.springboot.provider.common.utils.PropertyUtils;
 import com.springboot.provider.common.utils.ResourceUtils;
 import com.springboot.provider.module.common.service.CommonService;
@@ -38,14 +36,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import javax.websocket.server.PathParam;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -71,20 +64,17 @@ public class CommonController {
 
     private final RestTemplate restTemplate;
 
-    private final ObjectMapper objectMapper;
-
     private final PayService payService;
 
     private final HttpFeignClientService httpFeignClientService;
 
     public CommonController(ApplicationEventPublisher applicationEventPublisher, ServletContext servletContext,
-                            CommonService commonService, RestTemplate restTemplate, ObjectMapper objectMapper,
+                            CommonService commonService, RestTemplate restTemplate,
                             PayService payService, HttpFeignClientService httpFeignClientService) {
         this.applicationEventPublisher = applicationEventPublisher;
         this.servletContext = servletContext;
         this.commonService = commonService;
         this.restTemplate = restTemplate;
-        this.objectMapper = objectMapper;
         this.payService = payService;
         this.httpFeignClientService = httpFeignClientService;
     }
@@ -286,29 +276,6 @@ public class CommonController {
             return ResultJson.success("consume: " + id + " success, Container might contain 1: " + b);
         }
         return ResultJson.failure(ResultCode.SERVICE_UNAVAILABLE, "access too frequently");
-    }
-
-    @RequestMapping(value = "/test/getJson")
-    public void getJson(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 获取 post 请求中 json 数据
-        String param = null;
-        BufferedReader streamReader = new BufferedReader(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
-        StringBuilder responseStrBuilder = new StringBuilder();
-        String inputStr;
-        while ((inputStr = streamReader.readLine()) != null) {
-            responseStrBuilder.append(inputStr);
-        }
-        streamReader.close();
-
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("许振奎");
-        user.setPassword(responseStrBuilder.toString());
-
-        // 返回 json 格式的数据
-        response.setContentType("application/json; charset=UTF-8");
-        assert param != null;
-        response.getWriter().write(JsonAndXmlUtils.objectToJson(user));
     }
 
 }

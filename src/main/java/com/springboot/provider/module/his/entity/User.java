@@ -33,13 +33,9 @@ public class User extends Model<User> {
     @TableField("password")
     private String password;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // post请求使用formdata格式传参
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")     // post请求使用json格式传参
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") // post请求使用formdata格式传参
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")     // post请求使用json格式传参
     @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
