@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.springboot.mjt.proxy.JdbcOperationsProxy;
 import com.springboot.mjt.proxy.NamedParameterJdbcOperationsProxy;
 import com.springboot.provider.common.ResultJson;
+import com.springboot.provider.common.constants.SnowflakeConstants;
 import com.springboot.provider.mjt.constants.Mapper;
 import com.springboot.provider.module.his.entity.User;
 import com.springboot.provider.module.lis.entity.Role;
@@ -91,7 +92,7 @@ public class MjtController {
 //        Map parmas = ImmutableMap.of("id",1L);
 //        List query = namedParameterJdbcTemplate.query("select * from user where id = :id", parmas, new BeanPropertyRowMapper<>(User.class));
 
-        NamedParameterJdbcOperations namedParameterJdbcTemplate = NamedParameterJdbcOperationsProxy.getProxyInstance("hisDataSource", true);
+        NamedParameterJdbcOperations namedParameterJdbcTemplate = NamedParameterJdbcOperationsProxy.getProxyInstance("hisDataSource");
 
         Map parmas = ImmutableMap.of("id", 1L);
 
@@ -104,11 +105,13 @@ public class MjtController {
         List query = namedParameterJdbcTemplate.query(Mapper.getUserById, mapSqlParameterSource, new BeanPropertyRowMapper<>(User.class));
 
         User user1 = new User();
+        user1.setId(SnowflakeConstants.next());
         user1.setUsername("xzk1");
         user1.setPassword("123");
         user1.setStatus(1);
         User user2 = new User();
-        user2.setUsername("xzk1");
+        user2.setId(SnowflakeConstants.next());
+        user2.setUsername("xzk2");
         user2.setPassword("123");
         user2.setStatus(1);
 

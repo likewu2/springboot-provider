@@ -1,5 +1,6 @@
 package com.springboot.provider.module.common.service.impl;
 
+import com.springboot.provider.common.constants.SnowflakeConstants;
 import com.springboot.provider.module.common.service.CommonService;
 import com.springboot.provider.module.his.entity.User;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,10 +42,10 @@ public class CommonServiceImpl implements CommonService {
         String username = UUID.randomUUID().toString();
         username = username.substring(0, 16);
 
-        int his = hisJdbcOperations.update("insert into user(username,password) values(?,?)", username, passwordEncoder.encode(username));
+        int his = hisJdbcOperations.update("insert into user(id, username, password) values(?, ?, ?)", SnowflakeConstants.next(), username, passwordEncoder.encode(username));
 //        int a= 1/0;
 
-        int lis = lisJdbcOperations.update("insert into role(name,title) values(?,?)", "admin", "ADMIN");
+        int lis = lisJdbcOperations.update("insert into role(id, name, title) values(?, ?, ?)", SnowflakeConstants.next(), "admin", "ADMIN");
 //        int i = 1/0;
         return his + lis;
     }
@@ -52,7 +53,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public Integer update(User user) {
         try {
-            return hisJdbcOperations.update("update user set username=?,password=? where id=?", user.getUsername(), user.getPassword(), user.getId());
+            return hisJdbcOperations.update("update user set username = ?, password = ? where id = ?", user.getUsername(), user.getPassword(), user.getId());
         } catch (DataAccessException e) {
             return null;
         }
@@ -61,7 +62,7 @@ public class CommonServiceImpl implements CommonService {
     @Override
     public Integer deleteById(Long id) {
         try {
-            return hisJdbcOperations.update("delete from user where id=?", id);
+            return hisJdbcOperations.update("delete from user where id = ?", id);
         } catch (DataAccessException e) {
             return null;
         }

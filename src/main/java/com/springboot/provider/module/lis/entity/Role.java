@@ -19,7 +19,7 @@ public class Role extends Model<Role> {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    private Integer id;
+    private Long id;
 
     private String name;
 
@@ -33,17 +33,17 @@ public class Role extends Model<Role> {
         this.title = title;
     }
 
-    public Role(Integer id, String name, String title) {
+    public Role(Long id, String name, String title) {
         this.id = id;
         this.name = name;
         this.title = title;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -33,6 +33,6 @@
     </sql>
 
     <sql id="batchSaveUser">
-        insert into user(username, password, create_time, status) values (:username, :password, :createTime, :status)
+        insert into user(id, username, password, create_time, status) values (:id, :username, :password, :createTime, :status)
     </sql>
 </namespace>
