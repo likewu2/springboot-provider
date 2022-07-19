@@ -61,7 +61,7 @@ public class LisDataSourceConfig {
     }
 
     @Bean(name = "lisJdbcOperations")
-    public JdbcOperations lisJdbcTemplate(@Qualifier("lisDataSource") DataSource dataSource) {
+    public JdbcOperations lisJdbcOperations(@Qualifier("lisDataSource") DataSource dataSource) {
         return JdbcOperationsProxy.getProxyInstance(dataSource);
     }
 
