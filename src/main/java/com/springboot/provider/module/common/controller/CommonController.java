@@ -127,20 +127,20 @@ public class CommonController {
                 .username("root")
                 .password("root").build();
 
-        DataSource build1 = MultiDataSourceHolder.builder()
+        DataSource build1 = ApplicationContextDataSourceHolder.builder()
                 .jdbcUrl("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai&useSSL=false")
                 .username("root")
                 .password("root").build();
 
 
-        DataSource dataSource = MultiDataSourceHolder.buildDataSource(DataSourceEnum.MYSQL.getDbType(), "localhost", "3306", "test", "root", "root", "");
+        DataSource dataSource = ApplicationContextDataSourceHolder.buildDataSource(DataSourceEnum.MYSQL.getDbType(), "localhost", "3306", "test", "root", "root", "");
 
-        return ResultJson.success(MultiDataSourceHolder.addDataSource("test", build1));
+        return ResultJson.success(ApplicationContextDataSourceHolder.addDataSource("test", build1));
     }
 
     @RequestMapping("/test/getRunningSQL")
     public ResultJson getRunningSQL() {
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(MultiDataSourceHolder.getDataSource("test")));
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(Objects.requireNonNull(ApplicationContextDataSourceHolder.getDataSource("test")));
         List<Map<String, Object>> maps = jdbcTemplate.queryForList("SELECT * FROM information_schema.processlist WHERE STATE = 'Sending data'");
         return ResultJson.success(maps);
     }

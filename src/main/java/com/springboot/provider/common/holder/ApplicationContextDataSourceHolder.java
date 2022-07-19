@@ -2,10 +2,18 @@ package com.springboot.provider.common.holder;
 
 import com.springboot.provider.common.builder.HikariDataSourceBuilder;
 import com.springboot.provider.common.enums.DataSourceEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.availability.AvailabilityChangeEvent;
+import org.springframework.boot.availability.ReadinessState;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,9 +23,37 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author xuzhenkui
  * @Date 2020/2/26 18:27
  */
-public class MultiDataSourceHolder {
+@Component
+public class ApplicationContextDataSourceHolder {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final ConcurrentHashMap<String, DataSource> DATA_SOURCE_MAP = new ConcurrentHashMap<>();
+
+    private final ApplicationContext applicationContext;
+
+    public ApplicationContextDataSourceHolder(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
+
+    @EventListener
+    public void onStateChange(AvailabilityChangeEvent<ReadinessState> event) {
+        switch (event.getState()) {
+            case ACCEPTING_TRAFFIC:
+                logger.info("[ApplicationContextDataSourceHolder ReadinessStateExporter] ACCEPTING_TRAFFIC");
+
+                String[] beanNamesForType = this.applicationContext.getBeanNamesForType(DataSource.class);
+                for (String beanName : beanNamesForType) {
+                    Object bean = this.applicationContext.getBean(beanName);
+                    DATA_SOURCE_MAP.put(beanName, (DataSource) bean);
+                }
+
+                logger.info("[ApplicationContextDataSourceHolder ReadinessStateExporter] load context datasource: " + Arrays.toString(beanNamesForType));
+                break;
+            case REFUSING_TRAFFIC:
+                logger.info("[ApplicationContextDataSourceHolder ReadinessStateExporter] REFUSING_TRAFFIC");
+                break;
+        }
+    }
 
     /**
      * 根据数据源名称获取数据源

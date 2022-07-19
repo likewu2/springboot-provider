@@ -1,8 +1,6 @@
 package com.springboot.provider.config;
 
-import com.mysql.cj.jdbc.MysqlXADataSource;
 import com.springboot.provider.common.builder.AtomikosDataSourceBuilder;
-import com.springboot.provider.common.holder.MultiDataSourceHolder;
 import com.springboot.provider.common.proxy.JdbcOperationsProxy;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -17,11 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
-import javax.sql.XADataSource;
-import java.util.Properties;
 
 /**
  * @program: bsinterface
@@ -68,12 +63,7 @@ public class HisDataSourceConfig {
     }
 
     @Bean(name = "hisJdbcOperations")
-    public JdbcOperations hisJdbcTemplate(@Qualifier("hisDataSource") DataSource dataSource) {
-//        if (MultiDataSourceHolder.addDataSource(RESOURCE_NAME, dataSource)) {
-//            return JdbcOperationsProxy.getProxyInstance(RESOURCE_NAME);
-//        }
-//        return null;
-
+    public JdbcOperations hisJdbcOperations(@Qualifier("hisDataSource") DataSource dataSource) {
         return JdbcOperationsProxy.getProxyInstance(dataSource);
     }
 

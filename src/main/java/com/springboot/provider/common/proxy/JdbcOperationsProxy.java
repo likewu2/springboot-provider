@@ -1,6 +1,6 @@
 package com.springboot.provider.common.proxy;
 
-import com.springboot.provider.common.holder.MultiDataSourceHolder;
+import com.springboot.provider.common.holder.ApplicationContextDataSourceHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class JdbcOperationsProxy {
 
     public static JdbcOperations getProxyInstance(String dsName) {
         if (JDBC_OPERATIONS_MAP.get(dsName) == null) {
-            DataSource dataSource = MultiDataSourceHolder.getDataSource(dsName);
+            DataSource dataSource = ApplicationContextDataSourceHolder.getDataSource(dsName);
             Assert.notNull(dataSource, dsName + " datasource is not exists in MultiDataSourceHolder!");
 
             JDBC_OPERATIONS_MAP.putIfAbsent(dsName, getProxyInstance(dataSource));
