@@ -32,7 +32,6 @@ import java.util.Properties;
 @Configuration
 @MapperScan(basePackages = {"com.springboot.provider.module.lis.**.mapper"}, sqlSessionTemplateRef = "lisSqlSessionTemplate")
 public class LisDataSourceConfig {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public static final String RESOURCE_NAME = "lisDataSource";

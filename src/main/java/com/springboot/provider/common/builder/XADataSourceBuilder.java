@@ -1,7 +1,6 @@
 package com.springboot.provider.common.builder;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -14,7 +13,6 @@ import org.springframework.boot.context.properties.source.MapConfigurationProper
 import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.jdbc.XADataSourceWrapper;
-import org.springframework.boot.jta.atomikos.AtomikosXADataSourceWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;

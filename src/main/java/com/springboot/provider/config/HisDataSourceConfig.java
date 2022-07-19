@@ -33,7 +33,6 @@ import java.util.Properties;
 @Configuration
 @MapperScan(basePackages = {"com.springboot.provider.module.his.**.mapper"}, sqlSessionTemplateRef = "hisSqlSessionTemplate")
 public class HisDataSourceConfig {
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public static final String RESOURCE_NAME = "hisDataSource";

@@ -3,15 +3,15 @@ package com.springboot.provider.config;
 import com.springboot.provider.common.exception.AsyncException;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
-@Configuration
 @EnableAsync
-public class AsyncConfig implements AsyncConfigurer {
+@Configuration
+public class AsyncConfig extends AsyncConfigurerSupport {
     /**
      * The {@link Executor} instance to be used when processing async
      * method invocations.

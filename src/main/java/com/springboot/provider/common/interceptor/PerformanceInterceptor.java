@@ -85,7 +85,8 @@ public class PerformanceInterceptor implements Interceptor {
 
         // 打印SQL执行时间
         StringBuilder invokeCost = new StringBuilder();
-        invokeCost.append(" >>> ID：").append(mpStatementHandler.mappedStatement().getId());
+        invokeCost.append(" >>> Datasource：").append(dataSource.toString());
+        invokeCost.append(" - ID：").append(mpStatementHandler.mappedStatement().getId());
         invokeCost.append(" - Cost：").append(timing).append(" ms");
         if (this.isWriteInLog()) {
             if (this.getMaxTime() >= 1 && timing > this.getMaxTime()) {
