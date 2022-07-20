@@ -1,4 +1,4 @@
-package com.springboot.provider.common.lifecycle.aware;
+package com.springboot.provider.common.lifecycle;
 
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.core.io.ResourceLoader;
@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 * 用于获取ResourceLoader的一个扩展类，ResourceLoader可以用于获取classpath内所有的资源对象，可以扩展此类来拿到ResourceLoader对象。
 * */
 @Component
-public class ResourceLoaderHolder implements ResourceLoaderAware {
-
-    private static ResourceLoader loader;
+public class ResourceLoaderAwareHandler implements ResourceLoaderAware {
 
     /**
      * Set the ResourceLoader that this object runs in.
@@ -30,10 +28,6 @@ public class ResourceLoaderHolder implements ResourceLoaderAware {
      */
     @Override
     public void setResourceLoader(ResourceLoader resourceLoader) {
-        loader = resourceLoader;
-    }
-
-    public static ResourceLoader getLoader(){
-        return loader;
+        System.out.println("[ResourceLoaderAware] setResourceLoader");
     }
 }

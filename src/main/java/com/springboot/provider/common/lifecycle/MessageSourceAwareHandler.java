@@ -1,4 +1,4 @@
-package com.springboot.provider.common.lifecycle.aware;
+package com.springboot.provider.common.lifecycle;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceAware;
@@ -9,9 +9,7 @@ import org.springframework.stereotype.Component;
 * 用于获取MessageSource的一个扩展类，MessageSource主要用来做国际化。
 * */
 @Component
-public class MessageSourceHolder implements MessageSourceAware {
-
-    private static MessageSource source;
+public class MessageSourceAwareHandler implements MessageSourceAware {
 
     /**
      * Set the MessageSource that this object runs in.
@@ -23,10 +21,6 @@ public class MessageSourceHolder implements MessageSourceAware {
      */
     @Override
     public void setMessageSource(MessageSource messageSource) {
-        source = messageSource;
-    }
-
-    public static MessageSource getMessageSource(){
-        return source;
+        System.out.println("[MessageSourceAware] setMessageSource");
     }
 }

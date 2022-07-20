@@ -1,4 +1,4 @@
-package com.springboot.provider.common.lifecycle.aware;
+package com.springboot.provider.common.lifecycle;
 
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 * 当然个人认为这个Aware没必要去扩展，因为spring内部都可以通过注入的方式来直接获得。
 * */
 @Component
-public class EnvironmentHolder implements EnvironmentAware {
-
-    private static Environment env;
+public class EnvironmentAwareHandler implements EnvironmentAware {
 
     /**
      * Set the {@code Environment} that this component runs in.
@@ -21,10 +19,6 @@ public class EnvironmentHolder implements EnvironmentAware {
      */
     @Override
     public void setEnvironment(Environment environment) {
-        env = environment;
-    }
-
-    public static Environment getEnvironment(){
-        return env;
+        System.out.println("[EnvironmentAware] setEnvironment");
     }
 }

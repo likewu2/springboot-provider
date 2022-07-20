@@ -1,6 +1,5 @@
-package com.springboot.provider.common.lifecycle.aware;
+package com.springboot.provider.common.lifecycle;
 
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Component;
@@ -12,9 +11,7 @@ import org.springframework.stereotype.Component;
 * 这个对象也可以通过spring注入的方式来获得。
 * */
 @Component
-public class ApplicationEventPublisherHolder implements ApplicationEventPublisherAware {
-
-    private static ApplicationEventPublisher publisher;
+public class ApplicationEventPublisherAwareHandler implements ApplicationEventPublisherAware {
 
     /**
      * Set the ApplicationEventPublisher that this object runs in.
@@ -26,18 +23,7 @@ public class ApplicationEventPublisherHolder implements ApplicationEventPublishe
      */
     @Override
     public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        publisher = applicationEventPublisher;
+        System.out.println("[ApplicationEventPublisherAware] setApplicationEventPublisher");
     }
 
-    public static ApplicationEventPublisher getPublisher() {
-        return publisher;
-    }
-
-    public static void publishEvent(ApplicationEvent applicationEvent){
-        publisher.publishEvent(applicationEvent);
-    }
-
-    public static void publishEvent(Object event){
-        publisher.publishEvent(event);
-    }
 }
