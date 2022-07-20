@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2020/5/2 0:14
  */
 @Component
-public class ShutdownHook {
+public class MemoryMonitorShutdownHook {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostConstruct

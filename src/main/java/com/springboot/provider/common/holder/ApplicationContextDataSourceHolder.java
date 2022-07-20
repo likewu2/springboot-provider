@@ -25,34 +25,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class ApplicationContextDataSourceHolder {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final ConcurrentHashMap<String, DataSource> DATA_SOURCE_MAP = new ConcurrentHashMap<>();
 
-    private final ApplicationContext applicationContext;
-
-    public ApplicationContextDataSourceHolder(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    @EventListener
-    public void onStateChange(AvailabilityChangeEvent<ReadinessState> event) {
-        switch (event.getState()) {
-            case ACCEPTING_TRAFFIC:
-                logger.info("[ApplicationContextDataSourceHolder ReadinessStateExporter] ACCEPTING_TRAFFIC");
-
-                String[] beanNamesForType = this.applicationContext.getBeanNamesForType(DataSource.class);
-                for (String beanName : beanNamesForType) {
-                    Object bean = this.applicationContext.getBean(beanName);
-                    DATA_SOURCE_MAP.put(beanName, (DataSource) bean);
-                }
-
-                logger.info("[ApplicationContextDataSourceHolder ReadinessStateExporter] load context datasource: " + Arrays.toString(beanNamesForType));
-                break;
-            case REFUSING_TRAFFIC:
-                logger.info("[ApplicationContextDataSourceHolder ReadinessStateExporter] REFUSING_TRAFFIC");
-                break;
-        }
+    public static ConcurrentHashMap<String, DataSource> getDataSourceMap() {
+        return DATA_SOURCE_MAP;
     }
 
     /**
