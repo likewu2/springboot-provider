@@ -38,7 +38,7 @@ public class MemoryMonitor {
 //    释放资源(来源于 flume 源码)
 //    主要用于关闭线程池
     public void stop(){
-        logger.info(String.format("开始关闭线程池: %s",Thread.currentThread().getName()));
+        logger.info(String.format("开始关闭线程: %s",Thread.currentThread().getName()));
         if (scheduledExecutorService != null) {
             scheduledExecutorService.shutdown();
             try {

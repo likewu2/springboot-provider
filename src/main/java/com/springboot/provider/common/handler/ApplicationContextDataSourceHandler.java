@@ -48,26 +48,25 @@ public class ApplicationContextDataSourceHandler {
             case REFUSING_TRAFFIC:
                 logger.info("[ApplicationContextDataSourceHandler ReadinessStateExporter] REFUSING_TRAFFIC");
 
-                ApplicationContextDataSourceHolder.getDataSourceMap().values().forEach(dataSource -> {
-                    logger.info("{} Shutdown initiated...", dataSource);
+                ApplicationContextDataSourceHolder.getDataSourceMap().forEach((dsName, dataSource) -> {
+                    logger.info("{} Shutdown initiated...", dsName);
                     Class<? extends DataSource> clazz = dataSource.getClass();
                     try {
                         Method closeMethod = clazz.getDeclaredMethod("close");
                         closeMethod.invoke(dataSource);
-                        logger.info("{} close completed.", dataSource);
+                        logger.info("{} close completed.", dsName);
                     } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                        logger.info("{} close failed", dataSource);
+                        logger.info("{} close failed", dsName);
                         try {
                             Method closeMethod = clazz.getDeclaredMethod("destroy");
                             closeMethod.invoke(dataSource);
-                            logger.info("{} destroy completed.", dataSource);
+                            logger.info("{} destroy completed.", dsName);
                         } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException invocationTargetException) {
-                            logger.info("{} destroy  failed", dataSource);
+                            logger.info("{} destroy  failed", dsName);
                         }
                     }
                 });
 
-                logger.info("[ApplicationContextDataSourceHandler ReadinessStateExporter] close context datasource: " + ApplicationContextDataSourceHolder.getDataSourceMap().keySet());
                 break;
         }
     }

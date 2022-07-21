@@ -28,7 +28,7 @@ public class MemoryMonitorShutdownHook {
 
 //        添加钩子, 实现优雅停服
         final MemoryMonitor appReference = memoryMonitor;
-        Runtime.getRuntime().addShutdownHook(new Thread("shutdown-hook"){
+        Runtime.getRuntime().addShutdownHook(new Thread("memory-monitor-shutdown-hook"){
             @Override
             public void run() {
                 logger.info(Thread.currentThread().getName() + " 线程接收到退出信号, 开始释放资源...");
