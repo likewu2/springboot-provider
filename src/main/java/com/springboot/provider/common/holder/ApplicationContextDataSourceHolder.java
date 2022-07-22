@@ -76,9 +76,10 @@ public class ApplicationContextDataSourceHolder implements InitializingBean, Dis
         DataSource oldDataSource = DATA_SOURCE_MAP.put(dsName, dataSource);
         // 关闭老的数据源
         if (oldDataSource != null) {
-            LOGGER.info("ApplicationContextDataSourceHolder close datasource named [{}] start", dsName);
             closeDataSource(oldDataSource);
+            LOGGER.info("ApplicationContextDataSourceHolder close old datasource named [{}] success", dsName);
         }
+        LOGGER.info("ApplicationContextDataSourceHolder - add datasource named [{}] success", dsName);
     }
 
     /**
@@ -104,10 +105,12 @@ public class ApplicationContextDataSourceHolder implements InitializingBean, Dis
             Method closeMethod = ReflectionUtils.findMethod(dataSource.getClass(), "close");
             if (closeMethod != null) {
                 closeMethod.invoke(dataSource);
+                LOGGER.info("ApplicationContextDataSourceHolder close datasource named [{}] success", dataSource);
             } else {
                 closeMethod = ReflectionUtils.findMethod(dataSource.getClass(), "destroy");
                 if (closeMethod != null) {
                     closeMethod.invoke(dataSource);
+                    LOGGER.info("ApplicationContextDataSourceHolder destroy datasource named [{}] success", dataSource);
                 } else {
                     LOGGER.warn("ApplicationContextDataSourceHolder close or destroy datasource named [{}] failed", dataSource);
                 }
@@ -163,11 +166,11 @@ public class ApplicationContextDataSourceHolder implements InitializingBean, Dis
 
     @Override
     public void destroy() throws Exception {
-        LOGGER.info("ApplicationContextDataSourceHandler start closing ....");
+        LOGGER.info("ApplicationContextDataSourceHolder start closing ....");
 
         DATA_SOURCE_MAP.values().forEach(ApplicationContextDataSourceHolder::closeDataSource);
 
-        LOGGER.info("ApplicationContextDataSourceHandler all closed success,bye");
+        LOGGER.info("ApplicationContextDataSourceHolder all closed success,bye");
     }
 
 }
