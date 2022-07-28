@@ -3,6 +3,7 @@ package com.springboot.provider.module.his.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.springboot.provider.common.handler.SensitiveHandler;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ import java.util.Date;
  * @author XuZhenkui
  * @since 2020-12-10
  */
-@TableName("user")
+@TableName(value = "user", autoResultMap = true)
 public class User extends Model<User> {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +31,7 @@ public class User extends Model<User> {
     @NotNull(message="用户名不能为空")
     private String username;
 
-    @TableField("password")
+    @TableField(value = "password", typeHandler = SensitiveHandler.class)
     private String password;
 
     @TableField(value = "create_time", fill = FieldFill.INSERT)
