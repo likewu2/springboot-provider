@@ -12,6 +12,9 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @Configuration
 public class AsyncConfig extends AsyncConfigurerSupport {
+
+    private static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+
     /**
      * The {@link Executor} instance to be used when processing async
      * method invocations.
@@ -19,8 +22,8 @@ public class AsyncConfig extends AsyncConfigurerSupport {
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors() / 2 + 1);
-        executor.setMaxPoolSize(Runtime.getRuntime().availableProcessors() + 1);
+        executor.setCorePoolSize(AVAILABLE_PROCESSORS + 1);
+        executor.setMaxPoolSize(AVAILABLE_PROCESSORS * 2);
         executor.setQueueCapacity(256);
         executor.setThreadNamePrefix("Application AsyncThread::");
         executor.initialize();
