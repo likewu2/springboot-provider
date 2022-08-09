@@ -16,6 +16,7 @@ import com.springboot.provider.common.handler.MyBatisMetaObjectHandler;
 import com.springboot.provider.common.interceptor.DataScopeInterceptor;
 import com.springboot.provider.common.interceptor.EasySqlInjector;
 import com.springboot.provider.common.interceptor.PerformanceInterceptor;
+import com.springboot.provider.common.interceptor.SensitiveInterceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.core.io.Resource;
@@ -90,7 +91,8 @@ public class AtomikosDataSourceBuilder {
         mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL)); // 分页拦截器
         mybatisPlusInterceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor()); // 乐观锁
         mybatisPlusInterceptor.addInnerInterceptor(new BlockAttackInnerInterceptor()); // 攻击 SQL 阻断解析器,防止全表更新与删除
-        sessionFactoryBean.setPlugins(mybatisPlusInterceptor, new DataScopeInterceptor(dataSource), new PerformanceInterceptor(dataSource));
+        sessionFactoryBean.setPlugins(mybatisPlusInterceptor, new DataScopeInterceptor(dataSource),
+                new PerformanceInterceptor(dataSource), new SensitiveInterceptor(dataSource));
 
         Resource[] resources = resolveMapperLocations(mapperLocations);
         sessionFactoryBean.setMapperLocations(resources);
