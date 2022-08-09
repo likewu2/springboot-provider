@@ -2,17 +2,16 @@ package com.springboot.provider.module.his.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.springboot.provider.common.handler.SensitiveHandler;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.springboot.provider.common.jackson.Sensitive;
+import com.springboot.provider.common.jackson.SensitiveMode;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author XuZhenkui
@@ -24,11 +23,12 @@ public class User extends Model<User> {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.ASSIGN_ID)
-    @NotNull(message="用户ID不能为空")
+    @NotNull(message = "用户ID不能为空")
     private Long id;
 
+    @Sensitive(maskFunc = SensitiveMode.MID)
     @TableField("username")
-    @NotNull(message="用户名不能为空")
+    @NotNull(message = "用户名不能为空")
     private String username;
 
     @TableField(value = "password", typeHandler = SensitiveHandler.class)
