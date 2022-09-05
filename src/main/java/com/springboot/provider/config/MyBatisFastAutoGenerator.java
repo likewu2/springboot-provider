@@ -90,7 +90,6 @@ public class MyBatisFastAutoGenerator {
                             .mapperBuilder()
                                 .enableBaseColumnList()
                                 .enableBaseResultMap()
-                                .enableMapperAnnotation()
                             .serviceBuilder()
                                 .formatServiceFileName("%sService")
                                 .formatServiceImplFileName("%sServiceImpl")
