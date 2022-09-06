@@ -37,7 +37,7 @@ public class User extends Model<User> {
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 
     private Integer status;
