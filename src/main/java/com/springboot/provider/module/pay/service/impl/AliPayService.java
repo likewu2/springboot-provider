@@ -1,14 +1,11 @@
 package com.springboot.provider.module.pay.service.impl;
 
 import com.springboot.provider.module.pay.enums.PayStrategy;
-import com.springboot.provider.module.pay.factory.PayStrategyFactory;
 import com.springboot.provider.module.pay.service.AbstractPayService;
 import com.springboot.provider.module.pay.service.PayService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * @program: springboot-provider
@@ -34,7 +31,7 @@ public class AliPayService extends AbstractPayService implements PayService {
 //    }
 
 
-//    3. 由抽象父类注册
+    //    3. 由抽象父类注册
     @Override
     public PayStrategy getStrategy() {
         return PayStrategy.ALI;

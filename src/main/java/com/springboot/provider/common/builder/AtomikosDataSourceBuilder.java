@@ -66,9 +66,10 @@ public class AtomikosDataSourceBuilder {
 
     /**
      * 创建SqlSessionFactory实例
-     * @param dataSource XA 数据源
+     *
+     * @param dataSource         XA 数据源
      * @param typeAliasesPackage 包路径
-     * @param mapperLocations mappedStatement XML 文件路径
+     * @param mapperLocations    mappedStatement XML 文件路径
      * @return
      * @throws Exception
      */

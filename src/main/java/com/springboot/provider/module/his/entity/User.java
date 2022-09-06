@@ -8,7 +8,6 @@ import com.springboot.provider.common.jackson.SensitiveMode;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * <p>
