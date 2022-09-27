@@ -71,7 +71,7 @@ public class MyBatisFastAutoGenerator {
                             .addInclude(getTables(tables))
                             .entityBuilder()
                             .enableActiveRecord()
-//                                .superClass(com.baomidou.mybatisplus.extension.activerecord.Model.class)
+                            .superClass(com.springboot.provider.common.BaseEntity.class)
                             .disableSerialVersionUID()
                             .enableChainModel()
                             .idType(IdType.ASSIGN_ID)
